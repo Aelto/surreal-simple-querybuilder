@@ -2,6 +2,12 @@
 name = "surreal-simple-querybuilder"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A query-building & utility crate for SurrealDB and its SQL querying language that aims to be simple"
+readme = "README.md"
+keywords = ["surrealdb", "querybuilder", "query", "builder"]
+categories = ["database"]
+repository = "https://github.com/Aelto/surreal-simple-querybuilder"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -10,3 +16,4 @@ serde = { version = "1.0.144", features = ["derive"] }
 
 [dev-dependencies]
 serde_json = "1.0"
+
