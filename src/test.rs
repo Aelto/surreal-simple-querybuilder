@@ -28,8 +28,15 @@ struct File {
 }
 
 impl IntoKey<String> for Account {
-  fn into_key(&self) -> String {
-    self.id.as_ref().map(String::clone).unwrap()
+  fn into_key<E>(&self) -> Result<String, E>
+  where
+    E: serde::ser::Error,
+  {
+    self
+      .id
+      .as_ref()
+      .map(String::clone)
+      .ok_or(serde::ser::Error::custom("The account contains to ID"))
   }
 }
 

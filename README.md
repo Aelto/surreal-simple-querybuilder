@@ -184,10 +184,15 @@ to safely serialize it into an ID during serialization.
   }
 
   impl IntoKey<String> for Account {
-    fn into_key(&self) -> String {
-      // the unwrap here will cause our program to crash if we were to attempt a
-      // serialization of an object without an ID. Keeping it simple for the example
-      self.id.as_ref().map(String::clone).unwrap()
+    fn into_key<E>(&self) -> Result<String, E>
+    where
+      E: serde::ser::Error,
+    {
+      self
+        .id
+        .as_ref()
+        .map(String::clone)
+        .ok_or(serde::ser::Error::custom("The account contains to ID"))
     }
   }
 
