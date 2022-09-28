@@ -38,7 +38,7 @@ you want.
 <details>
   <summary>example</summary>
 
-  ```rs
+  ```rust
   use surreal_simple_querybuilder::prelude::*;
 
   struct Account {
@@ -76,7 +76,7 @@ or using a field you renamed long time ago.
 These traits add a few utility functions to the `String` and `str` types that can
 be used alongside the querybuilder for even more flexibility.
 
-```rs
+```rust
 use surreal_simple_querybuilder::prelude::*;
 
 let my_label = "John".as_named_label("Account");
@@ -96,7 +96,7 @@ methods.
 <details>
   <summary>Simple example</summary>
 
-  ```rs
+  ```rust
   use surreal_simple_querybuilder::prelude::*;
 
   let query = QueryBuilder::new()
@@ -111,7 +111,7 @@ methods.
 <details>
   <summary>Complex example</summary>
 
-  ```rs
+  ```rust
   use surreal_simple_querybuilder::prelude::*;
 
   let should_fetch_authors = false;
@@ -181,7 +181,7 @@ to safely serialize it into an ID during serialization.
 <details>
   <summary>example</summary>
 
-  ```rs
+  ```rust
   /// For the tests, and as an example we are creating what could be an Account in
   /// a simple database.
   #[derive(Debug, Serialize, Deserialize, Default)]
