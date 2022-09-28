@@ -36,7 +36,7 @@ impl IntoKey<String> for Account {
       .id
       .as_ref()
       .map(String::clone)
-      .ok_or(serde::ser::Error::custom("The account contains to ID"))
+      .ok_or(serde::ser::Error::custom("The account has no ID"))
   }
 }
 

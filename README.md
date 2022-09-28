@@ -1,5 +1,5 @@
 # Surreal simple querybuilder
-A simple querybuilder for the Surreal Query Language, for [SurrealDB](https://surrealdb.com/).
+A simple query-builder for the Surreal Query Language, for [SurrealDB](https://surrealdb.com/).
 Aims at being simple to use and not too verbose first.
 
 # Summary
@@ -201,7 +201,7 @@ to safely serialize it into an ID during serialization.
         .id
         .as_ref()
         .map(String::clone)
-        .ok_or(serde::ser::Error::custom("The account contains to ID"))
+        .ok_or(serde::ser::Error::custom("The account has no ID"))
     }
   }
 
