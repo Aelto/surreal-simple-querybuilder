@@ -7,10 +7,14 @@ use serde::Serialize;
 /// during the query or else it won't be loaded or it will simply be the ID to a
 /// foreign node.
 ///
-/// A `ForeignKey` field may have one of the following values:
+/// A [ForeignKey] field may have one of the following values:
 ///  - Loaded data,
 ///  - An ID,
 ///  - None of the above (`null`)
+///
+/// When a field is set as a `ForeignKey<V, K>` or a `Foreign<V>`, the field will
+/// always be serialized into an ID so you can be sure you won't get raw data
+/// inserted into your nodes by mistake.
 ///
 /// Pairs well with objects that store IDs in the surreal DB, that you can also
 /// load using the `FETCH` keyword of SurrealQL.
@@ -133,7 +137,7 @@ where
     S: serde::Serializer,
   {
     match &self {
-      ForeignKey::Loaded(v) => v.into_key().serialize(serializer),
+      ForeignKey::Loaded(v) => v.into_key::<S::Error>()?.serialize(serializer),
       ForeignKey::Key(i) => i.serialize(serializer),
       ForeignKey::Unloaded => Option::<K>::None.serialize(serializer),
     }
@@ -154,15 +158,24 @@ where
   }
 }
 
+/// Any type use inside a [ForeignKey] must implement this trait. It allows you
+/// to transform the `I` type into an ID when `I` is serialized.
 pub trait IntoKey<I> {
-  fn into_key(&self) -> I;
+  fn into_key<E>(&self) -> Result<I, E>
+  where
+    E: serde::ser::Error;
 }
 
+/// An implementation for vector of objects that implement the IntoKey
+/// trait. So you can have `Foreign<Vec<MyType>>` rather than `Vec<Foreign<MyType>>`
 impl<V, K> IntoKey<Vec<K>> for Vec<V>
 where
   V: IntoKey<K>,
 {
-  fn into_key(&self) -> Vec<K> {
+  fn into_key<E>(&self) -> Result<Vec<K>, E>
+  where
+    E: serde::ser::Error,
+  {
     self.iter().map(|c| c.into_key()).collect()
   }
 }

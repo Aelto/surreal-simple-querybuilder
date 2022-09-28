@@ -47,7 +47,7 @@ impl<'a> QueryBuilder<'a> {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
-  /// let query = QueryBuilder::new().select(&"ee:Person").build();
+  /// let query = QueryBuilder::new().select("ee:Person").build();
   ///
   /// assert_eq!(query, "SELECT ee:Person")
   /// ```
@@ -57,6 +57,13 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new().from("Person").build();
+  ///
+  /// assert_eq!(query, "FROM Person")
   pub fn from(mut self, node: &'a str) -> Self {
     self.add_segment_p("FROM", node);
 
@@ -193,6 +200,18 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// Starts a SET clause with many fields.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .set_many(&["handle = $1", "password = $2"])
+  ///   .build();
+  ///
+  /// assert_eq!(query, "SET handle = $1 , password = $2");
+  /// ```
   pub fn set_many<T: Into<QueryBuilderSegment<'a>>>(mut self, updates: &[T]) -> Self
   where
     T: Copy,
@@ -365,6 +384,9 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// Add the given segment to the internal buffer. This is a rather internal
+  /// method that is set public for special cases, you should prefer using the `raw`
+  /// method instead.
   pub fn add_segment<T: Into<QueryBuilderSegment<'a>>>(&mut self, segment: T) -> &mut Self {
     let into = segment.into();
 
@@ -391,7 +413,23 @@ impl<'a> QueryBuilder<'a> {
     self.add_segment_p(prefix, segment).add_segment(suffix)
   }
 
+  /// Add a parameter and its value to the query that will be used to replace all
+  /// occurences of `key` into `value` when the `build` method is called.
+  ///
   /// **IMPORTANT** Do not use this for user provided data, the input is not sanitized
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .select("{{field}}")
+  ///   .from("Account")
+  ///   .param("{{field}}", "id")
+  ///   .build();
+  ///
+  /// assert_eq!("SELECT id FROM Account", query);
+  /// ```
   pub fn param(mut self, key: &'a str, value: &'a str) -> Self {
     self.parameters.insert(key, value);
 
@@ -420,7 +458,7 @@ impl<'a> QueryBuilder<'a> {
     output
   }
 
-  /// Tell the current query builder to execute the `QueryBuilderSetObject` trait
+  /// Tell the current query builder to execute the [QueryBuilderSetObject] trait
   /// for the given `T` generic type.
   pub fn set_object<T: QueryBuilderSetObject>(self) -> Self
   where
