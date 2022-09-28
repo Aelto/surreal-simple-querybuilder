@@ -2,6 +2,15 @@
 A simple querybuilder for the Surreal Query Language, for [SurrealDB](https://surrealdb.com/).
 Aims at being simple to use and not too verbose first.
 
+# Summary
+ - [Why a query-builder](#why-a-query-builder)
+ - [SQL injections](#sql-injections)
+ - [Examples](#examples)
+   - [The `node` macro](#the-node-macro)
+   - [The `NodeBuilder`traits](#the-nodebuilder-traits)
+   - [The `QueryBuilder` type](#the-querybuilder-type)
+   - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
+
 # Why a query-builder
 Query builders allow you to dynamically build your queries with some compile time
 checks to ensure they result in valid SQL queries. Unlike ORMs, query-builders are
@@ -20,7 +29,7 @@ parameters in your queries like `SET username = $username` with surrealdb parame
 However the crate comes with utility functions to easily create parameterized fields, refer to the [`NodeBuilder`](src/node_builder.rs) trait.
 
 # Examples
-A complete example can be found in the [`test.rs`](./src/test.rs) file. For an explanation of each component of the crate refer to the chapters below.
+A complete example can be found in the [`test.rs`](./src/test.rs) file. For an explanation of what each component in the crate does, refer to the chapters below.
 ## The `node` macro
 The `node` macro allows you to quickly create constants that match the fields of
 your structs. It is not a derive macro to allow you to name the fields the way
@@ -126,7 +135,7 @@ methods.
 </details>
 
 
-## The `ForeignKey` and `Foreign` type
+## The `ForeignKey` and `Foreign` types
 SurrealDB has the ability to fetch the data out of foreign keys. For example:
 ```sql
 create Author:JussiAdlerOlsen set name = "Jussi Adler-Olsen";
