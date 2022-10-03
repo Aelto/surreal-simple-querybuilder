@@ -5,6 +5,7 @@ Aims at being simple to use and not too verbose first.
 # Summary
  - [Why a query-builder](#why-a-query-builder)
  - [SQL injections](#sql-injections)
+ - [Compiler requirements/feature](#compiler-requirements)
  - [Examples](#examples)
    - [The `model` macro](#the-node-macro)
    - [The `NodeBuilder`traits](#the-nodebuilder-traits)
@@ -27,6 +28,15 @@ Refer to the [node macro](#the-node-macro) and the [Foreign type](#the-foreignke
 The strings you pass to the query builder are not sanitized in any way. Please use
 parameters in your queries like `SET username = $username` with surrealdb parameters to avoid injection issues.
 However the crate comes with utility functions to easily create parameterized fields, refer to the [`NodeBuilder`](src/node_builder.rs) trait.
+
+# Compiler requirements/features
+The crate uses const expressions for its [model creation macros](#the-model-macro)
+in order to use stack based arrays with sizes deduced by the compiler. For this reason
+any program using the crate has to add the following at the root of the main file:
+```
+#![allow(incomplete_features)]
+#![feature(generic_const_exprs)]
+```
 
 # Examples
 A complete example can be found in the [`test.rs`](./src/test.rs) file. For an explanation of what each component in the crate does, refer to the chapters below.
