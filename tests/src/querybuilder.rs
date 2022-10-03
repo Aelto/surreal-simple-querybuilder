@@ -1,9 +1,7 @@
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::querybuilder::QueryBuilderSetObject;
-
-use super::prelude::*;
+use surreal_simple_querybuilder::prelude::*;
 
 /// For the tests, and as an example we are creating what could be an Account in
 /// a simple database.
@@ -13,13 +11,22 @@ struct Account {
   handle: String,
   password: String,
   email: String,
+
+  friends: Foreign<Vec<Account>>,
 }
 
-node!(Account {
-  handle,
-  password,
-  email
-});
+mod account {
+  use super::*;
+
+  model!(Account {
+    handle,
+    password,
+    email,
+    friends<Account>
+  });
+}
+
+use account::schema::model as account;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct File {
@@ -40,13 +47,12 @@ impl IntoKey<String> for Account {
   }
 }
 
-///
 impl QueryBuilderSetObject for Account {
   fn set_querybuilder_object<'a>(mut querybuilder: QueryBuilder<'a>) -> QueryBuilder {
     let a = &[
-      querybuilder.hold(schema::handle.equals_parameterized()),
-      querybuilder.hold(schema::password.equals_parameterized()),
-      querybuilder.hold(schema::email.equals_parameterized()),
+      querybuilder.hold(account.handle.equals_parameterized()),
+      querybuilder.hold(account.password.equals_parameterized()),
+      querybuilder.hold(account.email.equals_parameterized()),
     ];
 
     querybuilder.set_many(a)
@@ -55,15 +61,8 @@ impl QueryBuilderSetObject for Account {
 
 #[test]
 fn test_create_account_query() {
-  let account = Account {
-    id: None,
-    handle: "handle".to_owned(),
-    email: "e@ma.il".to_owned(),
-    password: "pass".to_owned(),
-  };
-
   let query = QueryBuilder::new()
-    .create(&account.handle.as_named_label(schema::label))
+    .create(account.handle.as_named_label(&account.to_string()))
     .set_object::<Account>()
     .build();
 
@@ -77,8 +76,8 @@ fn test_create_account_query() {
 fn test_account_find_query() {
   let query = QueryBuilder::new()
     .select("*")
-    .from(schema::label)
-    .filter(&schema::email.equals_parameterized())
+    .from("test")
+    .filter(account.email.equals_parameterized())
     .build();
 
   assert_eq!(query, "SELECT * FROM Account WHERE email = $email");
@@ -137,25 +136,26 @@ pub fn test_foreign_serialize() {
 
 #[test]
 fn test_foreign_deserialize() {
-  let account = Account {
+  let created_account = Account {
     id: Some("Account:John".to_owned()),
     handle: "JohnTheUser".to_owned(),
     password: "abc".to_owned(),
     email: "abc".to_owned(),
+    friends: Default::default(),
   };
 
   // build a json string where the author field contains a fully built Account
   // object.
   let loaded_author_json = format!(
     "{{ \"name\": \"filename\", \"author\": {} }}",
-    serde_json::to_string(&account).unwrap()
+    serde_json::to_string(&created_account).unwrap()
   );
 
   let file: File = serde_json::from_str(&loaded_author_json).unwrap();
 
   // confirm the `Foreign<Author>` contains a value
   assert!(match &file.author.value() {
-    Some(account) => account.id == Some("Account:John".to_owned()),
+    Some(acc) => acc.id == Some("Account:John".to_owned()),
     _ => false,
   });
 
@@ -178,4 +178,12 @@ fn test_foreign_deserialize() {
     Foreign::Unloaded => true,
     _ => false,
   });
+}
+
+/// Test that a model can have fields that reference the `Self` type.
+#[test]
+fn test_model_self_reference() {
+  assert_eq!("friends", account.friends.to_string());
+  assert_eq!("Account", account.friends().to_string());
+  assert_eq!("friends.handle", account.friends().handle.to_string());
 }
