@@ -7,7 +7,7 @@ Aims at being simple to use and not too verbose first.
  - [SQL injections](#sql-injections)
  - [Compiler requirements/feature](#compiler-requirements)
  - [Examples](#examples)
-   - [The `model` macro](#the-node-macro)
+   - [The `model` macro](#the-model-macro)
    - [The `NodeBuilder`traits](#the-nodebuilder-traits)
    - [The `QueryBuilder` type](#the-querybuilder-type)
    - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
