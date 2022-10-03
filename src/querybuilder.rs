@@ -23,7 +23,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "CREATE Person:ee")
   /// ```
-  pub fn create(mut self, node: &'a str) -> Self {
+  pub fn create<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
     self.add_segment_p("CREATE", node);
 
     self
@@ -37,7 +37,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "UPDATE Person:ee")
   /// ```
-  pub fn update(mut self, node: &'a str) -> Self {
+  pub fn update<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
     self.add_segment_p("UPDATE", node);
 
     self
@@ -51,7 +51,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT ee:Person")
   /// ```
-  pub fn select(mut self, node: &'a str) -> Self {
+  pub fn select<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
     self.add_segment_p("SELECT", node);
 
     self
@@ -64,7 +64,10 @@ impl<'a> QueryBuilder<'a> {
   /// let query = QueryBuilder::new().from("Person").build();
   ///
   /// assert_eq!(query, "FROM Person")
-  pub fn from(mut self, node: &'a str) -> Self {
+  pub fn from<T>(mut self, node: T) -> Self
+  where
+    T: IntoQueryBuilderSegment + 'a,
+  {
     self.add_segment_p("FROM", node);
 
     self
@@ -78,7 +81,10 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT ee:Person , o:Order")
   /// ```
-  pub fn select_many(mut self, nodes: &[&'a str]) -> Self {
+  pub fn select_many<T: IntoQueryBuilderSegment + 'a>(mut self, nodes: &[T]) -> Self
+  where
+    T: Copy,
+  {
     self.add_segment("SELECT");
     self.join_segments(",", "", nodes, "");
 
@@ -95,7 +101,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, ", ee")
   /// ```
-  pub fn also(mut self, query: &'a str) -> Self {
+  pub fn also<T: IntoQueryBuilderSegment + 'a>(mut self, query: T) -> Self {
     self.add_segment_p(",", query);
 
     self
@@ -115,7 +121,7 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "set handle , set id");
   /// ```
   #[allow(dead_code)]
-  fn join_segments<T: Into<QueryBuilderSegment<'a>>>(
+  fn join_segments<T: IntoQueryBuilderSegment + 'a>(
     &mut self, seperator: &'a str, prefix: &'a str, segments: &[T], suffix: &'a str,
   ) -> &mut Self
   where
@@ -153,14 +159,14 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "WHERE handle = ?1");
   /// ```
-  pub fn filter(mut self, condition: &'a str) -> Self {
+  pub fn filter<T: IntoQueryBuilderSegment + 'a>(mut self, condition: T) -> Self {
     self.add_segment_p("WHERE", condition);
 
     self
   }
 
   /// An alias for `QueryBuilder::filter`
-  pub fn and_where(self, condition: &'a str) -> Self {
+  pub fn and_where<T: IntoQueryBuilderSegment + 'a>(self, condition: T) -> Self {
     self.filter(condition)
   }
 
@@ -176,7 +182,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "AND handle = ?1");
   /// ```
-  pub fn and(mut self, condition: &'a str) -> Self {
+  pub fn and<T: IntoQueryBuilderSegment + 'a>(mut self, condition: T) -> Self {
     self.add_segment_p("AND", condition);
 
     self
@@ -194,7 +200,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SET handle = ?1");
   /// ```
-  pub fn set(mut self, update: &'a str) -> Self {
+  pub fn set<T: IntoQueryBuilderSegment + 'a>(mut self, update: T) -> Self {
     self.add_segment_p("SET", update);
 
     self
@@ -212,7 +218,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SET handle = $1 , password = $2");
   /// ```
-  pub fn set_many<T: Into<QueryBuilderSegment<'a>>>(mut self, updates: &[T]) -> Self
+  pub fn set_many<T: IntoQueryBuilderSegment + 'a>(mut self, updates: &[T]) -> Self
   where
     T: Copy,
   {
@@ -234,7 +240,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "FETCH author");
   /// ```
-  pub fn fetch(mut self, field: &'a str) -> Self {
+  pub fn fetch<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
     self.add_segment_p("FETCH", field);
 
     self
@@ -252,7 +258,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "FETCH author , projects");
   /// ```
-  pub fn fetch_many<T: Into<QueryBuilderSegment<'a>>>(mut self, fields: &[T]) -> Self
+  pub fn fetch_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
   where
     T: Copy,
   {
@@ -357,7 +363,7 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "LIMIT 10")
   ///
   /// ```
-  pub fn limit(mut self, limit: &'a str) -> Self {
+  pub fn limit<T: IntoQueryBuilderSegment + 'a>(mut self, limit: T) -> Self {
     self.add_segment_p("LIMIT", limit);
 
     self
@@ -378,7 +384,7 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "START AT 10")
   ///
   /// ```
-  pub fn start_at(mut self, offset: &'a str) -> Self {
+  pub fn start_at<T: IntoQueryBuilderSegment + 'a>(mut self, offset: T) -> Self {
     self.add_segment_p("START AT", offset);
 
     self
@@ -387,8 +393,8 @@ impl<'a> QueryBuilder<'a> {
   /// Add the given segment to the internal buffer. This is a rather internal
   /// method that is set public for special cases, you should prefer using the `raw`
   /// method instead.
-  pub fn add_segment<T: Into<QueryBuilderSegment<'a>>>(&mut self, segment: T) -> &mut Self {
-    let into = segment.into();
+  pub fn add_segment<T: IntoQueryBuilderSegment + 'a>(&mut self, segment: T) -> &mut Self {
+    let into = segment.into(self);
 
     if let QueryBuilderSegment::Str(s) = into {
       if s.is_empty() {
@@ -401,13 +407,13 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
-  fn add_segment_p<T: Into<QueryBuilderSegment<'a>>>(
+  fn add_segment_p<T: IntoQueryBuilderSegment + 'a>(
     &mut self, prefix: &'a str, segment: T,
   ) -> &mut Self {
     self.add_segment(prefix).add_segment(segment)
   }
 
-  fn add_segment_ps<T: Into<QueryBuilderSegment<'a>>>(
+  fn add_segment_ps<T: IntoQueryBuilderSegment + 'a>(
     &mut self, prefix: &'a str, segment: T, suffix: &'a str,
   ) -> &mut Self {
     self.add_segment_p(prefix, segment).add_segment(suffix)
@@ -522,6 +528,12 @@ pub trait QueryBuilderSetObject {
   fn set_querybuilder_object<'b>(querybuilder: QueryBuilder<'b>) -> QueryBuilder<'b>;
 }
 
+/// Segment of a query held by the [QueryBuilder] until the final query is built.
+///
+/// Has two variants:
+///  - [QueryBuilderSegment::Str] for string slices that will outlive the [QueryBuilder]
+///  - [QueryBuilderSegment::Ref] for references to values that live **in** the [QueryBuilder].
+/// such references can be obtained using the [`QueryBuilder::hold()`] method.
 #[derive(Clone, Copy)]
 pub enum QueryBuilderSegment<'a> {
   Str(&'a str),
@@ -537,5 +549,40 @@ impl<'a> From<&'a str> for QueryBuilderSegment<'a> {
 impl<'a> From<usize> for QueryBuilderSegment<'a> {
   fn from(i: usize) -> Self {
     QueryBuilderSegment::Ref(i)
+  }
+}
+
+/// Implementing the trait allows `Self` to be converted into a [QueryBuilderSegment]
+/// when needed. Allows one to pass `Self` to all of the [QueryBuilder]'s methods.
+pub trait IntoQueryBuilderSegment {
+  fn into<'b>(self, querybuilder: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
+  where
+    Self: 'b;
+}
+
+impl IntoQueryBuilderSegment for &str {
+  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
+  where
+    Self: 'b,
+  {
+    QueryBuilderSegment::Str(self)
+  }
+}
+
+impl IntoQueryBuilderSegment for String {
+  fn into<'b>(self, querybuilder: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
+  where
+    Self: 'b,
+  {
+    querybuilder.hold(self)
+  }
+}
+
+impl IntoQueryBuilderSegment for QueryBuilderSegment<'_> {
+  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
+  where
+    Self: 'b,
+  {
+    self
   }
 }

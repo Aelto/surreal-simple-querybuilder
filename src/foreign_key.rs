@@ -1,4 +1,5 @@
 use std::fmt::Debug;
+use std::ops::Deref;
 
 use serde::Deserialize;
 use serde::Serialize;
@@ -60,18 +61,21 @@ use serde::Serialize;
 /// ```
 ///
 /// **Note** that if you plan to use `ForeignKey<T, String>` (where the second generic
-/// type is a string), you can use the `Foreign<T>` type in the parent module
-/// to shorten the declaration.
+/// type is a string), you can use the `Foreign<T>` type in the same module to
+/// shorten the declaration.
 #[derive(Deserialize)]
 #[serde(untagged)]
-pub enum ForeignKey<V, K>
-where
-  V: Debug,
-{
+pub enum ForeignKey<V, K> {
   Loaded(V),
   Key(K),
 
   Unloaded,
+}
+
+impl<V, K> Default for ForeignKey<V, K> {
+  fn default() -> Self {
+    Self::Unloaded
+  }
 }
 
 impl<V, K> ForeignKey<V, K>
@@ -129,7 +133,6 @@ impl<V, K> Serialize for ForeignKey<V, K>
 where
   V: IntoKey<K>,
   K: Serialize,
-  V: Default,
   V: Debug,
 {
   fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -168,14 +171,27 @@ pub trait IntoKey<I> {
 
 /// An implementation for vector of objects that implement the IntoKey
 /// trait. So you can have `Foreign<Vec<MyType>>` rather than `Vec<Foreign<MyType>>`
-impl<V, K> IntoKey<Vec<K>> for Vec<V>
+impl<V, K> IntoKey<K> for Vec<V>
 where
   V: IntoKey<K>,
+  K: std::iter::FromIterator<K>,
 {
-  fn into_key<E>(&self) -> Result<Vec<K>, E>
+  fn into_key<E>(&self) -> Result<K, E>
   where
     E: serde::ser::Error,
   {
     self.iter().map(|c| c.into_key()).collect()
   }
 }
+
+impl<V: IntoKey<K>, K> IntoKey<K> for Box<V> {
+  fn into_key<E>(&self) -> Result<K, E>
+  where
+    E: serde::ser::Error,
+  {
+    self.deref().into_key()
+  }
+}
+
+/// A `ForeignKey` whose `Key` type is set to a `String` by default.
+pub type Foreign<T> = ForeignKey<T, String>;

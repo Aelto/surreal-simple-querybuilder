@@ -6,7 +6,7 @@ Aims at being simple to use and not too verbose first.
  - [Why a query-builder](#why-a-query-builder)
  - [SQL injections](#sql-injections)
  - [Examples](#examples)
-   - [The `node` macro](#the-node-macro)
+   - [The `model` macro](#the-node-macro)
    - [The `NodeBuilder`traits](#the-nodebuilder-traits)
    - [The `QueryBuilder` type](#the-querybuilder-type)
    - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
@@ -30,10 +30,9 @@ However the crate comes with utility functions to easily create parameterized fi
 
 # Examples
 A complete example can be found in the [`test.rs`](./src/test.rs) file. For an explanation of what each component in the crate does, refer to the chapters below.
-## The `node` macro
-The `node` macro allows you to quickly create constants that match the fields of
-your structs. It is not a derive macro to allow you to name the fields the way
-you want.
+## The `model` macro
+The `model` macro allows you to quickly create structs (aka models) with fields
+that match the nodes of your database.
 
 <details>
   <summary>example</summary>
@@ -46,22 +45,22 @@ you want.
     handle: String,
     password: String,
     email: String,
+    friend: Foreign<Account>
   }
 
-  node!(Account {
+  model!(Account {
     id,
     handle,
     password,
+    friends<Vec<Account>>
   });
 
   fn main() {
-    // you can now reference the fields like so:
-    let handle_field = schema::handle;
-    let password_field = schema::password;
+    // the schema module is created by the macro
+    use schema::model as account;
 
-    use schema::*;
-
-    format!("There is also the {id} field");
+    let query = format!("select {} from {}", account.handle, account);
+    assert_eq!("select handle from Account", query);
   }
   ```
 </details>
