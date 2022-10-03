@@ -47,7 +47,6 @@ impl IntoKey<String> for Account {
   }
 }
 
-///
 impl QueryBuilderSetObject for Account {
   fn set_querybuilder_object<'a>(mut querybuilder: QueryBuilder<'a>) -> QueryBuilder {
     let a = &[

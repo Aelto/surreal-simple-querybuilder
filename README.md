@@ -39,7 +39,7 @@ any program using the crate has to add the following at the root of the main fil
 ```
 
 # Examples
-A complete example can be found in the [`test.rs`](./src/test.rs) file. For an explanation of what each component in the crate does, refer to the chapters below.
+A complete example can be found in the [`tests project`](/tests/src/querybuilder.rs). For an explanation of what each component in the crate does, refer to the chapters below.
 ## The `model` macro
 The `model` macro allows you to quickly create structs (aka models) with fields
 that match the nodes of your database.
