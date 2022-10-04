@@ -578,6 +578,15 @@ impl IntoQueryBuilderSegment for String {
   }
 }
 
+impl IntoQueryBuilderSegment for &String {
+  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
+  where
+    Self: 'b,
+  {
+    QueryBuilderSegment::Str(self)
+  }
+}
+
 impl IntoQueryBuilderSegment for QueryBuilderSegment<'_> {
   fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
   where
