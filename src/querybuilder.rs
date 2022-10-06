@@ -57,6 +57,73 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// Start a `DELETE` statement:
+  /// ```sql
+  /// DELETE user:John
+  /// ```
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new().delete("ee:Person").build();
+  ///
+  /// assert_eq!(query, "DELETE ee:Person");
+  /// ```
+  pub fn delete<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+    self.add_segment_p("DELETE", node);
+
+    self
+  }
+
+  /// Start a `RELATE` statement:
+  /// ```sql
+  /// RELATE user:tobie->write->article:surreal SET time.written = time::now();
+  /// ```
+  /// _Note: the `SET` or anything after it in the example above should be added
+  /// manually using the [`QueryBuilder::set()`] method._
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new().relate("user:John->likes->user:Mark").build();
+  ///
+  /// assert_eq!(query, "RELATE user:John->likes->user:Mark");
+  /// ```
+  pub fn relate<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+    self.add_segment_p("RELATE", node);
+
+    self
+  }
+
+  /// Start a `CONTENT` statement. Content statements often follow RELATE statements:
+  /// ```sql
+  /// RELATE user:tobie->write->article:surreal CONTENT {
+  ///   source: 'Apple notes',
+  ///   tags: ['notes', 'markdown'],
+  ///   time: {
+  ///     written: time::now(),
+  ///   },
+  /// };
+  /// ```
+  /// _Note: Anything before the `CONTENT` in the example above should be added
+  /// manually using the [`QueryBuilder::relate()`] method._
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new().content("{ creation_time: time::now() }").build();
+  ///
+  /// assert_eq!(query, "CONTENT { creation_time: time::now() }");
+  /// ```
+  pub fn content<T: IntoQueryBuilderSegment + 'a>(mut self, json_content: T) -> Self {
+    self.add_segment_p("CONTENT", json_content);
+
+    self
+  }
+
   /// # Example
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
@@ -575,6 +642,15 @@ impl IntoQueryBuilderSegment for String {
     Self: 'b,
   {
     querybuilder.hold(self)
+  }
+}
+
+impl IntoQueryBuilderSegment for &String {
+  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
+  where
+    Self: 'b,
+  {
+    QueryBuilderSegment::Str(self)
   }
 }
 
