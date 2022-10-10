@@ -1,0 +1,16 @@
+[package]
+name = "model-proc-macro"
+version = "0.1.0"
+edition = "2021"
+
+build = "build.rs"
+
+[lib]
+proc-macro = true
+
+[build-dependencies]
+lalrpop = "0.19.8"
+
+[dependencies]
+lalrpop-util = { version = "0.19.7", features = ["lexer"] }
+quote = "1.0"

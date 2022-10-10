@@ -9,11 +9,15 @@ keywords = ["surrealdb", "querybuilder", "query", "builder"]
 categories = ["database"]
 repository = "https://github.com/Aelto/surreal-simple-querybuilder"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [
+  "model-proc-macro"
+]
 
 [dependencies]
 serde = { version = "1.0.144", features = ["derive"] }
 
+model-proc-macro = { path = "./model-proc-macro" }
+
 [dev-dependencies]
 serde_json = "1.0"
-
