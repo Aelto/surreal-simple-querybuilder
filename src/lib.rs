@@ -86,6 +86,8 @@ pub mod model;
 
 pub use model_proc_macro::model;
 
+pub mod node;
+
 /// Contains a trait for simplifying the building of relationships between nodes
 pub mod node_builder;
 

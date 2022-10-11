@@ -70,6 +70,20 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   fn equals_parameterized(&self) -> String {
     format!("{self} = ${self}")
   }
+
+  /// Take the current string and add `as $alias` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account->manage->project".as_alias("account_projects");
+  ///
+  /// assert_eq!("account->manage->project as account_projects");
+  /// ```
+  fn as_alias(&self, alias: &str) -> String {
+    format!("{self} as {alias}")
+  }
 }
 
 impl<'a> ToNodeBuilder for &'a str {}

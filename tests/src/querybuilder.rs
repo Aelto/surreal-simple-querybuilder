@@ -3,8 +3,6 @@ use serde::Serialize;
 
 use surreal_simple_querybuilder::prelude::*;
 
-/// For the tests, and as an example we are creating what could be an Account in
-/// a simple database.
 #[derive(Debug, Serialize, Deserialize, Default)]
 struct Account {
   id: Option<String>,
@@ -12,26 +10,89 @@ struct Account {
   password: String,
   email: String,
 
-  friends: Foreign<Vec<Account>>,
+  projects: Foreign<Vec<Project>>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Default)]
+struct Project {
+  id: Option<String>,
+  name: String,
+
+  releases: Foreign<Vec<Release>>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Default)]
+struct Release {
+  id: Option<String>,
+  name: String,
+}
+
+mod release {
+  use surreal_simple_querybuilder::prelude::*;
+
+  model!(Release { name });
+}
+
+mod project {
+  use super::account::schema::Account;
+  use super::release::schema::Release;
+  use surreal_simple_querybuilder::prelude::*;
+
+  model!(Project {
+    name,
+
+    ->has->Release as releases,
+    <-manage<-Account as authors
+  });
 }
 
 mod account {
-  use super::*;
+  use super::project::schema::Project;
+  use surreal_simple_querybuilder::prelude::*;
 
   model!(Account {
     handle,
     password,
     email,
-    friends<Account>
+    friend<Account>,
+
+    ->manage->Project as managed_projects,
   });
 }
 
 use account::schema::model as account;
+use project::schema::model as project;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct File {
   name: String,
   author: Foreign<Account>,
+}
+
+impl IntoKey<String> for Project {
+  fn into_key<E>(&self) -> Result<String, E>
+  where
+    E: serde::ser::Error,
+  {
+    self
+      .id
+      .as_ref()
+      .map(String::clone)
+      .ok_or(serde::ser::Error::custom("The project has no ID"))
+  }
+}
+
+impl IntoKey<String> for Release {
+  fn into_key<E>(&self) -> Result<String, E>
+  where
+    E: serde::ser::Error,
+  {
+    self
+      .id
+      .as_ref()
+      .map(String::clone)
+      .ok_or(serde::ser::Error::custom("The release has no ID"))
+  }
 }
 
 impl IntoKey<String> for Account {
@@ -76,7 +137,7 @@ fn test_create_account_query() {
 fn test_account_find_query() {
   let query = QueryBuilder::new()
     .select("*")
-    .from("test")
+    .from(account)
     .filter(account.email.equals_parameterized())
     .build();
 
@@ -141,7 +202,7 @@ fn test_foreign_deserialize() {
     handle: "JohnTheUser".to_owned(),
     password: "abc".to_owned(),
     email: "abc".to_owned(),
-    friends: Default::default(),
+    ..Default::default()
   };
 
   // build a json string where the author field contains a fully built Account
@@ -183,7 +244,42 @@ fn test_foreign_deserialize() {
 /// Test that a model can have fields that reference the `Self` type.
 #[test]
 fn test_model_self_reference() {
-  assert_eq!("friends", account.friends.to_string());
-  assert_eq!("Account", account.friends().to_string());
-  assert_eq!("friends.handle", account.friends().handle.to_string());
+  assert_eq!("friend", account.friend.to_string());
+  assert_eq!("Account", account.friend().to_string());
+  assert_eq!("friend.handle", account.friend().handle.to_string());
+}
+
+#[test]
+fn test_model_serializing_relations() {
+  assert_eq!(
+    "->manage->Project as account_projects",
+    account.managed_projects.as_alias("account_projects")
+  );
+  assert_eq!("Project", account.managed_projects().to_string());
+  assert_eq!(
+    "->manage->Project.name as project_names",
+    account.managed_projects().name.as_alias("project_names")
+  );
+
+  assert_eq!(
+    "->manage->Project->has->Release as account_projects_releases",
+    account
+      .managed_projects()
+      .releases
+      .as_alias("account_projects_releases")
+  );
+
+  assert_eq!(
+    "->manage->Project->has->Release.name as account_projects_release_names",
+    account
+      .managed_projects()
+      .releases()
+      .name
+      .as_alias("account_projects_release_names")
+  );
+
+  assert_eq!(
+    "<-manage<-Account as authors",
+    project.authors.as_alias("authors")
+  );
 }

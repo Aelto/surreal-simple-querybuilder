@@ -8,14 +8,8 @@ pub struct OriginHolder<const N: usize> {
 
 impl<const N: usize> Display for OriginHolder<N> {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    let mut segments = self.segments.iter().peekable();
-
-    while let Some(segment) = segments.next() {
+    for segment in self.segments {
       write!(f, "{segment}")?;
-
-      if segments.peek().is_some() {
-        write!(f, ".")?;
-      }
     }
 
     Ok(())

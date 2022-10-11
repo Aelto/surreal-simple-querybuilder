@@ -7,7 +7,6 @@ pub enum Field {
   Property(FieldProperty),
   ForeignNode(FieldForeignNode),
   Relation(FieldRelation),
-  ForeignRelation(FieldForeignRelation),
 }
 
 impl Field {
@@ -16,7 +15,6 @@ impl Field {
       Field::Property(x) => x.emit_field(),
       Field::ForeignNode(x) => x.emit_field(),
       Field::Relation(x) => x.emit_field(),
-      Field::ForeignRelation(x) => x.emit_field(),
     }
   }
 
@@ -25,7 +23,6 @@ impl Field {
       Field::Property(x) => x.emit_initialization(),
       Field::ForeignNode(x) => x.emit_initialization(),
       Field::Relation(x) => x.emit_initialization(),
-      Field::ForeignRelation(x) => x.emit_initialization(),
     }
   }
 
@@ -34,7 +31,6 @@ impl Field {
       Field::Property(x) => x.emit_initialization_with_origin(),
       Field::ForeignNode(x) => x.emit_initialization_with_origin(),
       Field::Relation(x) => x.emit_initialization_with_origin(),
-      Field::ForeignRelation(x) => x.emit_initialization_with_origin(),
     }
   }
 
@@ -43,7 +39,6 @@ impl Field {
       Field::Property(x) => x.emit_foreign_field_function(),
       Field::ForeignNode(x) => x.emit_foreign_field_function(),
       Field::Relation(x) => x.emit_foreign_field_function(),
-      Field::ForeignRelation(x) => x.emit_foreign_field_function(),
     }
   }
 }
@@ -113,11 +108,16 @@ impl FieldForeignNode {
     let foreign_type = format_ident!("{}", self.foreign_type);
 
     quote!(
-      pub fn #name (self) -> #foreign_type <{ N + 1 }> {
+      pub fn #name (self) -> #foreign_type <{ N + 2 }> {
         let origin = self.origin.unwrap_or_else(|| OriginHolder::new([""; N]));
-        let mut new_origin: [&'static str; N + 1] = [""; N + 1];
+        let mut new_origin: [&'static str; N + 2] = [""; N + 2];
         new_origin[..N].clone_from_slice(&origin.segments);
-        new_origin[N] = self.#name.identifier;
+
+        if (N > 0 && new_origin[N - 1] != ".") {
+          new_origin[N] = ".";
+        }
+
+        new_origin[N + 1] = self.#name.identifier;
 
         #foreign_type::with_origin(OriginHolder::new(new_origin))
       }
@@ -130,95 +130,72 @@ impl FieldForeignNode {
 pub struct FieldRelation {
   pub name: String,
   pub foreign_type: String,
+  pub alias: String,
+  pub relation_type: FieldRelationType,
+}
+
+#[derive(Debug, Clone)]
+pub enum FieldRelationType {
+  /// for `->` type of relations/edges
+  OutgoingEdge,
+
+  /// for `<-` type of relations/edges
+  IncomingEdge,
 }
 
 impl FieldRelation {
   fn emit_field(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
+    let alias = format_ident!("{}", self.alias);
 
-    quote!(pub #name: SchemaField<N>)
+    quote!(pub #alias: SchemaField<N>)
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let alias = format_ident!("{}", self.alias);
+    let name_str = format!("{}{}{}", self.name, self.edge(), self.foreign_type);
+    let field_type = self.field_type();
 
-    quote!(#name: SchemaField::new(#name_str, SchemaFieldType::Relation))
+    quote!(#alias: SchemaField::new(#name_str, #field_type))
   }
 
   pub fn emit_initialization_with_origin(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let alias = format_ident!("{}", self.alias);
+    let name_str = format!("{}{}{}", self.name, self.edge(), self.foreign_type);
+    let field_type = self.field_type();
 
-    quote!(#name: SchemaField::with_origin(#name_str, SchemaFieldType::Relation, origin.clone()))
+    quote!(#alias: SchemaField::with_origin(#name_str, #field_type, origin.clone()))
   }
 
   pub fn emit_foreign_field_function(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let alias = format_ident!("{}", self.alias);
     let foreign_type = format_ident!("{}", self.foreign_type);
+    let edge = self.edge();
 
     quote!(
-      pub fn #name (self) -> RelationNode<#foreign_type <{ N + 1 }>> {
+      pub fn #alias (self) -> #foreign_type <{N + 2}> {
         let origin = self.origin.unwrap_or_else(|| OriginHolder::new([""; N]));
-        let mut new_origin: [&'static str; N + 1] = [""; N + 1];
-        new_origin[..N].clone_from_slice(&origin.segments);
-        new_origin[N] = self.#name.identifier;
+        let mut new_nested_origin: [&'static str; N + 2] = [""; N + 2];
+        new_nested_origin[..N].clone_from_slice(&origin.segments);
 
-        RelationNode::new(
-          #name_str,
-          #foreign_type::with_origin(OriginHolder::new(new_origin))
-        )
+        new_nested_origin[N] = #edge;
+        new_nested_origin[N + 1] = self.#alias.identifier;
+
+        #foreign_type::with_origin(OriginHolder::new(new_nested_origin))
       }
     )
   }
-}
 
-/// A named relation that belongs to a foreign node
-#[derive(Debug, Clone)]
-pub struct FieldForeignRelation {
-  pub name: String,
-  pub foreign_type: String,
-}
-
-impl FieldForeignRelation {
-  fn emit_field(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-
-    quote!(pub #name: SchemaField<N>)
+  fn edge(&self) -> &'static str {
+    match &self.relation_type {
+      FieldRelationType::OutgoingEdge => "->",
+      FieldRelationType::IncomingEdge => "<-",
+    }
   }
 
-  pub fn emit_initialization(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
-
-    quote!(#name: SchemaField::new(#name_str, SchemaFieldType::ForeignRelation))
-  }
-
-  pub fn emit_initialization_with_origin(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
-
-    quote!(#name: SchemaField::with_origin(#name_str, SchemaFieldType::ForeignRelation, origin.clone()))
-  }
-
-  pub fn emit_foreign_field_function(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
-    let foreign_type = format_ident!("{}", self.foreign_type);
-
-    quote!(
-      pub fn #name (self) -> RelationNode<#foreign_type <{ N + 1 }>> {
-        let origin = self.origin.unwrap_or_else(|| OriginHolder::new([""; N]));
-        let mut new_origin: [&'static str; N + 1] = [""; N + 1];
-        new_origin[..N].clone_from_slice(&origin.segments);
-        new_origin[N] = self.#name.identifier;
-
-        RelationNode::new(
-          #name_str,
-          #foreign_type::with_origin(OriginHolder::new(new_origin))
-        )
-      }
-    )
+  fn field_type(&self) -> TokenStream {
+    match &self.relation_type {
+      FieldRelationType::OutgoingEdge => quote!(SchemaFieldType::Relation),
+      FieldRelationType::IncomingEdge => quote!(SchemaFieldType::ForeignRelation),
+    }
   }
 }

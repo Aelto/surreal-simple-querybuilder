@@ -16,7 +16,7 @@ Field: Field = {
   FieldProperty => Field::Property(<>),
   FieldForeignNode => Field::ForeignNode(<>),
   FieldRelation => Field::Relation(<>),
-  FieldForeignRelation => Field::ForeignRelation(<>)
+  FieldForeignRelation => Field::Relation(<>)
 }
 
 FieldProperty: FieldProperty = {
@@ -28,11 +28,13 @@ FieldForeignNode: FieldForeignNode = {
 }
 
 FieldRelation: FieldRelation = {
-  "->" <name:Identifier> "->" <foreign_type:Identifier> => FieldRelation { name, foreign_type }
+  KeywordOutgoingEdge <name:Identifier> KeywordOutgoingEdge <foreign_type:Identifier> KeywordAs <alias:Identifier> =>
+    FieldRelation { name, foreign_type, alias, relation_type: FieldRelationType::OutgoingEdge }
 }
 
-FieldForeignRelation: FieldForeignRelation = {
-  "<-" <name:Identifier> "<-" <foreign_type:Identifier> => FieldForeignRelation { name, foreign_type }
+FieldForeignRelation: FieldRelation = {
+  KeywordIncomingEdge <name:Identifier> KeywordIncomingEdge <foreign_type:Identifier> KeywordAs <alias:Identifier> =>
+    FieldRelation { name, foreign_type, alias, relation_type: FieldRelationType::IncomingEdge }
 }
 
 // -----------------------------------------------------------------------------
@@ -64,6 +66,9 @@ match {
 
   // These items have highest precedence.
   r"[0-9]+",
+  "as" => KeywordAs,
+  "->" => KeywordOutgoingEdge,
+  "<-" => KeywordIncomingEdge,
 } else {
   // These items have next highest precedence.
 
