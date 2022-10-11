@@ -84,6 +84,13 @@ impl<const N: usize> ToNodeBuilder for SchemaField<N> {
   fn equals_parameterized(&self) -> String {
     // special case for the schema field as it may include dots, we replace them
     // by underscores.
-    format!("{self} = ${}", self.to_string().replace(".", "_"))
+    format!(
+      "{self} = ${}",
+      self
+        .to_string()
+        .replace(".", "_")
+        .replace("->", "_")
+        .replace("<-", "_")
+    )
   }
 }
