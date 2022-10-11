@@ -8,6 +8,7 @@ Aims at being simple to use and not too verbose first.
  - [Compiler requirements/feature](#compiler-requirements)
  - [Examples](#examples)
    - [The `model` macro](#the-model-macro)
+     - [Relations between your models](#relations-between-your-models)
    - [The `NodeBuilder`traits](#the-nodebuilder-traits)
    - [The `QueryBuilder` type](#the-querybuilder-type)
    - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
@@ -55,7 +56,7 @@ that match the nodes of your database.
     handle: String,
     password: String,
     email: String,
-    friend: Foreign<Account>
+    friends: Foreign<Vec<Account>>
   }
 
   model!(Account {
@@ -69,7 +70,7 @@ that match the nodes of your database.
     // the schema module is created by the macro
     use schema::model as account;
 
-    let query = format!("select {} from {}", account.handle, account);
+    let query = format!("select {} from {account}", account.handle);
     assert_eq!("select handle from Account", query);
   }
   ```
@@ -80,6 +81,44 @@ This allows you to have compile time checked constants for your fields, allowing
 you to reference them while building your queries without fearing of making a typo
 or using a field you renamed long time ago.
 
+### Relations between your models
+If you wish to include relations (aka edges) in your models, the `model` macro
+has a special syntax for them:
+
+```rust
+mod account {
+  use surreal_simple_querybuilder::prelude::*;
+  use super::project::schema::Project;
+
+  model!(Account {
+    id,
+
+    ->manage->Project as managed_projects
+  });
+}
+
+mod project {
+  use surreal_simple_querybuilder::prelude::*;
+  use super::project::schema::Project;
+
+  model!(Project {
+    id,
+    name,
+
+    <-manage<-Account as authors
+  });
+}
+
+fn main() {
+    use account::schema::model as account;
+
+    let query = format!("select {} from {account}", account.managed_projects);
+    assert_eq!("select ->manage->Project from Account");
+
+    let query = format!("select {} from {account}", account.managed_projects().name.as_alias("project_names"))
+    assert_eq!("select ->manage->Project.name as project_names from Account", query);
+  }
+```
 
 ## The `NodeBuilder` traits
 These traits add a few utility functions to the `String` and `str` types that can
