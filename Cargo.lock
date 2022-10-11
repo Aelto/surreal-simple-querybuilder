@@ -433,12 +433,23 @@ version = "0.3.0"
 dependencies = [
  "serde",
  "serde_json",
- "surreal-simple-querybuilder-proc-macro",
+ "surreal-simple-querybuilder-proc-macro 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "surreal-simple-querybuilder-proc-macro"
 version = "0.1.0"
+dependencies = [
+ "lalrpop",
+ "lalrpop-util",
+ "quote",
+]
+
+[[package]]
+name = "surreal-simple-querybuilder-proc-macro"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d88e847a01d032e053098923d0dace1720a485b0fbf7e4b8ad8dbf038882acd"
 dependencies = [
  "lalrpop",
  "lalrpop-util",
