@@ -164,7 +164,7 @@ impl<'a> QueryBuilder<'a> {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
-  /// let query = QueryBuilder::new().also(&"ee").build();
+  /// let query = QueryBuilder::new().also("ee").build();
   ///
   /// assert_eq!(query, ", ee")
   /// ```

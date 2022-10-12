@@ -79,14 +79,66 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   ///
   /// let s = "account->manage->project".as_alias("account_projects");
   ///
-  /// assert_eq!("account->manage->project as account_projects");
+  /// assert_eq!("account->manage->project as account_projects", s);
   /// ```
   fn as_alias(&self, alias: &str) -> String {
     format!("{self} as {alias}")
   }
+
+  /// Take the current string, extract the last segment if it is a nested property,
+  /// then add parenthesis around it and add the supplied condition in them.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let path = "account->manage->project";
+  /// let s = path.filter("name = 'a_cool_project'");
+  ///
+  /// assert_eq!("account->manage->(project WHERE name = 'a_cool_project')", s);
+  /// ```
+  ///
+  fn filter(&self, condition: &str) -> String {
+    // This is a default implementation, but since we need the original string
+    // to iterate over the chars the function does two string allocations.
+    let original = self.to_string();
+    let original_size = original.len();
+
+    // this yields the size of the last segment, until a non alphanumeric character
+    // is found.
+    let last_segment_size = original
+      .chars()
+      .rev()
+      .take_while(|c| c.is_alphanumeric())
+      .count();
+
+    let left = &original[..original_size - last_segment_size];
+    let right = &original[original_size - last_segment_size..];
+
+    format!("{left}({right} WHERE {condition})")
+  }
 }
 
-impl<'a> ToNodeBuilder for &'a str {}
+impl<'a> ToNodeBuilder for &'a str {
+  fn filter(&self, condition: &str) -> String {
+    // unlike the default implementation of this trait function, the &str impl
+    // does only one allocation.
+    let original_size = self.len();
+
+    // this yields the size of the last segment, until a non alphanumeric character
+    // is found.
+    let last_segment_size = self
+      .chars()
+      .rev()
+      .take_while(|c| c.is_alphanumeric())
+      .count();
+
+    let left = &self[..original_size - last_segment_size];
+    let right = &self[original_size - last_segment_size..];
+
+    format!("{left}({right} WHERE {condition})")
+  }
+}
 
 pub trait NodeBuilder<T: Display = Self>: Display {
   /// Draws the start of a relation `->node`
