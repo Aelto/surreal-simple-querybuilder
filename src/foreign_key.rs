@@ -171,12 +171,25 @@ pub trait IntoKey<I> {
 
 /// An implementation for vector of objects that implement the IntoKey
 /// trait. So you can have `Foreign<Vec<MyType>>` rather than `Vec<Foreign<MyType>>`
-impl<V, K> IntoKey<K> for Vec<V>
+// impl<V, K> IntoKey<K> for Vec<V>
+// where
+//   V: IntoKey<K>,
+//   K: std::iter::FromIterator<K>,
+// {
+//   fn into_key<E>(&self) -> Result<K, E>
+//   where
+//     E: serde::ser::Error,
+//   {
+//     self.iter().map(|c| c.into_key()).collect()
+//   }
+// }
+
+impl<V, K> IntoKey<Vec<K>> for Vec<V>
 where
   V: IntoKey<K>,
   K: std::iter::FromIterator<K>,
 {
-  fn into_key<E>(&self) -> Result<K, E>
+  fn into_key<E>(&self) -> Result<Vec<K>, E>
   where
     E: serde::ser::Error,
   {
@@ -195,3 +208,7 @@ impl<V: IntoKey<K>, K> IntoKey<K> for Box<V> {
 
 /// A `ForeignKey` whose `Key` type is set to a `String` by default.
 pub type Foreign<T> = ForeignKey<T, String>;
+
+/// A `ForeignKey` whose `Key` type is set to a `Vec<String>` by default, and whose
+/// `Value` type is set to be a `Vec<T>`
+pub type ForeignVec<T> = ForeignKey<Vec<T>, Vec<String>>;

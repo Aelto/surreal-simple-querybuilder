@@ -10,7 +10,7 @@ struct Account {
   password: String,
   email: String,
 
-  projects: Foreign<Vec<Project>>,
+  projects: ForeignVec<Project>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -18,7 +18,7 @@ struct Project {
   id: Option<String>,
   name: String,
 
-  releases: Foreign<Vec<Release>>,
+  releases: ForeignVec<Release>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -252,17 +252,17 @@ fn test_model_self_reference() {
 #[test]
 fn test_model_serializing_relations() {
   assert_eq!(
-    "->manage->Project as account_projects",
+    "->manage->Project AS account_projects",
     account.managed_projects.as_alias("account_projects")
   );
   assert_eq!("Project", account.managed_projects().to_string());
   assert_eq!(
-    "->manage->Project.name as project_names",
+    "->manage->Project.name AS project_names",
     account.managed_projects().name.as_alias("project_names")
   );
 
   assert_eq!(
-    "->manage->Project->has->Release as account_projects_releases",
+    "->manage->Project->has->Release AS account_projects_releases",
     account
       .managed_projects()
       .releases
@@ -270,7 +270,7 @@ fn test_model_serializing_relations() {
   );
 
   assert_eq!(
-    "->manage->Project->has->Release.name as account_projects_release_names",
+    "->manage->Project->has->Release.name AS account_projects_release_names",
     account
       .managed_projects()
       .releases()
@@ -279,7 +279,7 @@ fn test_model_serializing_relations() {
   );
 
   assert_eq!(
-    "<-manage<-Account as authors",
+    "<-manage<-Account AS authors",
     project.authors.as_alias("authors")
   );
 }

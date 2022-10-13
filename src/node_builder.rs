@@ -71,7 +71,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{self} = ${self}")
   }
 
-  /// Take the current string and add `as $alias` after it
+  /// Take the current string and add `as alias` after it
   ///
   /// # Example
   /// ```
@@ -79,10 +79,10 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   ///
   /// let s = "account->manage->project".as_alias("account_projects");
   ///
-  /// assert_eq!("account->manage->project as account_projects", s);
+  /// assert_eq!("account->manage->project AS account_projects", s);
   /// ```
   fn as_alias(&self, alias: &str) -> String {
-    format!("{self} as {alias}")
+    format!("{self} AS {alias}")
   }
 
   /// Take the current string, extract the last segment if it is a nested property,
@@ -180,21 +180,6 @@ pub trait NodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("User:John->LOVES->User->FRIEND->User", *modified);
   /// ```
   fn if_then(&mut self, condition: bool, action: fn(&mut Self) -> &mut Self) -> &mut String;
-
-  /// Take the current string and add in front of it the given label name as to
-  /// make a string of the following format `LabelName:CurrentString`
-  ///
-  /// # Example
-  /// ```
-  /// use surreal_simple_querybuilder::prelude::*;
-  ///
-  /// let label = "John".as_named_label("Account");
-  ///
-  /// assert_eq!(label, "Account:John");
-  /// ```
-  fn as_named_label(&self, label_name: &str) -> String {
-    format!("{label_name}:{self}")
-  }
 }
 
 impl NodeBuilder for String {
@@ -212,3 +197,5 @@ impl NodeBuilder for String {
     }
   }
 }
+
+impl ToNodeBuilder for String {}
