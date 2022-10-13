@@ -50,6 +50,38 @@ impl<const N: usize> SchemaField<N> {
       Some(OriginHolder::new(new_origin)),
     )
   }
+
+  /// Return the name of the field, and if the field is an edge then return the
+  /// name of the edge instead.
+  ///
+  /// # Example
+  /// ```
+  /// #![allow(incomplete_features)]
+  /// #![feature(generic_const_exprs)]
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// model!(Test {
+  ///   normal_field,
+  ///   ->edge->Test as test_edge
+  /// });
+  ///
+  /// assert_eq!("normal_field", schema::model.normal_field.name());
+  /// assert_eq!("edge", schema::model.test_edge.name());
+  /// ```
+  pub fn name(&self) -> &'static str {
+    match self.field_type {
+      SchemaFieldType::Property => self.identifier,
+      _ => {
+        let edge_name_index = self
+          .identifier
+          .chars()
+          .take_while(|c| c.is_alphanumeric())
+          .count();
+
+        &self.identifier[..edge_name_index]
+      }
+    }
+  }
 }
 
 impl<const N: usize> Display for SchemaField<N> {
