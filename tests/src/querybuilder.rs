@@ -175,7 +175,7 @@ pub fn test_as_named_label() {
 
 #[test]
 pub fn test_foreign_serialize() {
-  let f: Foreign<Account> = Foreign::Key("Account:John".to_owned());
+  let f: Foreign<Account> = Foreign::new_key("Account:John".to_owned());
 
   // Confirm a foreign key is serialized into a simple string
   assert_eq!(
@@ -183,7 +183,7 @@ pub fn test_foreign_serialize() {
     serde_json::to_value(f).unwrap()
   );
 
-  let f: Foreign<Account> = Foreign::Loaded(Account {
+  let f: Foreign<Account> = Foreign::new_value(Account {
     id: Some("Account:John".to_owned()),
     ..Default::default()
   });
@@ -192,6 +192,55 @@ pub fn test_foreign_serialize() {
   assert_eq!(
     serde_json::Value::String("Account:John".to_owned()),
     serde_json::to_value(f).unwrap()
+  );
+}
+
+#[test]
+pub fn test_foreign_serialize_allowed() {
+  let f: Foreign<Account> = Foreign::new_value(Account {
+    id: Some("Account:John".to_owned()),
+    ..Default::default()
+  });
+
+  // once called, the Foreign should deserialize even the Values without calling
+  // IntoKeys
+  f.allow_value_serialize();
+
+  assert_eq!(
+    serde_json::to_string(&Account {
+      id: Some("Account:John".to_owned()),
+      ..Default::default()
+    })
+    .unwrap(),
+    serde_json::to_string(&f).unwrap()
+  );
+}
+
+#[test]
+pub fn test_foreign_serialize_allowed_vec() {
+  let v = vec![
+    Foreign::new_value(Account {
+      id: Some("Account:John".to_owned()),
+      ..Default::default()
+    }),
+    Foreign::new_key("Account:John".to_owned()),
+  ];
+
+  // once called, the Foreign should deserialize even the Values without calling
+  // IntoKeys
+  v.allow_value_serialize();
+
+  assert_eq!(
+    serde_json::to_value(&vec![
+      serde_json::to_value(Account {
+        id: Some("Account:John".to_owned()),
+        ..Default::default()
+      })
+      .unwrap(),
+      serde_json::to_value("Account:John").unwrap(),
+    ])
+    .unwrap(),
+    serde_json::to_value(&v).unwrap()
   );
 }
 
@@ -235,10 +284,7 @@ fn test_foreign_deserialize() {
   let file: File = serde_json::from_str(&unloaded_author_json).unwrap();
 
   // confirm the author field of the file is Unloaded
-  assert!(match file.author {
-    Foreign::Unloaded => true,
-    _ => false,
-  });
+  assert!(file.author.is_unloaded());
 }
 
 /// Test that a model can have fields that reference the `Self` type.

@@ -117,6 +117,21 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
 
     format!("{left}({right} WHERE {condition})")
   }
+
+  /// write a comma at the end of the string and append `right` after it.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let select = "*".comma("<-manage<-User as authors");
+  /// let query = format!("select {select} from Files");
+  ///
+  /// assert_eq!("select *, <-manage<-User as authors from Files", query);
+  /// ```
+  fn comma(&self, right: &str) -> String {
+    format!("{self}, {right}")
+  }
 }
 
 impl<'a> ToNodeBuilder for &'a str {
