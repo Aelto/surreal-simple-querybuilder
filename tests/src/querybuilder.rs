@@ -242,6 +242,34 @@ pub fn test_foreign_serialize_allowed_vec() {
     .unwrap(),
     serde_json::to_value(&v).unwrap()
   );
+
+  let v = ForeignVec::<Account>::new_value(vec![
+    Account {
+      id: Some("Account:John".to_owned()),
+      ..Default::default()
+    },
+    Account {
+      id: Some("Account:Mark".to_owned()),
+      ..Default::default()
+    },
+  ]);
+
+  v.allow_value_serialize();
+
+  assert_eq!(
+    serde_json::to_value(vec![
+      Account {
+        id: Some("Account:John".to_owned()),
+        ..Default::default()
+      },
+      Account {
+        id: Some("Account:Mark".to_owned()),
+        ..Default::default()
+      },
+    ])
+    .unwrap(),
+    serde_json::to_value(&v).unwrap()
+  );
 }
 
 #[test]
