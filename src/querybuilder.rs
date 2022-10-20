@@ -335,6 +335,126 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// Starts a GROUP BY clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .group_by("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "GROUP BY author");
+  /// ```
+  pub fn group_by<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+    self.add_segment_p("GROUP BY", field);
+
+    self
+  }
+
+  /// Starts a GROUP BY clause with zero or more fields,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .group_by_many(&["author", "projects"])
+  ///   .build();
+  ///
+  /// assert_eq!(query, "GROUP BY author , projects");
+  /// ```
+  pub fn group_by_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  where
+    T: Copy,
+  {
+    self.add_segment("GROUP BY");
+    self.join_segments(",", "", fields, "");
+
+    self
+  }
+
+  /// Starts a ORDER BY ASC clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .order_by_asc("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "ORDER BY author ASC");
+  /// ```
+  pub fn order_by_asc<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+    self.add_segment_ps("ORDER BY", field, "ASC");
+
+    self
+  }
+
+  /// Starts a ORDER BY ASC clause with zero or more fields,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .order_by_asc_many(&["author", "projects"])
+  ///   .build();
+  ///
+  /// assert_eq!(query, "ORDER BY author ASC , projects ASC");
+  /// ```
+  pub fn order_by_asc_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  where
+    T: Copy,
+  {
+    self.add_segment("ORDER BY");
+    self.join_segments(",", "", fields, "ASC");
+
+    self
+  }
+
+  /// Starts a ORDER BY DESC clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .order_by_desc("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "ORDER BY author DESC");
+  /// ```
+  pub fn order_by_desc<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+    self.add_segment_ps("ORDER BY", field, "DESC");
+
+    self
+  }
+
+  /// Starts a ORDER BY DESC clause with zero or more fields,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .order_by_desc_many(&["author", "projects"])
+  ///   .build();
+  ///
+  /// assert_eq!(query, "ORDER BY author DESC , projects DESC");
+  /// ```
+  pub fn order_by_desc_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  where
+    T: Copy,
+  {
+    self.add_segment("ORDER BY");
+    self.join_segments(",", "", fields, "DESC");
+
+    self
+  }
+
   /// Queues a condition which allows the next statement to be ignored if
   /// `condition` is `false`.
   ///
