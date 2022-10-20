@@ -289,8 +289,8 @@ to safely serialize it into an ID during serialization.
 
 ### `ForeignKey` and loaded data during serialization
 
-A `ForeignKey` always tried to serialize itself into an ID by default. Meaning that
-if the foreign-key held a value and not an ID, it will call the `IntoKey` trait on
+A `ForeignKey` always tries to serialize itself into an ID by default. Meaning that
+if the foreign-key holds a value and not an ID, it will call the `IntoKey` trait on
 the value in order to get an ID to serialize.
 
 There are cases where this may pose a problem, for example in an API where you wish
@@ -298,8 +298,7 @@ to serialize a struct with `ForeignKey` fields so the users can get all the data
 they need in a single request.
 
 By default if you were to serialize a `File` (from the example above) struct
-with a fetched `author`, it would be automatically converted into the author's id
-when returned to the client.
+with a fetched `author`, it would automatically be converted into the author's id.
 
 The `ForeignKey` struct offers two methods to control this behaviour:
 ```rust
