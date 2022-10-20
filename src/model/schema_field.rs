@@ -2,6 +2,8 @@ use std::fmt::Display;
 
 use crate::model::OriginHolder;
 use crate::node_builder::ToNodeBuilder;
+use crate::prelude::IntoQueryBuilderSegment;
+use crate::prelude::QueryBuilderSegment;
 
 pub enum SchemaFieldType {
   Property,
@@ -124,5 +126,16 @@ impl<const N: usize> ToNodeBuilder for SchemaField<N> {
         .replace("->", "_")
         .replace("<-", "_")
     )
+  }
+}
+
+impl<const N: usize> IntoQueryBuilderSegment for SchemaField<N> {
+  fn into<'b>(
+    self, _: &mut crate::prelude::QueryBuilder<'b>,
+  ) -> crate::prelude::QueryBuilderSegment<'b>
+  where
+    Self: 'b,
+  {
+    QueryBuilderSegment::Str(self.identifier)
   }
 }
