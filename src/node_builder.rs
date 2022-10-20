@@ -12,7 +12,15 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("user->project", s);
   /// ```
   fn with(&self, relation_or_node: &str) -> String {
-    format!("{self}->{relation_or_node}")
+    // write the arrow only if the first character is not a special character.
+    // there are cases where the `node` string that was passed starts with
+    // an arrow or a dot, in which case we do not want to push a new arrow
+    // ourselves.
+    if !relation_or_node.starts_with("->") && !relation_or_node.starts_with(".") {
+      format!("{self}->{relation_or_node}")
+    } else {
+      format!("{self}{relation_or_node}")
+    }
   }
 
   /// Draws the end of a relation `<-node`
@@ -199,7 +207,14 @@ pub trait NodeBuilder<T: Display = Self>: Display {
 
 impl NodeBuilder for String {
   fn with(&mut self, node: &str) -> &mut String {
-    self.push_str("->");
+    // push the arrow only if the first character is not a special character.
+    // there are cases where the `node` string that was passed starts with
+    // an arrow or a dot, in which case we do not want to push a new arrow
+    // ourselves.
+    if !node.starts_with("->") && !node.starts_with(".") {
+      self.push_str("->");
+    }
+
     self.push_str(node);
 
     self
