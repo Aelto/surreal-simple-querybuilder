@@ -480,7 +480,10 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT 1 , 2 SELECT 7 , 8");
   /// ```
-  pub fn if_then(self, condition: bool, action: fn(Self) -> Self) -> Self {
+  pub fn if_then<F>(self, condition: bool, action: F) -> Self
+  where
+    F: Fn(Self) -> Self,
+  {
     if !condition {
       return self;
     }
