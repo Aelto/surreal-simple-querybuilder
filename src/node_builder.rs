@@ -1,6 +1,10 @@
 use std::fmt::Display;
 
 pub trait ToNodeBuilder<T: Display = Self>: Display {
+  fn quoted(&self) -> String {
+    format!("\"{self}\"")
+  }
+
   /// Draws the start of a relation `->node`
   ///
   /// # Example
@@ -79,6 +83,80 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{self} = ${self}")
   }
 
+  /// Take the current string add add `> value` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".greater_than("5");
+  ///
+  /// assert_eq!("account > 5", s);
+  /// ```
+  fn greater_than(&self, value: &str) -> String {
+    format!("{self} > {value}")
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".contains_one("'c'");
+  ///
+  /// assert_eq!("account CONTAINS 'c'", s);
+  /// ```
+  fn contains_one(&self, value: &str) -> String {
+    format!("{self} CONTAINS {value}")
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".contains_not("'z'");
+  ///
+  /// assert_eq!("account CONTAINSNOT 'z'", s);
+  /// ```
+  fn contains_not(&self, value: &str) -> String {
+    format!("{self} CONTAINSNOT {value}")
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".contains_all("['a', 'c', 'u']");
+  ///
+  /// assert_eq!("account CONTAINSALL ['a', 'c', 'u']", s);
+  /// ```
+  fn contains_all(&self, values: &str) -> String {
+    format!("{self} CONTAINSALL {values}")
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".contains_any("['a', 'c', 'u']");
+  ///
+  /// assert_eq!("account CONTAINSANY ['a', 'c', 'u']", s);
+  /// ```
+  fn contains_any(&self, values: &str) -> String {
+    format!("{self} CONTAINSANY {values}")
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".contains_none("['z', 'd', 'f']");
+  ///
+  /// assert_eq!("account CONTAINSNONE ['z', 'd', 'f']", s);
+  /// ```
+  fn contains_none(&self, values: &str) -> String {
+    format!("{self} CONTAINSNONE {values}")
+  }
+
   /// Take the current string and add `as alias` after it
   ///
   /// # Example
@@ -139,6 +217,22 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// ```
   fn comma(&self, right: &str) -> String {
     format!("{self}, {right}")
+  }
+
+  /// write a `count()` around the current string so that it sits between the
+  /// parenthesis.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let count = "id".count();
+  /// let query = format!("select {count} from Files");
+  ///
+  /// assert_eq!("select count(id) from Files", query);
+  /// ```
+  fn count(&self) -> String {
+    format!("count({self})")
   }
 }
 
@@ -203,6 +297,18 @@ pub trait NodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("User:John->LOVES->User->FRIEND->User", *modified);
   /// ```
   fn if_then(&mut self, condition: bool, action: fn(&mut Self) -> &mut Self) -> &mut String;
+
+  /// Take the current string add add `> value` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".greater_than("5");
+  ///
+  /// assert_eq!("account > 5", s);
+  /// ```
+  fn greater_than(&mut self, value: &str) -> &mut String;
 }
 
 impl NodeBuilder for String {
@@ -225,6 +331,13 @@ impl NodeBuilder for String {
       true => action(self),
       false => self,
     }
+  }
+
+  fn greater_than(&mut self, value: &str) -> &mut String {
+    self.push_str(" > ");
+    self.push_str(value);
+
+    self
   }
 }
 
