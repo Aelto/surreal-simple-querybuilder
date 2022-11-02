@@ -123,7 +123,7 @@ impl QueryBuilderSetObject for Account {
 #[test]
 fn test_create_account_query() {
   let query = QueryBuilder::new()
-    .create(account.with_label("handle"))
+    .create(account.handle.as_named_label(&account.to_string()))
     .set_object::<Account>()
     .build();
 
@@ -166,9 +166,9 @@ pub fn test_nodebuilder_condition() {
 }
 
 #[test]
-pub fn test_with_label() {
+pub fn test_as_named_label() {
   let user_handle = "John";
-  let label = account.with_label(user_handle);
+  let label = user_handle.as_named_label("Account");
 
   assert_eq!(label, "Account:John");
 }
@@ -329,6 +329,7 @@ fn test_set_id() {
     "Account:123",
     account.set_node().set_id("123").origin().to_string()
   );
+  assert_eq!("Account:123", "Account".set_id("123"));
   let v = account
     .set_node()
     .set_id("fda")

@@ -60,12 +60,12 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
-  /// let label = "Account".with_label("John");
+  /// let label = "Account".set_id("John");
   ///
   /// assert_eq!(label, "Account:John");
   /// ```
-  fn with_label(&self, label_name: &str) -> String {
-    format!("{self}:{label_name}")
+  fn set_id(&self, id: &str) -> String {
+    format!("{self}:{id}")
   }
 
   /// # Example
