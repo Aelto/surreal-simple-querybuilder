@@ -64,6 +64,20 @@ impl Display for Model {
           }
         }
 
+        pub fn do_label(self,id: &str) -> #name<{N+2}> {
+          let origin = self.origin.unwrap_or_else(|| OriginHolder::new([""; N]));
+          let mut new_origin: [&'static str; N + 2] = [""; N + 2];
+          new_origin[..N].clone_from_slice(&origin.segments);
+
+          if (N > 0 && new_origin[N - 1] != ":") {
+            new_origin[N] = ":";
+          }
+
+          new_origin[N + 1] = Box::leak(id.to_owned().into_boxed_str());/// todo
+
+          #name::with_origin(OriginHolder::new(new_origin))
+        }
+
         #(#field_foreign_functions)*
       }
 
