@@ -6,6 +6,7 @@ use crate::prelude::IntoQueryBuilderSegment;
 use crate::prelude::QueryBuilderSegment;
 
 pub enum SchemaFieldType {
+  None,
   Property,
   Relation,
   ForeignRelation,
@@ -93,6 +94,7 @@ impl<const N: usize> Display for SchemaField<N> {
         write!(f, "{holder}")?;
 
         match &self.field_type {
+          SchemaFieldType::None => write!(f, "")?,
           SchemaFieldType::Property => write!(f, ".")?,
           SchemaFieldType::Relation => write!(f, "->")?,
           SchemaFieldType::ForeignRelation => write!(f, "<-")?,
@@ -103,6 +105,7 @@ impl<const N: usize> Display for SchemaField<N> {
       None => {
         // prefix depending on the field type
         match &self.field_type {
+          SchemaFieldType::None => {}
           SchemaFieldType::Property => {}
           SchemaFieldType::Relation => write!(f, "->")?,
           SchemaFieldType::ForeignRelation => write!(f, "<-")?,
@@ -122,6 +125,7 @@ impl<const N: usize> ToNodeBuilder for SchemaField<N> {
       "{self} = ${}",
       self
         .to_string()
+        .replace(":", "_")
         .replace(".", "_")
         .replace("->", "_")
         .replace("<-", "_")

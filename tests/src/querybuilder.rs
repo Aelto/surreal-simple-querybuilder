@@ -324,6 +324,22 @@ fn test_model_self_reference() {
 }
 
 #[test]
+fn test_set_id() {
+  assert_eq!(
+    "Account:123",
+    account.set_node().set_id("123").origin().to_string()
+  );
+  let v = account
+    .set_node()
+    .set_id("fda")
+    .managed_projects()
+    .set_id("fda")
+    .origin()
+    .to_string();
+  assert_eq!("Account:fda->manage->Project:fda", v);
+}
+
+#[test]
 fn test_model_serializing_relations() {
   assert_eq!(
     "->manage->Project AS account_projects",

@@ -55,6 +55,10 @@ impl Display for Model {
           }
         }
 
+        pub fn origin(self) -> SchemaField<N> {
+          SchemaField::with_origin("", SchemaFieldType::None, self.origin)
+        }
+
         pub fn with_origin(origin: OriginHolder<N>) -> Self {
           let origin = Some(origin);
 
@@ -64,7 +68,19 @@ impl Display for Model {
           }
         }
 
-        pub fn do_label(self,id: &str) -> #name<{N+2}> {
+        pub fn set_node(self) -> #name<{N+1}> {
+
+          let origin = self.origin.unwrap_or_else(|| OriginHolder::new([""; N]));
+          let mut new_origin: [&'static str; N + 1] = [""; N + 1];
+          new_origin[..N].clone_from_slice(&origin.segments);
+
+          new_origin[N] = Self::label;
+
+          #name::with_origin(OriginHolder::new(new_origin))
+        }
+
+        pub fn set_id(self,id: &str) -> #name<{N+2}> {
+
           let origin = self.origin.unwrap_or_else(|| OriginHolder::new([""; N]));
           let mut new_origin: [&'static str; N + 2] = [""; N + 2];
           new_origin[..N].clone_from_slice(&origin.segments);
@@ -73,7 +89,7 @@ impl Display for Model {
             new_origin[N] = ":";
           }
 
-          new_origin[N + 1] = Box::leak(id.to_owned().into_boxed_str());/// todo
+          new_origin[N + 1] = Box::leak(id.to_owned().into_boxed_str()); // to static str
 
           #name::with_origin(OriginHolder::new(new_origin))
         }
