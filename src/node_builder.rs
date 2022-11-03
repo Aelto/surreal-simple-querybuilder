@@ -60,6 +60,18 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
+  /// let label = "Account".with_id("John");
+  ///
+  /// assert_eq!(label, "Account:John");
+  /// ```
+  fn with_id(&self, id: &str) -> String {
+    format!("{self}:{id}")
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
   /// let s = "user".equals("John");
   ///
   /// // Note that it doesn't add quotes around strings

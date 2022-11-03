@@ -324,6 +324,16 @@ fn test_model_self_reference() {
 }
 
 #[test]
+fn test_with_id() {
+  assert_eq!("Account:123", account.with_id("123"));
+
+  let v = account
+    .with_id("fda")
+    .with(&account.managed_projects.with_id("fda"));
+  assert_eq!("Account:fda->manage->Project:fda", v);
+}
+
+#[test]
 fn test_model_serializing_relations() {
   assert_eq!(
     "->manage->Project AS account_projects",
