@@ -357,3 +357,17 @@ fn test_model_serializing_relations() {
     project.authors.as_alias("authors")
   );
 }
+
+#[test]
+fn test_with_id_edge() {
+  let query_one = "an_id"
+    .as_named_label(&account.to_string())
+    .with(&account.managed_projects.with_id("other_id"));
+
+  let query_two = account
+    .with_id("an_id")
+    .with(&account.managed_projects.with_id("other_id"));
+
+  assert_eq!("Account:an_id->manage->Project:other_id", query_two);
+  assert_eq!(query_one, query_two);
+}

@@ -234,6 +234,20 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   fn count(&self) -> String {
     format!("count({self})")
   }
+
+  /// Add the supplied `id` right after the current string in order to get the a
+  /// new string in the following format `current:id`
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = "Account".with_id("John");
+  ///
+  /// assert_eq!(query, "Account:John");
+  /// ```
+  fn with_id(&self, id: &str) -> String {
+    format!("{self}:{id}")
+  }
 }
 
 impl<'a> ToNodeBuilder for &'a str {
