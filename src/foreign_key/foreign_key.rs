@@ -1,6 +1,7 @@
 use std::cell::Cell;
 use std::fmt::Debug;
 use std::ops::Deref;
+use std::ops::DerefMut;
 
 use serde::Deserialize;
 use serde::Serialize;
@@ -100,6 +101,12 @@ impl<V, K> Deref for ForeignKey<V, K> {
 
   fn deref(&self) -> &Self::Target {
     &self.inner
+  }
+}
+
+impl<V, K> DerefMut for ForeignKey<V, K> {
+  fn deref_mut(&mut self) -> &mut Self::Target {
+    &mut self.inner
   }
 }
 
