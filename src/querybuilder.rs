@@ -509,6 +509,43 @@ impl<'a> QueryBuilder<'a> {
     action(self)
   }
 
+  /// Writes an AND followed by the supplied `first_condition` and any other
+  /// statement added to the querybuilder in the `action` closure surrounded by
+  /// parenthesis.
+  ///
+  /// Can be used to compose boolean expressions with grouped OR statements like so:
+  /// ```sql
+  /// WHERE name contains 'John' AND (name contains 'Doe' OR name contains 'Eod')
+  /// ```
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .select("*")
+  ///   .from("user")
+  ///   .filter("name contains 'John'")
+  ///   .and_group("name contains 'Doe'", |q| {
+  ///     q.or("name contains 'Eod'")
+  ///   })
+  ///   .build();
+  ///
+  /// assert_eq!(query, "SELECT * FROM user WHERE name contains 'John' AND ( name contains 'Doe' OR name contains 'Eod' )");
+  /// ```
+  pub fn and_group<F, T: IntoQueryBuilderSegment + 'a>(
+    mut self, first_condition: T, action: F,
+  ) -> Self
+  where
+    F: Fn(Self) -> Self,
+  {
+    self.add_segment_p("AND", "(");
+    self.add_segment(first_condition);
+    let mut output = action(self);
+    output.add_segment(")");
+
+    output
+  }
+
   /// Pushes raw text to the buffer
   ///
   /// # Example
