@@ -237,7 +237,25 @@ impl<'a> QueryBuilder<'a> {
     self.filter(condition)
   }
 
-  /// Starts a WHERE clause.
+  /// Writes a OR followed by the supplied `condition`
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .or("handle = ?1")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "OR handle = ?1");
+  /// ```
+  pub fn or<T: IntoQueryBuilderSegment + 'a>(mut self, condition: T) -> Self {
+    self.add_segment_p("OR", condition);
+
+    self
+  }
+
+  /// Starts an AND followed by the supplied `condition`.
   ///
   /// # Example
   /// ```
