@@ -1,9 +1,15 @@
 use std::str::FromStr;
 
+use darling::FromMeta;
 use lalrpop_util::lalrpop_mod;
 use proc_macro::TokenStream;
+use querybuilder_object::{emit_querybuilder_object_impl, options::QueryBuilderObjectDeriveOptions};
+use quote::{quote};
+use syn::{AttributeArgs, parse_macro_input};
+use quote::__private::TokenStream as QuoteTokenStream;
 
 mod ast;
+mod querybuilder_object;
 
 lalrpop_mod!(parser);
 
@@ -105,4 +111,28 @@ pub fn model(input: TokenStream) -> TokenStream {
 
   let output = model.to_string();
   TokenStream::from_str(&output).unwrap()
+}
+
+#[proc_macro_attribute]
+pub fn querybuilder_object(args: TokenStream, input: TokenStream) -> TokenStream {
+  let quoted_token_stream = QuoteTokenStream::from(input.clone());
+  let attribute_args = parse_macro_input!(args as AttributeArgs);
+  let ast: syn::DeriveInput = syn::parse(input).unwrap();
+  let struct_name = ast.ident;
+
+  if let Ok(options) = QueryBuilderObjectDeriveOptions::from_list(&attribute_args) {
+    if let syn::Data::Struct(data_struct) = ast.data {
+      let output = emit_querybuilder_object_impl(&struct_name, &data_struct.fields, &options.model);
+  
+      return quote! {
+        #quoted_token_stream
+        #output
+      }.into()
+    }
+  }
+
+  dbg!("dsfsdf");
+
+
+  TokenStream::from_str("").unwrap()
 }

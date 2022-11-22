@@ -5,6 +5,7 @@
 pub mod model;
 
 pub use surreal_simple_querybuilder_proc_macro::model;
+pub use surreal_simple_querybuilder_proc_macro::querybuilder_object;
 
 /// Contains a trait for simplifying the building of relationships between nodes
 pub mod node_builder;

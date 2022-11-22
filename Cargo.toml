@@ -17,7 +17,7 @@ members = [
 [dependencies]
 serde = { version = "1.0.144", features = ["derive"] }
 
-surreal-simple-querybuilder-proc-macro = "0.1.0"
+surreal-simple-querybuilder-proc-macro = { path = "./model-proc-macro" }
 
 [dev-dependencies]
 serde_json = "1.0"

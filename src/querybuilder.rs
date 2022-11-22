@@ -1,7 +1,9 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, borrow::Cow};
+
+type CowSegment<'a> = Cow<'a, str>;
 
 pub struct QueryBuilder<'a> {
-  segments: Vec<QueryBuilderSegment<'a>>,
+  segments: Vec<CowSegment<'a>>,
   parameters: HashMap<&'a str, &'a str>,
   storage: Vec<String>,
 }
@@ -23,7 +25,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "CREATE Person:ee")
   /// ```
-  pub fn create<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+  pub fn create<T: Into<CowSegment<'a>>>(mut self, node: T) -> Self {
     self.add_segment_p("CREATE", node);
 
     self
@@ -37,7 +39,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "UPDATE Person:ee")
   /// ```
-  pub fn update<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+  pub fn update<T: Into<CowSegment<'a>>>(mut self, node: T) -> Self {
     self.add_segment_p("UPDATE", node);
 
     self
@@ -51,7 +53,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT ee:Person")
   /// ```
-  pub fn select<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+  pub fn select<T: Into<CowSegment<'a>>>(mut self, node: T) -> Self {
     self.add_segment_p("SELECT", node);
 
     self
@@ -70,7 +72,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "DELETE ee:Person");
   /// ```
-  pub fn delete<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+  pub fn delete<T: Into<CowSegment<'a>>>(mut self, node: T) -> Self {
     self.add_segment_p("DELETE", node);
 
     self
@@ -91,7 +93,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "RELATE user:John->likes->user:Mark");
   /// ```
-  pub fn relate<T: IntoQueryBuilderSegment + 'a>(mut self, node: T) -> Self {
+  pub fn relate<T: Into<CowSegment<'a>>>(mut self, node: T) -> Self {
     self.add_segment_p("RELATE", node);
 
     self
@@ -118,7 +120,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "CONTENT { creation_time: time::now() }");
   /// ```
-  pub fn content<T: IntoQueryBuilderSegment + 'a>(mut self, json_content: T) -> Self {
+  pub fn content<T: Into<CowSegment<'a>>>(mut self, json_content: T) -> Self {
     self.add_segment_p("CONTENT", json_content);
 
     self
@@ -131,9 +133,7 @@ impl<'a> QueryBuilder<'a> {
   /// let query = QueryBuilder::new().from("Person").build();
   ///
   /// assert_eq!(query, "FROM Person")
-  pub fn from<T>(mut self, node: T) -> Self
-  where
-    T: IntoQueryBuilderSegment + 'a,
+  pub fn from<T: Into<CowSegment<'a>>>(mut self, node: T) -> Self
   {
     self.add_segment_p("FROM", node);
 
@@ -148,7 +148,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT ee:Person , o:Order")
   /// ```
-  pub fn select_many<T: IntoQueryBuilderSegment + 'a>(mut self, nodes: &[T]) -> Self
+  pub fn select_many<T: Into<CowSegment<'a>>>(mut self, nodes: &[T]) -> Self
   where
     T: Copy,
   {
@@ -168,7 +168,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, ", ee")
   /// ```
-  pub fn also<T: IntoQueryBuilderSegment + 'a>(mut self, query: T) -> Self {
+  pub fn also<T: Into<CowSegment<'a>>>(mut self, query: T) -> Self {
     self.add_segment_p(",", query);
 
     self
@@ -188,7 +188,7 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "set handle , set id");
   /// ```
   #[allow(dead_code)]
-  fn join_segments<T: IntoQueryBuilderSegment + 'a>(
+  fn join_segments<T: Into<CowSegment<'a>>>(
     &mut self, seperator: &'a str, prefix: &'a str, segments: &[T], suffix: &'a str,
   ) -> &mut Self
   where
@@ -226,14 +226,14 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "WHERE handle = ?1");
   /// ```
-  pub fn filter<T: IntoQueryBuilderSegment + 'a>(mut self, condition: T) -> Self {
+  pub fn filter<T: Into<CowSegment<'a>>>(mut self, condition: T) -> Self {
     self.add_segment_p("WHERE", condition);
 
     self
   }
 
   /// An alias for `QueryBuilder::filter`
-  pub fn and_where<T: IntoQueryBuilderSegment + 'a>(self, condition: T) -> Self {
+  pub fn and_where<T: Into<CowSegment<'a>>>(self, condition: T) -> Self {
     self.filter(condition)
   }
 
@@ -249,7 +249,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "OR handle = ?1");
   /// ```
-  pub fn or<T: IntoQueryBuilderSegment + 'a>(mut self, condition: T) -> Self {
+  pub fn or<T: Into<CowSegment<'a>>>(mut self, condition: T) -> Self {
     self.add_segment_p("OR", condition);
 
     self
@@ -267,7 +267,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "AND handle = ?1");
   /// ```
-  pub fn and<T: IntoQueryBuilderSegment + 'a>(mut self, condition: T) -> Self {
+  pub fn and<T: Into<CowSegment<'a>>>(mut self, condition: T) -> Self {
     self.add_segment_p("AND", condition);
 
     self
@@ -285,7 +285,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SET handle = ?1");
   /// ```
-  pub fn set<T: IntoQueryBuilderSegment + 'a>(mut self, update: T) -> Self {
+  pub fn set<T: Into<CowSegment<'a>>>(mut self, update: T) -> Self {
     self.add_segment_p("SET", update);
 
     self
@@ -303,7 +303,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SET handle = $1 , password = $2");
   /// ```
-  pub fn set_many<T: IntoQueryBuilderSegment + 'a>(mut self, updates: &[T]) -> Self
+  pub fn set_many<T: Into<CowSegment<'a>>>(mut self, updates: &[T]) -> Self
   where
     T: Copy,
   {
@@ -325,7 +325,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "FETCH author");
   /// ```
-  pub fn fetch<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+  pub fn fetch<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
     self.add_segment_p("FETCH", field);
 
     self
@@ -343,7 +343,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "FETCH author , projects");
   /// ```
-  pub fn fetch_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  pub fn fetch_many<T: Into<CowSegment<'a>>>(mut self, fields: &[T]) -> Self
   where
     T: Copy,
   {
@@ -365,7 +365,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "GROUP BY author");
   /// ```
-  pub fn group_by<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+  pub fn group_by<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
     self.add_segment_p("GROUP BY", field);
 
     self
@@ -383,7 +383,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "GROUP BY author , projects");
   /// ```
-  pub fn group_by_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  pub fn group_by_many<T: Into<CowSegment<'a>>>(mut self, fields: &[T]) -> Self
   where
     T: Copy,
   {
@@ -405,7 +405,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "ORDER BY author ASC");
   /// ```
-  pub fn order_by_asc<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+  pub fn order_by_asc<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
     self.add_segment_ps("ORDER BY", field, "ASC");
 
     self
@@ -423,7 +423,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "ORDER BY author ASC , projects ASC");
   /// ```
-  pub fn order_by_asc_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  pub fn order_by_asc_many<T: Into<CowSegment<'a>>>(mut self, fields: &[T]) -> Self
   where
     T: Copy,
   {
@@ -445,7 +445,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "ORDER BY author DESC");
   /// ```
-  pub fn order_by_desc<T: IntoQueryBuilderSegment + 'a>(mut self, field: T) -> Self {
+  pub fn order_by_desc<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
     self.add_segment_ps("ORDER BY", field, "DESC");
 
     self
@@ -463,7 +463,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "ORDER BY author DESC , projects DESC");
   /// ```
-  pub fn order_by_desc_many<T: IntoQueryBuilderSegment + 'a>(mut self, fields: &[T]) -> Self
+  pub fn order_by_desc_many<T: Into<CowSegment<'a>>>(mut self, fields: &[T]) -> Self
   where
     T: Copy,
   {
@@ -532,7 +532,7 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT * FROM user WHERE name contains 'John' AND ( name contains 'Doe' OR name contains 'Eod' )");
   /// ```
-  pub fn and_group<F, T: IntoQueryBuilderSegment + 'a>(
+  pub fn and_group<F, T: Into<CowSegment<'a>>>(
     mut self, first_condition: T, action: F,
   ) -> Self
   where
@@ -608,7 +608,7 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "LIMIT 10")
   ///
   /// ```
-  pub fn limit<T: IntoQueryBuilderSegment + 'a>(mut self, limit: T) -> Self {
+  pub fn limit<T: Into<CowSegment<'a>>>(mut self, limit: T) -> Self {
     self.add_segment_p("LIMIT", limit);
 
     self
@@ -629,7 +629,7 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "START AT 10")
   ///
   /// ```
-  pub fn start_at<T: IntoQueryBuilderSegment + 'a>(mut self, offset: T) -> Self {
+  pub fn start_at<T: Into<CowSegment<'a>>>(mut self, offset: T) -> Self {
     self.add_segment_p("START AT", offset);
 
     self
@@ -638,13 +638,11 @@ impl<'a> QueryBuilder<'a> {
   /// Add the given segment to the internal buffer. This is a rather internal
   /// method that is set public for special cases, you should prefer using the `raw`
   /// method instead.
-  pub fn add_segment<T: IntoQueryBuilderSegment + 'a>(&mut self, segment: T) -> &mut Self {
-    let into = segment.into(self);
+  pub fn add_segment<T: Into<CowSegment<'a>>>(&mut self, segment: T) -> &mut Self {
+    let into = segment.into();
 
-    if let QueryBuilderSegment::Str(s) = into {
-      if s.is_empty() {
-        return self;
-      }
+    if into.is_empty() {
+      return self;
     }
 
     self.segments.push(into);
@@ -652,13 +650,13 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
-  fn add_segment_p<T: IntoQueryBuilderSegment + 'a>(
+  fn add_segment_p<T: Into<CowSegment<'a>>>(
     &mut self, prefix: &'a str, segment: T,
   ) -> &mut Self {
     self.add_segment(prefix).add_segment(segment)
   }
 
-  fn add_segment_ps<T: IntoQueryBuilderSegment + 'a>(
+  fn add_segment_ps<T: Into<CowSegment<'a>>>(
     &mut self, prefix: &'a str, segment: T, suffix: &'a str,
   ) -> &mut Self {
     self.add_segment_p(prefix, segment).add_segment(suffix)
@@ -690,12 +688,6 @@ impl<'a> QueryBuilder<'a> {
   pub fn build(self) -> String {
     let mut output = self
       .segments
-      .iter()
-      .map(|s| match s {
-        QueryBuilderSegment::Str(s) => s,
-        QueryBuilderSegment::Ref(i) => &self.storage[*i][..],
-      })
-      .collect::<Vec<&str>>()
       .join(" ");
 
     for (key, value) in self.parameters {
@@ -711,7 +703,7 @@ impl<'a> QueryBuilder<'a> {
 
   /// Tell the current query builder to execute the [QueryBuilderSetObject] trait
   /// for the given `T` generic type.
-  pub fn set_object<T: QueryBuilderSetObject>(self) -> Self
+  pub fn set_object<T: QueryBuilderObject>(self) -> Self
   where
     T: 'a,
   {
@@ -769,7 +761,7 @@ impl<'a> QueryBuilder<'a> {
 /// ```
 ///
 /// Refer to the `test.rs` file to a more complete example.
-pub trait QueryBuilderSetObject {
+pub trait QueryBuilderObject {
   fn set_querybuilder_object<'b>(querybuilder: QueryBuilder<'b>) -> QueryBuilder<'b>;
 }
 

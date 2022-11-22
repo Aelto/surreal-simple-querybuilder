@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::fmt::Display;
 
 use crate::model::OriginHolder;
@@ -126,6 +127,12 @@ impl<const N: usize> ToNodeBuilder for SchemaField<N> {
         .replace("->", "_")
         .replace("<-", "_")
     )
+  }
+}
+
+impl<const N: usize> Into<Cow<'static, str>> for SchemaField<N> {
+  fn into(self) -> Cow<'static, str> {
+    Cow::from(self.identifier)
   }
 }
 

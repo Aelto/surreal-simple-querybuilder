@@ -4,6 +4,7 @@ use serde::Serialize;
 use surreal_simple_querybuilder::prelude::*;
 
 #[derive(Debug, Serialize, Deserialize, Default)]
+#[querybuilder_object(model = "account")]
 struct Account {
   id: Option<String>,
   handle: String,
@@ -62,6 +63,7 @@ mod account {
 
 use account::schema::model as account;
 use project::schema::model as project;
+use surreal_simple_querybuilder_proc_macro::querybuilder_object;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct File {
@@ -108,17 +110,17 @@ impl IntoKey<String> for Account {
   }
 }
 
-impl QueryBuilderSetObject for Account {
-  fn set_querybuilder_object<'a>(mut querybuilder: QueryBuilder<'a>) -> QueryBuilder {
-    let a = &[
-      querybuilder.hold(account.handle.equals_parameterized()),
-      querybuilder.hold(account.password.equals_parameterized()),
-      querybuilder.hold(account.email.equals_parameterized()),
-    ];
+// impl QueryBuilderObject for Account {
+//   fn set_querybuilder_object<'a>(querybuilder: QueryBuilder<'a>) -> QueryBuilder {
+//     let output = querybuilder.set_many(&[
+//       account.handle.equals_parameterized(),
+//       account.password.equals_parameterized(),
+//       account.email.equals_parameterized(),
+//     ]);
 
-    querybuilder.set_many(a)
-  }
-}
+//     output
+//   }
+// }
 
 #[test]
 fn test_create_account_query() {

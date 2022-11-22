@@ -82,6 +82,12 @@ impl Display for Model {
         }
       }
 
+      impl<const N: usize> Into<std::borrow::Cow<'static, str>> for #name<N> {
+        fn into(self) -> std::borrow::Cow<'static, str> {
+          std::borrow::Cow::from(Self::label)
+        }
+      }
+
       impl<const N: usize> ToNodeBuilder for #name<N> {}
     };
 
