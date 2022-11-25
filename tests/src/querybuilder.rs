@@ -4,7 +4,6 @@ use serde::Serialize;
 use surreal_simple_querybuilder::prelude::*;
 
 #[derive(Debug, Serialize, Deserialize, Default)]
-#[querybuilder_object(model = "account")]
 struct Account {
   id: Option<String>,
   handle: String,
@@ -31,7 +30,9 @@ struct Release {
 mod release {
   use surreal_simple_querybuilder::prelude::*;
 
-  model!(Release { name });
+  model!(Release {
+    pub name
+  });
 }
 
 mod project {
@@ -40,10 +41,10 @@ mod project {
   use surreal_simple_querybuilder::prelude::*;
 
   model!(Project {
-    name,
+    pub name,
 
-    ->has->Release as releases,
-    <-manage<-Account as authors
+    pub ->has->Release as releases,
+    pub <-manage<-Account as authors
   });
 }
 
@@ -52,9 +53,9 @@ mod account {
   use surreal_simple_querybuilder::prelude::*;
 
   model!(Account {
-    handle,
-    password,
-    email,
+    pub handle,
+    pub password,
+    pub email,
     friend<Account>,
 
     ->manage->Project as managed_projects,
@@ -63,7 +64,6 @@ mod account {
 
 use account::schema::model as account;
 use project::schema::model as project;
-use surreal_simple_querybuilder_proc_macro::querybuilder_object;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct File {
@@ -110,23 +110,12 @@ impl IntoKey<String> for Account {
   }
 }
 
-// impl QueryBuilderObject for Account {
-//   fn set_querybuilder_object<'a>(querybuilder: QueryBuilder<'a>) -> QueryBuilder {
-//     let output = querybuilder.set_many(&[
-//       account.handle.equals_parameterized(),
-//       account.password.equals_parameterized(),
-//       account.email.equals_parameterized(),
-//     ]);
-
-//     output
-//   }
-// }
-
 #[test]
 fn test_create_account_query() {
   let query = QueryBuilder::new()
     .create(account.handle.as_named_label(&account.to_string()))
-    .set_object::<Account>()
+    .set_model(&account)
+    .unwrap()
     .build();
 
   assert_eq!(

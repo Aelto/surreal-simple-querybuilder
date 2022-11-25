@@ -1,15 +1,9 @@
 use std::str::FromStr;
 
-use darling::FromMeta;
 use lalrpop_util::lalrpop_mod;
 use proc_macro::TokenStream;
-use querybuilder_object::{emit_querybuilder_object_impl, options::QueryBuilderObjectDeriveOptions};
-use quote::{quote};
-use syn::{AttributeArgs, parse_macro_input};
-use quote::__private::TokenStream as QuoteTokenStream;
 
 mod ast;
-mod querybuilder_object;
 
 lalrpop_mod!(parser);
 
@@ -68,7 +62,7 @@ lalrpop_mod!(parser);
 ///
 ///   model!(Project {
 ///     id,
-///     name,
+///     pub name,
 ///
 ///     <-manage<-Account as authors
 ///   });
@@ -84,6 +78,34 @@ lalrpop_mod!(parser);
 ///   assert_eq!("select ->manage->Project.name as project_names from Account", query);
 /// }
 /// ```
+/// 
+/// ## public & private fields
+/// 
+/// The QueryBuilder type offers a series of methods to quickly list the fields of your
+/// models in SET or UPDATE statements so you don't have to write the fields and the
+/// variable names one by one. Since you may not want to serialize some of the fields
+/// like the `id` for example the model macro has the `pub` keyword to mark a field
+/// as serializable. Any field without the `pub` keyword in front of it will not
+/// be serialized by these methods.
+/// 
+/// ```rs
+/// model!(Project {
+///   id, // <- won't be serialized
+///   pub name, // <- will be serialized
+/// })
+/// 
+/// fn example() {
+///   use schema::model as project;
+/// 
+///   let query = QueryBuilder::new()
+///     .set_model(project)
+///     .build();
+/// 
+///   assert_eq!(query, "SET name = $name");
+/// }
+/// ```
+/// 
+/// ## Expected output
 ///
 /// The macro automatically creates a module named `schema` with two main elements
 /// inside:
@@ -91,13 +113,15 @@ lalrpop_mod!(parser);
 ///  - a `model` constant that is an instance of the struct above so you can quickly
 /// use it without having to call `Account::new()` everytime.
 ///
-/// Here is an trimmed down version of what to expect, keep in mind this is an example
+/// Here is a trimmed down version of what to expect, keep in mind this is an example
 /// and not exactly what you will find:
 /// ```rs
 /// mod schema {
+///   #[derive(Serialize)]
 ///   struct Account {
+///     #[serde(skip_serializing)]
 ///     id: &'static str
-///     name: &'statis str,
+///     name: &'static str,
 ///     // ...
 ///   }
 ///
@@ -111,28 +135,4 @@ pub fn model(input: TokenStream) -> TokenStream {
 
   let output = model.to_string();
   TokenStream::from_str(&output).unwrap()
-}
-
-#[proc_macro_attribute]
-pub fn querybuilder_object(args: TokenStream, input: TokenStream) -> TokenStream {
-  let quoted_token_stream = QuoteTokenStream::from(input.clone());
-  let attribute_args = parse_macro_input!(args as AttributeArgs);
-  let ast: syn::DeriveInput = syn::parse(input).unwrap();
-  let struct_name = ast.ident;
-
-  if let Ok(options) = QueryBuilderObjectDeriveOptions::from_list(&attribute_args) {
-    if let syn::Data::Struct(data_struct) = ast.data {
-      let output = emit_querybuilder_object_impl(&struct_name, &data_struct.fields, &options.model);
-  
-      return quote! {
-        #quoted_token_stream
-        #output
-      }.into()
-    }
-  }
-
-  dbg!("dsfsdf");
-
-
-  TokenStream::from_str("").unwrap()
 }

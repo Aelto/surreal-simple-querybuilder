@@ -1,6 +1,8 @@
 use std::borrow::Cow;
 use std::fmt::Display;
 
+use serde::Serialize;
+
 use crate::model::OriginHolder;
 use crate::node_builder::ToNodeBuilder;
 use crate::prelude::IntoQueryBuilderSegment;
@@ -144,5 +146,14 @@ impl<const N: usize> IntoQueryBuilderSegment for SchemaField<N> {
     Self: 'b,
   {
     QueryBuilderSegment::Str(self.identifier)
+  }
+}
+
+impl<const N: usize> Serialize for SchemaField<N> {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+  where
+    S: serde::Serializer,
+  {
+    serializer.serialize_str(&self.to_string())
   }
 }

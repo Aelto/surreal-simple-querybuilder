@@ -21,7 +21,9 @@ impl Display for Model {
       self.fields.iter().map(|field| field.emit_field()).collect();
 
     let struct_declaration = quote! {
+      #[derive(serde::Serialize)]
       pub struct #name <const N: usize> {
+        #[serde(skip_serializing)]
         origin: Option<OriginHolder<N>>,
         #(#field_declarations),*
       }
