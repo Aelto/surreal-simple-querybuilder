@@ -1,6 +1,6 @@
 [package]
 name = "surreal-simple-querybuilder"
-version = "0.3.1"
+version = "0.4.0"
 edition = "2021"
 license = "MIT"
 description = "A query-building & utility crate for SurrealDB and its SQL querying language that aims to be simple"
@@ -17,7 +17,7 @@ members = [
 [dependencies]
 serde = { version = "1.0.144", features = ["derive"] }
 
-surreal-simple-querybuilder-proc-macro = { path = "./model-proc-macro" }
+surreal-simple-querybuilder-proc-macro = "0.2.0"
 
 [dev-dependencies]
 serde_json = "1.0"
