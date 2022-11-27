@@ -9,7 +9,6 @@ type CowSegment<'a> = Cow<'a, str>;
 pub struct QueryBuilder<'a> {
   segments: Vec<CowSegment<'a>>,
   parameters: HashMap<&'a str, &'a str>,
-  storage: Vec<String>,
 }
 
 impl<'a> QueryBuilder<'a> {
@@ -17,7 +16,6 @@ impl<'a> QueryBuilder<'a> {
     QueryBuilder {
       segments: Vec::new(),
       parameters: HashMap::new(),
-      storage: Vec::new(),
     }
   }
 
@@ -730,127 +728,5 @@ impl<'a> QueryBuilder<'a> {
     self.add_segment_p("UPDATE", parameters);
 
     Ok(self)
-  }
-
-  /// Tell the current querybuilder to hold the given string into its internal
-  /// buffer and to return a reference to the newly held value a `QueryBuilder`
-  /// can use.
-  ///
-  /// This function is particularely useful if some of your code is inside a
-  /// short-lived scope such as a closure but you still need to add segments to
-  /// the querybuilder. However the fact the querybuilder initially holds series
-  /// of `&'a str` makes it impossible, this is where you can tell the builder
-  /// to _hold_ the given string for you.
-  pub fn hold(&mut self, string: String) -> QueryBuilderSegment<'a> {
-    let i = self.storage.len();
-
-    self.storage.push(string);
-
-    QueryBuilderSegment::Ref(i)
-  }
-}
-
-/// This trait allows you to easily and safely convert a type into a series of
-/// statements. One such case being a series of `field = $field` statements.
-///
-/// # Example
-/// ```rs
-/// impl QueryBuilderSetObject for Account {
-///  fn set_querybuilder_object<'a>(mut querybuilder: QueryBuilder<'a>) -> QueryBuilder {
-///    let a = &[
-///      querybuilder.hold(schema::handle.equals_parameterized()),
-///      querybuilder.hold(schema::password.equals_parameterized()),
-///      querybuilder.hold(schema::email.equals_parameterized()),
-///      querybuilder.hold(schema::roles.equals_parameterized()),
-///    ];
-///
-///    querybuilder.set_many(a)
-///  }
-/// }
-/// ```
-///
-/// which can be used like so:
-/// ```rs
-/// let query = QueryBuilder::new()
-///   .create("Account:John")
-///   .set_object::<Account>()
-///   .build();
-///
-/// assert_eq!(
-///   "CREATE Account:John SET handle = $handle , password = $password , email = $email , roles = $roles",
-///   query
-/// );
-/// ```
-///
-/// Refer to the `test.rs` file to a more complete example.
-pub trait QueryBuilderObject {
-  fn set_querybuilder_object<'b>(querybuilder: QueryBuilder<'b>) -> QueryBuilder<'b>;
-}
-
-/// Segment of a query held by the [QueryBuilder] until the final query is built.
-///
-/// Has two variants:
-///  - [QueryBuilderSegment::Str] for string slices that will outlive the [QueryBuilder]
-///  - [QueryBuilderSegment::Ref] for references to values that live **in** the [QueryBuilder].
-/// such references can be obtained using the [`QueryBuilder::hold()`] method.
-#[derive(Clone, Copy)]
-pub enum QueryBuilderSegment<'a> {
-  Str(&'a str),
-  Ref(usize),
-}
-
-impl<'a> From<&'a str> for QueryBuilderSegment<'a> {
-  fn from(i: &'a str) -> Self {
-    QueryBuilderSegment::Str(i)
-  }
-}
-
-impl<'a> From<usize> for QueryBuilderSegment<'a> {
-  fn from(i: usize) -> Self {
-    QueryBuilderSegment::Ref(i)
-  }
-}
-
-/// Implementing the trait allows `Self` to be converted into a [QueryBuilderSegment]
-/// when needed. Allows one to pass `Self` to all of the [QueryBuilder]'s methods.
-pub trait IntoQueryBuilderSegment {
-  fn into<'b>(self, querybuilder: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
-  where
-    Self: 'b;
-}
-
-impl IntoQueryBuilderSegment for &str {
-  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
-  where
-    Self: 'b,
-  {
-    QueryBuilderSegment::Str(self)
-  }
-}
-
-impl IntoQueryBuilderSegment for String {
-  fn into<'b>(self, querybuilder: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
-  where
-    Self: 'b,
-  {
-    querybuilder.hold(self)
-  }
-}
-
-impl IntoQueryBuilderSegment for &String {
-  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
-  where
-    Self: 'b,
-  {
-    QueryBuilderSegment::Str(self)
-  }
-}
-
-impl IntoQueryBuilderSegment for QueryBuilderSegment<'_> {
-  fn into<'b>(self, _: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
-  where
-    Self: 'b,
-  {
-    self
   }
 }

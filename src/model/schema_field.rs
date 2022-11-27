@@ -5,8 +5,6 @@ use serde::Serialize;
 
 use crate::model::OriginHolder;
 use crate::node_builder::ToNodeBuilder;
-use crate::prelude::IntoQueryBuilderSegment;
-use crate::prelude::QueryBuilderSegment;
 
 pub enum SchemaFieldType {
   Property,
@@ -135,17 +133,6 @@ impl<const N: usize> ToNodeBuilder for SchemaField<N> {
 impl<const N: usize> Into<Cow<'static, str>> for SchemaField<N> {
   fn into(self) -> Cow<'static, str> {
     Cow::from(self.identifier)
-  }
-}
-
-impl<const N: usize> IntoQueryBuilderSegment for SchemaField<N> {
-  fn into<'b>(
-    self, _: &mut crate::prelude::QueryBuilder<'b>,
-  ) -> crate::prelude::QueryBuilderSegment<'b>
-  where
-    Self: 'b,
-  {
-    QueryBuilderSegment::Str(self.identifier)
   }
 }
 
