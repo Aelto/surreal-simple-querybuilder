@@ -47,13 +47,23 @@ impl Field {
 #[derive(Debug, Clone)]
 pub struct FieldProperty {
   pub name: String,
+
+  pub is_public: bool,
 }
 
 impl FieldProperty {
   fn emit_field(&self) -> TokenStream {
     let name = format_ident!("{}", self.name);
+    let attribute = match self.is_public {
+      false => emit_skip_serializing_attribute(),
+      true => quote!(),
+    };
 
-    quote!(pub #name: SchemaField<N>).into()
+    quote!(
+      #attribute
+      pub #name: SchemaField<N>
+    )
+    .into()
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
@@ -80,13 +90,22 @@ impl FieldProperty {
 pub struct FieldForeignNode {
   pub name: String,
   pub foreign_type: String,
+
+  pub is_public: bool,
 }
 
 impl FieldForeignNode {
   fn emit_field(&self) -> TokenStream {
     let name = format_ident!("{}", self.name);
+    let attribute = match self.is_public {
+      false => emit_skip_serializing_attribute(),
+      true => quote!(),
+    };
 
-    quote!(pub #name: SchemaField<N>)
+    quote!(
+      #attribute
+      pub #name: SchemaField<N>
+    )
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
@@ -132,6 +151,7 @@ pub struct FieldRelation {
   pub foreign_type: String,
   pub alias: String,
   pub relation_type: FieldRelationType,
+  pub is_public: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -146,8 +166,15 @@ pub enum FieldRelationType {
 impl FieldRelation {
   fn emit_field(&self) -> TokenStream {
     let alias = format_ident!("{}", self.alias);
+    let attribute = match self.is_public {
+      false => emit_skip_serializing_attribute(),
+      true => quote!(),
+    };
 
-    quote!(pub #alias: SchemaField<N>)
+    quote!(
+      #attribute
+      pub #alias: SchemaField<N>
+    )
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
@@ -198,4 +225,8 @@ impl FieldRelation {
       FieldRelationType::IncomingEdge => quote!(SchemaFieldType::ForeignRelation),
     }
   }
+}
+
+fn emit_skip_serializing_attribute() -> TokenStream {
+  quote!(#[serde(skip_serializing)])
 }

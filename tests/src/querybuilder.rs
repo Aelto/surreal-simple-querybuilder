@@ -30,7 +30,9 @@ struct Release {
 mod release {
   use surreal_simple_querybuilder::prelude::*;
 
-  model!(Release { name });
+  model!(Release {
+    pub name
+  });
 }
 
 mod project {
@@ -39,10 +41,10 @@ mod project {
   use surreal_simple_querybuilder::prelude::*;
 
   model!(Project {
-    name,
+    pub name,
 
-    ->has->Release as releases,
-    <-manage<-Account as authors
+    pub ->has->Release as releases,
+    pub <-manage<-Account as authors
   });
 }
 
@@ -51,9 +53,9 @@ mod account {
   use surreal_simple_querybuilder::prelude::*;
 
   model!(Account {
-    handle,
-    password,
-    email,
+    pub handle,
+    pub password,
+    pub email,
     friend<Account>,
 
     ->manage->Project as managed_projects,
@@ -108,23 +110,12 @@ impl IntoKey<String> for Account {
   }
 }
 
-impl QueryBuilderSetObject for Account {
-  fn set_querybuilder_object<'a>(mut querybuilder: QueryBuilder<'a>) -> QueryBuilder {
-    let a = &[
-      querybuilder.hold(account.handle.equals_parameterized()),
-      querybuilder.hold(account.password.equals_parameterized()),
-      querybuilder.hold(account.email.equals_parameterized()),
-    ];
-
-    querybuilder.set_many(a)
-  }
-}
-
 #[test]
 fn test_create_account_query() {
   let query = QueryBuilder::new()
     .create(account.handle.as_named_label(&account.to_string()))
-    .set_object::<Account>()
+    .set_model(&account)
+    .unwrap()
     .build();
 
   assert_eq!(

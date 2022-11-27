@@ -1,9 +1,10 @@
+use std::borrow::Cow;
 use std::fmt::Display;
+
+use serde::Serialize;
 
 use crate::model::OriginHolder;
 use crate::node_builder::ToNodeBuilder;
-use crate::prelude::IntoQueryBuilderSegment;
-use crate::prelude::QueryBuilderSegment;
 
 pub enum SchemaFieldType {
   Property,
@@ -129,13 +130,17 @@ impl<const N: usize> ToNodeBuilder for SchemaField<N> {
   }
 }
 
-impl<const N: usize> IntoQueryBuilderSegment for SchemaField<N> {
-  fn into<'b>(
-    self, _: &mut crate::prelude::QueryBuilder<'b>,
-  ) -> crate::prelude::QueryBuilderSegment<'b>
+impl<const N: usize> Into<Cow<'static, str>> for SchemaField<N> {
+  fn into(self) -> Cow<'static, str> {
+    Cow::from(self.identifier)
+  }
+}
+
+impl<const N: usize> Serialize for SchemaField<N> {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
   where
-    Self: 'b,
+    S: serde::Serializer,
   {
-    QueryBuilderSegment::Str(self.identifier)
+    serializer.serialize_str(&self.to_string())
   }
 }

@@ -21,7 +21,9 @@ impl Display for Model {
       self.fields.iter().map(|field| field.emit_field()).collect();
 
     let struct_declaration = quote! {
+      #[derive(serde::Serialize)]
       pub struct #name <const N: usize> {
+        #[serde(skip_serializing)]
         origin: Option<OriginHolder<N>>,
         #(#field_declarations),*
       }
@@ -73,12 +75,9 @@ impl Display for Model {
         }
       }
 
-      impl<const N: usize> IntoQueryBuilderSegment for #name<N> {
-        fn into<'b>(self, querybuilder: &mut QueryBuilder<'b>) -> QueryBuilderSegment<'b>
-        where
-          Self: 'b,
-        {
-          querybuilder.hold(self.to_string())
+      impl<const N: usize> Into<std::borrow::Cow<'static, str>> for #name<N> {
+        fn into(self) -> std::borrow::Cow<'static, str> {
+          std::borrow::Cow::from(Self::label)
         }
       }
 
