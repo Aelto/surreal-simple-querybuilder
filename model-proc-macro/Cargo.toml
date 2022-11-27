@@ -1,6 +1,6 @@
 [package]
 name = "surreal-simple-querybuilder-proc-macro"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 description = "The proc macro for a query-building & utility crate for SurrealDB and its SQL querying language that aims to be simple"
