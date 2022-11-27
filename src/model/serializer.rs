@@ -341,26 +341,3 @@ impl<'a> ser::SerializeStructVariant for &'a mut SqlFieldSerializer {
     Ok(())
   }
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-#[test]
-fn test_struct() {
-  #[derive(Serialize)]
-  struct Test {
-    field_a: String,
-    field_b: u8,
-
-    #[serde(skip_serializing)]
-    #[allow(dead_code)]
-    field_c: u8,
-  }
-
-  let test = Test {
-    field_a: "".to_owned(),
-    field_b: 16,
-    field_c: 24,
-  };
-  let expected = r#"field_a = $field_a,field_b = $field_b"#;
-  assert_eq!(to_parameters(&test).unwrap(), expected);
-}

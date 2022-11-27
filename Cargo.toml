@@ -21,3 +21,7 @@ surreal-simple-querybuilder-proc-macro = { path = "./model-proc-macro" }
 
 [dev-dependencies]
 serde_json = "1.0"
+
+[[example]]
+name = "querybuilder-basics"
+path = "examples/0-querybuilder-basics.rs"

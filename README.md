@@ -3,15 +3,19 @@ A simple query-builder for the Surreal Query Language, for [SurrealDB](https://s
 Aims at being simple to use and not too verbose first.
 
 # Summary
- - [Why a query-builder](#why-a-query-builder)
- - [SQL injections](#sql-injections)
- - [Compiler requirements/feature](#compiler-requirements)
- - [Examples](#examples)
-   - [The `model` macro](#the-model-macro)
-     - [Relations between your models](#relations-between-your-models)
-   - [The `NodeBuilder`traits](#the-nodebuilder-traits)
-   - [The `QueryBuilder` type](#the-querybuilder-type)
-   - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
+- [Surreal simple querybuilder](#surreal-simple-querybuilder)
+- [Summary](#summary)
+- [Why a query-builder](#why-a-query-builder)
+- [SQL injections](#sql-injections)
+- [Compiler requirements/features](#compiler-requirementsfeatures)
+- [Examples](#examples)
+  - [The `model` macro](#the-model-macro)
+    - [public \& private fields in models](#public--private-fields-in-models)
+    - [Relations between your models](#relations-between-your-models)
+  - [The `NodeBuilder` traits](#the-nodebuilder-traits)
+  - [The `QueryBuilder` type](#the-querybuilder-type)
+  - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
+    - [`ForeignKey` and loaded data during serialization](#foreignkey-and-loaded-data-during-serialization)
 
 # Why a query-builder
 Query builders allow you to dynamically build your queries with some compile time
@@ -40,7 +44,9 @@ any program using the crate has to add the following at the root of the main fil
 ```
 
 # Examples
-A complete example can be found in the [`tests project`](/tests/src/querybuilder.rs). For an explanation of what each component in the crate does, refer to the chapters below.
+ - A series of [examples are available](/examples/) to offer a **guided introduction** to the core features of the crate
+ - An all-in-one exapmle can be found in the [`tests project`](/tests/src/querybuilder.rs).
+ - For an explanation of what each component in the crate does, refer to the chapters below.
 ## The `model` macro
 The `model` macro allows you to quickly create structs (aka models) with fields
 that match the nodes of your database.
