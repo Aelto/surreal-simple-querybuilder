@@ -83,7 +83,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{self} = ${self}")
   }
 
-  /// Take the current string add add `> value` after it
+  /// Take the current string and add `> value` after it
   ///
   /// # Example
   /// ```
@@ -95,6 +95,20 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// ```
   fn greater_than(&self, value: &str) -> String {
     format!("{self} > {value}")
+  }
+
+  /// Take the current string and add `+= value` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "friends".plus_equal("account:john");
+  ///
+  /// assert_eq!("friends += account:john", s);
+  /// ```
+  fn plus_equal(&self, value: &str) -> String {
+    format!("{self} += {value}")
   }
 
   /// # Example
@@ -323,6 +337,18 @@ pub trait NodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("account > 5", s);
   /// ```
   fn greater_than(&mut self, value: &str) -> &mut String;
+
+  /// Take the current string and add `+= value` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "friends".plus_equal("account:john");
+  ///
+  /// assert_eq!("friends += account:john", s);
+  /// ```
+  fn plus_equal(&mut self, value: &str) -> &mut String;
 }
 
 impl NodeBuilder for String {
@@ -349,6 +375,13 @@ impl NodeBuilder for String {
 
   fn greater_than(&mut self, value: &str) -> &mut String {
     self.push_str(" > ");
+    self.push_str(value);
+
+    self
+  }
+
+  fn plus_equal(&mut self, value: &str) -> &mut String {
+    self.push_str(" += ");
     self.push_str(value);
 
     self
