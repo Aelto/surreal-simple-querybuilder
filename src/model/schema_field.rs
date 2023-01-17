@@ -136,6 +136,12 @@ impl<const N: usize> Into<Cow<'static, str>> for SchemaField<N> {
   }
 }
 
+impl<const N: usize> Into<String> for SchemaField<N> {
+  fn into(self) -> String {
+    self.to_string()
+  }
+}
+
 impl<const N: usize> Serialize for SchemaField<N> {
   fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
   where
