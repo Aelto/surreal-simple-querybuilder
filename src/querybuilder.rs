@@ -3,8 +3,9 @@ use std::{borrow::Cow, collections::HashMap};
 use serde::Serialize;
 
 use crate::prelude::SqlSerializeResult;
+use crate::queries::QueryBuilderConsumable;
 
-type CowSegment<'a> = Cow<'a, str>;
+pub type CowSegment<'a> = Cow<'a, str>;
 
 pub struct QueryBuilder<'a> {
   segments: Vec<CowSegment<'a>>,
@@ -728,5 +729,9 @@ impl<'a> QueryBuilder<'a> {
     self.add_segment_p("UPDATE", parameters);
 
     Ok(self)
+  }
+
+  pub fn feed(self, consumable: &impl QueryBuilderConsumable<Self>) -> Self {
+    consumable.feed(self)
   }
 }

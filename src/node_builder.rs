@@ -83,6 +83,20 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{self} = ${self}")
   }
 
+  /// Take the current string and add `+= $current_string` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "account".plus_equal_parameterized();
+  ///
+  /// assert_eq!("account += $account", s);
+  /// ```
+  fn plus_equal_parameterized(&self) -> String {
+    format!("{self} += ${self}")
+  }
+
   /// Take the current string and add `> value` after it
   ///
   /// # Example

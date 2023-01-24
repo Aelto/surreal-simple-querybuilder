@@ -6,12 +6,14 @@ use serde::Serialize;
 use crate::model::OriginHolder;
 use crate::node_builder::ToNodeBuilder;
 
+#[derive(Debug, Clone, Copy)]
 pub enum SchemaFieldType {
   Property,
   Relation,
   ForeignRelation,
 }
 
+#[derive(Clone, Copy)]
 pub struct SchemaField<const N: usize> {
   pub identifier: &'static str,
   field_type: SchemaFieldType,

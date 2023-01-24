@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 ///
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct OriginHolder<const N: usize> {
   pub segments: [&'static str; N],
 }

@@ -11,6 +11,7 @@ use super::Field;
 pub struct Model {
   pub name: String,
   pub fields: Vec<Field>,
+  pub alias: Option<String>,
 }
 
 impl Display for Model {
@@ -84,8 +85,13 @@ impl Display for Model {
       impl<const N: usize> ToNodeBuilder for #name<N> {}
     };
 
+    let module_name = match &self.alias {
+      Some(alias) => format_ident!("{alias}"),
+      None => format_ident!("schema"),
+    };
+
     let output = quote! {
-      pub mod schema {
+      pub mod #module_name {
         use super::*;
         use surreal_simple_querybuilder::prelude::*;
 
