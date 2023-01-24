@@ -23,12 +23,7 @@ where
   Table: Into<CowSegment<'static>>,
   Params: QueryBuilderConsumable<QueryBuilder<'a>>,
 {
-  let query = QueryBuilder::new()
-    .feed(&Select(table))
-    .feed(&params)
-    .build();
-
-  let a = params;
+  let query = QueryBuilder::new().feed(Select(table)).feed(params).build();
 
   (query, HashMap::new())
 }
@@ -68,7 +63,7 @@ impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
   fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
     let (select, filter) = self;
 
-    querybuilder.feed(&select).feed(&filter)
+    querybuilder.feed(select).feed(filter)
   }
 }
 
@@ -78,7 +73,7 @@ impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
   fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
     let (select, pagination) = self;
 
-    querybuilder.feed(&select).feed(&pagination)
+    querybuilder.feed(select).feed(pagination)
   }
 }
 
@@ -88,7 +83,7 @@ impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
   fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
     let (select, filter, pagination) = self;
 
-    querybuilder.feed(&select).feed(&filter).feed(&pagination)
+    querybuilder.feed(select).feed(filter).feed(pagination)
   }
 }
 
@@ -99,9 +94,9 @@ impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
     let (select, filter, pagination, fetch) = self;
 
     querybuilder
-      .feed(&select)
-      .feed(&filter)
-      .feed(&pagination)
-      .feed(&fetch)
+      .feed(select)
+      .feed(filter)
+      .feed(pagination)
+      .feed(fetch)
   }
 }

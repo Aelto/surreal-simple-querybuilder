@@ -30,14 +30,14 @@ pub struct Update<T: Into<CowSegment<'static>>>(pub T);
 pub struct Delete<T: Into<CowSegment<'static>>>(pub T);
 
 pub fn query<'a, C: QueryBuilderConsumable<QueryBuilder<'a>>>(consumable: C) -> String {
-  QueryBuilder::new().feed(&consumable).build()
+  QueryBuilder::new().feed(consumable).build()
 }
 
 pub trait QueryBuilderConsumable<T>
 where
   Self: Sized,
 {
-  fn feed(&self, consumer: &mut T);
+  fn feed(self, consumer: T) -> T;
 }
 
 // pub trait QueryBuilderConsumer<T: QueryBuilderConsumable> {
@@ -48,7 +48,7 @@ impl<'a> QueryBuilderConsumable<QueryBuilder<'a>> for (Filter, Pagination) {
   fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
     let (filter, pagination) = self;
 
-    querybuilder.feed(&filter).feed(&pagination)
+    querybuilder.feed(filter).feed(pagination)
   }
 }
 

@@ -731,7 +731,7 @@ impl<'a> QueryBuilder<'a> {
     Ok(self)
   }
 
-  pub fn feed(self, consumable: &impl QueryBuilderConsumable<Self>) -> Self {
+  pub fn feed(self, consumable: impl QueryBuilderConsumable<Self>) -> Self {
     consumable.feed(self)
   }
 }
