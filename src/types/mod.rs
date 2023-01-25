@@ -1,7 +1,23 @@
+mod equal;
 mod fetch;
 mod filter;
+mod from;
+mod greater;
+mod lower;
 mod pagination;
+mod plus_equal;
+mod select;
+mod set;
+mod update;
 
+pub use equal::Equal;
 pub use fetch::Fetch;
-pub use filter::Filter;
+pub use filter::Where;
+pub use from::From;
+pub use greater::Greater;
+pub use lower::Lower;
 pub use pagination::Pagination;
+pub use plus_equal::PlusEqual;
+pub use select::Select;
+pub use set::Set;
+pub use update::Update;

@@ -1,60 +1,51 @@
 use std::collections::HashMap;
-use std::marker::PhantomData;
 
-use crate::prelude::*;
+use crate::prelude::QueryBuilder;
 
+mod impls;
 mod select;
+mod update;
 
-pub use select::*;
+pub use impls::*;
+pub use select::select;
+pub use update::update;
 
-pub struct Client<T>(PhantomData<T>);
-pub type QueryResult = (String, HashMap<String, String>);
+// TODO:
+// - create a Equals, PlusEquals, GreaterThan, LowerThan, etc... instead of Filter
+// - make them combinable with Select,Update,Delete and have different outputs based on the combinations
+//   thanks to traits
+// - find a clean solution for Fetch: at the moment it clones the Cow
+//
+//
 
-// impl<T: Into<CowSegment<'static>>> QueryBuilderConsumable for (Update<T>, Filter) {
-//   fn compose<'a>(self) -> QueryBuilder<'a> {
-//     let (update, filter) = self;
+pub trait QueryBuilderInjecter<'a> {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    querybuilder
+  }
 
-//     QueryBuilder::new().select(update.0).feed(filter)
-//   }
-// }
-
-// impl<T: Into<CowSegment<'static>>> QueryBuilderConsumable for (Delete<T>, Filter) {
-//   fn compose<'a>(self) -> QueryBuilder<'a> {
-//     let (delete, filter) = self;
-
-//     QueryBuilder::new().select(delete.0).feed(filter)
-//   }
-// }
-
-pub struct Update<T: Into<CowSegment<'static>>>(pub T);
-pub struct Delete<T: Into<CowSegment<'static>>>(pub T);
-
-pub fn query<'a, C: QueryBuilderConsumable<QueryBuilder<'a>>>(consumable: C) -> String {
-  QueryBuilder::new().feed(consumable).build()
-}
-
-pub trait QueryBuilderConsumable<T>
-where
-  Self: Sized,
-{
-  fn feed(self, consumer: T) -> T;
-}
-
-// pub trait QueryBuilderConsumer<T: QueryBuilderConsumable> {
-//   fn eat(self, consumable: T) -> Self;
-// }
-
-impl<'a> QueryBuilderConsumable<QueryBuilder<'a>> for (Filter, Pagination) {
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let (filter, pagination) = self;
-
-    querybuilder.feed(filter).feed(pagination)
+  fn params(self, _map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  where
+    Self: Sized,
+  {
+    Ok(())
   }
 }
 
-impl<'a> QueryBuilderConsumable<QueryBuilder<'a>> for (Pagination, Filter) {
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    // re-use the `(Filter,Pagination)` impl
-    (self.1, self.0).feed(querybuilder)
-  }
+// TODO: this function could maybe be converted to a const fn? Or at least be
+// cached
+pub fn query<'a>(component: &impl QueryBuilderInjecter<'a>) -> serde_json::Result<String> {
+  let builder = QueryBuilder::new();
+  let builder = component.inject(builder);
+  let query = builder.build();
+
+  Ok(query)
+}
+
+pub fn bindings<'a>(
+  component: impl QueryBuilderInjecter<'a> + 'a,
+) -> serde_json::Result<HashMap<String, String>> {
+  let mut params = HashMap::new();
+  component.params(&mut params)?;
+
+  Ok(params)
 }

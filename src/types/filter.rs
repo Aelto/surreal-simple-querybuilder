@@ -1,32 +1,25 @@
-use serde_json::Value;
+use std::collections::HashMap;
 
 use crate::prelude::QueryBuilder;
-use crate::prelude::ToNodeBuilder;
-use crate::queries::QueryBuilderConsumable;
+use crate::prelude::QueryBuilderInjecter;
 
-pub struct Filter(pub Value);
+pub struct Where<T>(pub T);
 
-impl<'a> QueryBuilderConsumable<QueryBuilder<'a>> for Filter {
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    self.0.feed(querybuilder)
+// impl<'a, T> Where<T>
+// where
+//   T: QueryBuilderInjecter<'a>,
+// {
+//   pub fn new(component: T) -> Self {
+//     Self(component)
+//   }
+// }
+
+impl<'a, T: QueryBuilderInjecter<'a>> QueryBuilderInjecter<'a> for Where<T> {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    querybuilder.filter("").ands(|q| self.0.inject(q))
   }
-}
 
-impl<'a> QueryBuilderConsumable<QueryBuilder<'a>> for Value {
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let mut query = querybuilder;
-
-    if let Some(map) = self.as_object() {
-      let mut keys = map.keys();
-      if let Some(first_filter) = keys.next() {
-        query = query.filter(first_filter.equals_parameterized());
-      }
-
-      for key in keys {
-        query = query.and(key.equals_parameterized());
-      }
-    }
-
-    query
+  fn params(self, map: &mut HashMap<String, String>) -> serde_json::Result<()> {
+    self.0.params(map)
   }
 }

@@ -1,102 +1,38 @@
 use std::collections::HashMap;
 
-use crate::prelude::*;
+use crate::types::From;
+use crate::types::Select;
 
-use super::QueryResult;
+use super::bindings;
+use super::query;
+use super::QueryBuilderInjecter;
 
-pub struct Select<T: Into<CowSegment<'static>>>(pub T);
+pub fn select<'a>(
+  what: &'static str, from: &'static str, component: impl QueryBuilderInjecter<'a> + 'a,
+) -> serde_json::Result<(String, HashMap<String, String>)> {
+  let params = (Select(what), From(from), component);
+  let query = query(&params)?;
+  let bindings = bindings(params)?;
 
-impl<T: Into<CowSegment<'static>>> From<T> for Select<T> {
-  fn from(value: T) -> Self {
-    Select(value)
-  }
+  Ok((query, bindings))
 }
 
-// -----------------------------------------------------------------------------
+#[test]
+fn test() {
+  use crate::prelude::*;
 
-pub fn select<T: Into<CowSegment<'static>>>(table: T) -> QueryResult {
-  (super::query(Select(table)), HashMap::new())
-}
+  let filter = serde_json::json!({ "name": "John", "age": 10 });
+  let pagination = Pagination::from(10..25);
+  let fetch = Fetch(["friends", "articles"]);
+  let components = (Where(filter), pagination, fetch);
 
-pub fn select_params<'a, Table, Params>(table: Table, params: Params) -> QueryResult
-where
-  Table: Into<CowSegment<'static>>,
-  Params: QueryBuilderConsumable<QueryBuilder<'a>>,
-{
-  let query = QueryBuilder::new().feed(Select(table)).feed(params).build();
+  let (query, params) = select("*", "User", components).unwrap();
 
-  (query, HashMap::new())
-}
+  assert_eq!(
+    "SELECT * FROM User WHERE age = $age AND name = $name LIMIT 15 START AT 10 FETCH friends , articles",
+    query
+  );
 
-// -----------------------------------------------------------------------------
-
-// pub trait SelectParams {
-//   fn with_select<'a, T: Into<CowSegment<'static>>>(self, select: Select<T>) -> QueryBuilder<'a>;
-// }
-
-// impl SelectParams for Filter {
-//   fn with_select<'a, T: Into<CowSegment<'static>>>(self, select: Select<T>) -> QueryBuilder<'a> {
-//     (select, self)
-//   }
-// }
-
-// impl SelectParams for Pagination {
-//   fn with_select<'a, T: Into<CowSegment<'static>>>(self, select: Select<T>) -> QueryBuilder<'a> {
-//     (select, self).feed()
-//   }
-// }
-
-// -----------------------------------------------------------------------------
-
-impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>> for Select<T> {
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let select = self;
-    let segment: CowSegment = select.0.into();
-
-    querybuilder.select(segment)
-  }
-}
-
-impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
-  for (Select<T>, Filter)
-{
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let (select, filter) = self;
-
-    querybuilder.feed(select).feed(filter)
-  }
-}
-
-impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
-  for (Select<T>, Pagination)
-{
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let (select, pagination) = self;
-
-    querybuilder.feed(select).feed(pagination)
-  }
-}
-
-impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
-  for (Select<T>, Filter, Pagination)
-{
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let (select, filter, pagination) = self;
-
-    querybuilder.feed(select).feed(filter).feed(pagination)
-  }
-}
-
-impl<'a, T: Into<CowSegment<'static>>> QueryBuilderConsumable<QueryBuilder<'a>>
-  for (Select<T>, Filter, Pagination, Fetch)
-{
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
-    let (select, filter, pagination, fetch) = self;
-
-    querybuilder
-      .feed(select)
-      .feed(filter)
-      .feed(pagination)
-      .feed(fetch)
-  }
+  assert_eq!(params.get("name"), Some(&"\"John\"".to_owned()));
+  assert_eq!(params.get("age"), Some(&"10".to_owned()));
 }

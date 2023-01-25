@@ -97,6 +97,34 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{self} += ${self}")
   }
 
+  /// Take the current string and add `> $current_string` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "age".greater_parameterized();
+  ///
+  /// assert_eq!("age > $age", s);
+  /// ```
+  fn greater_parameterized(&self) -> String {
+    format!("{self} > ${self}")
+  }
+
+  /// Take the current string and add `< $current_string` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "age".greater_parameterized();
+  ///
+  /// assert_eq!("age < $age", s);
+  /// ```
+  fn lower_parameterized(&self) -> String {
+    format!("{self} < ${self}")
+  }
+
   /// Take the current string and add `> value` after it
   ///
   /// # Example

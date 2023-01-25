@@ -152,3 +152,17 @@ impl<const N: usize> Serialize for SchemaField<N> {
     serializer.serialize_str(&self.to_string())
   }
 }
+
+impl<const N: usize> std::ops::Deref for SchemaField<N> {
+  type Target = str;
+
+  fn deref(&self) -> &Self::Target {
+    self.identifier
+  }
+}
+
+impl<const N: usize> AsRef<str> for SchemaField<N> {
+  fn as_ref(&self) -> &str {
+    self.identifier
+  }
+}

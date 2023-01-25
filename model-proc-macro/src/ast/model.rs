@@ -82,6 +82,20 @@ impl Display for Model {
         }
       }
 
+      impl<const N: usize> std::ops::Deref for #name<N> {
+        type Target = str;
+
+        fn deref(&self) -> &Self::Target {
+          Self::label
+        }
+      }
+
+      impl<const N: usize> AsRef<str> for #name<N> {
+        fn as_ref(&self) -> &str {
+          Self::label
+        }
+      }
+
       impl<const N: usize> ToNodeBuilder for #name<N> {}
     };
 

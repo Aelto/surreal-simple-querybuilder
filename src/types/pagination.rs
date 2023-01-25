@@ -1,9 +1,9 @@
 use std::ops::Range;
 
 use crate::prelude::QueryBuilder;
-use crate::prelude::QueryBuilderConsumable;
+use crate::prelude::QueryBuilderInjecter;
 
-pub struct Pagination(Range<u64>);
+pub struct Pagination(pub Range<u64>);
 
 impl From<Range<u64>> for Pagination {
   fn from(value: Range<u64>) -> Self {
@@ -12,6 +12,10 @@ impl From<Range<u64>> for Pagination {
 }
 
 impl Pagination {
+  pub fn new(range: Range<u64>) -> Self {
+    Pagination(range)
+  }
+
   pub fn limit(&self) -> u64 {
     self.0.end - self.0.start
   }
@@ -21,8 +25,8 @@ impl Pagination {
   }
 }
 
-impl<'a> QueryBuilderConsumable<QueryBuilder<'a>> for Pagination {
-  fn feed(self, querybuilder: QueryBuilder) -> QueryBuilder {
+impl<'a> QueryBuilderInjecter<'a> for Pagination {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     let start = self.start();
 
     querybuilder
