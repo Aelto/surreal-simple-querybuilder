@@ -6,12 +6,14 @@ use serde::Serialize;
 use crate::model::OriginHolder;
 use crate::node_builder::ToNodeBuilder;
 
+#[derive(Debug, Clone, Copy)]
 pub enum SchemaFieldType {
   Property,
   Relation,
   ForeignRelation,
 }
 
+#[derive(Clone, Copy)]
 pub struct SchemaField<const N: usize> {
   pub identifier: &'static str,
   field_type: SchemaFieldType,
@@ -148,5 +150,19 @@ impl<const N: usize> Serialize for SchemaField<N> {
     S: serde::Serializer,
   {
     serializer.serialize_str(&self.to_string())
+  }
+}
+
+impl<const N: usize> std::ops::Deref for SchemaField<N> {
+  type Target = str;
+
+  fn deref(&self) -> &Self::Target {
+    self.identifier
+  }
+}
+
+impl<const N: usize> AsRef<str> for SchemaField<N> {
+  fn as_ref(&self) -> &str {
+    self.identifier
   }
 }

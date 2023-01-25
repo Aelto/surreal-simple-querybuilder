@@ -4,7 +4,7 @@ use crate::ast::*;
 grammar();
 
 pub Model: Model = {
-  <name:Identifier> "{" <fields:CommaSeparatedFields> "}" => Model { name, fields }
+  <name:Identifier> <alias:(KeywordAs <Identifier>)?> "{" <fields:CommaSeparatedFields> "}" => Model { name, fields, alias }
 }
 
 // -----------------------------------------------------------------------------

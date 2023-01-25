@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::prelude::SqlSerializeResult;
 
-type CowSegment<'a> = Cow<'a, str>;
+pub type CowSegment<'a> = Cow<'a, str>;
 
 pub struct QueryBuilder<'a> {
   segments: Vec<CowSegment<'a>>,
@@ -577,7 +577,10 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "foo , bar");
   /// ```
-  pub fn commas(mut self, action: fn(Self) -> Self) -> Self {
+  pub fn commas<F>(mut self, action: F) -> Self
+  where
+    F: Fn(Self) -> Self,
+  {
     let other = action(QueryBuilder::new());
 
     for (index, segment) in other.segments.into_iter().enumerate() {
@@ -586,6 +589,37 @@ impl<'a> QueryBuilder<'a> {
       } else {
         self.add_segment(",");
         self.segments.push(segment);
+      }
+    }
+
+    self
+  }
+
+  /// Start a queue where all of the new pushed actions are separated by `AND`s.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .ands(|query| query
+  ///     .raw("foo")
+  ///     .raw("bar")
+  ///   ).build();
+  ///
+  /// assert_eq!(query, "foo AND bar");
+  /// ```
+  pub fn ands<F>(mut self, action: F) -> Self
+  where
+    F: Fn(Self) -> Self,
+  {
+    let other = action(QueryBuilder::new());
+
+    for (index, segment) in other.segments.into_iter().enumerate() {
+      if index <= 0 {
+        self.segments.push(segment);
+      } else {
+        self = self.and(segment);
       }
     }
 
