@@ -117,7 +117,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
-  /// let s = "age".greater_parameterized();
+  /// let s = "age".lower_parameterized();
   ///
   /// assert_eq!("age < $age", s);
   /// ```

@@ -18,7 +18,7 @@ pub fn select<'a>(
 }
 
 #[test]
-fn test() {
+fn test_select() {
   use crate::prelude::*;
 
   let filter = serde_json::json!({ "name": "John", "age": 10 });

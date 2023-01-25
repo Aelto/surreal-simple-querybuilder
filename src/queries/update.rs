@@ -15,14 +15,13 @@ pub fn update<'a, 'b>(
 }
 
 #[test]
-fn test() {
-  use crate::prelude::Pagination;
+fn test_update() {
+  use crate::prelude::*;
 
-  let filter = Set::new(serde_json::json!({ "name": "John", "age": 10 }));
-  let pagination = Pagination::from(10..25);
-  let components = (filter, pagination);
+  let filter = Set(serde_json::json!({ "name": "John", "age": 10 }));
+  let (query, params) = update("User", filter).unwrap();
 
-  let (query, params) = update("User", components).unwrap();
-
-  dbg!(query, params);
+  assert_eq!("UPDATE User SET age = $age , name = $name", query);
+  assert_eq!(params.get("name"), Some(&"\"John\"".to_owned()));
+  assert_eq!(params.get("age"), Some(&"10".to_owned()));
 }
