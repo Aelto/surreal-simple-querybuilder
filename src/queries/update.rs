@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-use crate::prelude::Set;
 use crate::prelude::Update;
-use crate::prelude::Where;
 
 use super::bindings;
 use super::query;

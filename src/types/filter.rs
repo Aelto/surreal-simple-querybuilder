@@ -5,15 +5,6 @@ use crate::prelude::QueryBuilderInjecter;
 
 pub struct Where<T>(pub T);
 
-// impl<'a, T> Where<T>
-// where
-//   T: QueryBuilderInjecter<'a>,
-// {
-//   pub fn new(component: T) -> Self {
-//     Self(component)
-//   }
-// }
-
 impl<'a, T: QueryBuilderInjecter<'a>> QueryBuilderInjecter<'a> for Where<T> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.filter("").ands(|q| self.0.inject(q))

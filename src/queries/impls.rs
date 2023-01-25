@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use serde_json::Value;
-
 use crate::prelude::*;
 
 /// Blanked implementation for the unit type so it can be passed as a "null" type
