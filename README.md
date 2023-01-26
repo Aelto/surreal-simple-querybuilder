@@ -90,7 +90,7 @@ that you can extend if need be.
 The first scenario that comes to mind is a standard function to retrieve books
 by the author:
 ```rs
-impl Article {
+impl Book {
   fn find_by_author_id(id: &str) -> Vec<Self> {
     // ...
   }
