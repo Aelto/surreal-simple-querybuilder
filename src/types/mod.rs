@@ -1,4 +1,5 @@
 mod create;
+mod delete;
 mod equal;
 mod fetch;
 mod filter;
@@ -12,6 +13,7 @@ mod set;
 mod update;
 
 pub use create::Create;
+pub use delete::Delete;
 pub use equal::Equal;
 pub use fetch::Fetch;
 pub use filter::Where;

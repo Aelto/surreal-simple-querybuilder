@@ -3,11 +3,13 @@ use std::collections::HashMap;
 use crate::prelude::QueryBuilder;
 
 mod create;
+mod delete;
 mod impls;
 mod select;
 mod update;
 
 pub use create::create;
+pub use delete::delete;
 pub use impls::*;
 pub use select::select;
 pub use update::update;
