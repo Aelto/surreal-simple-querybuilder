@@ -9,6 +9,8 @@ Aims at being simple to use and not too verbose first.
 - [SQL injections](#sql-injections)
 - [Compiler requirements/features](#compiler-requirementsfeatures)
 - [Examples](#examples)
+  - [Premade queries with dynamic parameters](#premade-queries-with-dynamic-parameters)
+  - [Why dynamic parameters](#why-dynamic-parameters)
   - [The `model` macro](#the-model-macro)
     - [public \& private fields in models](#public--private-fields-in-models)
     - [Relations between your models](#relations-between-your-models)
@@ -47,6 +49,93 @@ any program using the crate has to add the following at the root of the main fil
  - A series of [examples are available](/examples/) to offer a **guided introduction** to the core features of the crate
  - An all-in-one exapmle can be found in the [`tests project`](/tests/src/querybuilder.rs).
  - For an explanation of what each component in the crate does, refer to the chapters below.
+
+## Premade queries with dynamic parameters
+The crate offers a set of premade queries you can access in [`surreal_simple_querybuilder::queries::*;`](src/queries) or
+in the prelude for easier access.
+```rs
+use surreal_simple_querybuilder::prelude::*;
+
+fn main() {
+  let (query, _bindings) = select("*", "user", ());
+
+  assert_eq!(query, "SELECT * FROM user");
+}
+```
+
+these pre-made query functions accept all types of parameters to further extend
+the queries. If dynamic values (variables) are passed among these parameters then
+the functions will automatically add them to the list of bindings:
+```rs
+use surreal_simple_querybuilder::prelude::*;
+use serde_json::json;
+
+fn main() {
+  let (query, bindings) = select("*", "user", Where(json!({ "name": "John" })));
+
+  assert_eq!(query, "SELECT * FROM user WHERE name = $name");
+
+  // 👇 the bindings were updated with the $name variable
+  assert_eq!(bindings.get("name"), Some("John".to_owned())); 
+}
+```
+
+---
+## Why dynamic parameters
+
+At a first glance these pre-made queries offer nothing the querybuilder doesn't,
+but in reality they allow you to easily make functions in your backends (for example)
+that you can extend if need be.
+
+The first scenario that comes to mind is a standard function to retrieve books
+by the author:
+```rs
+impl Article {
+  fn find_by_author_id(id: &str) -> Vec<Self> {
+    // ...
+  }
+}
+```
+
+You'll need the list of books and nothing else, another time you'll need
+the results to be paginated, and sometimes you'll want to fetch the author data
+on top of the books. Considering you may also want to have the book with both pagination
+and fetch this could potentially result in at least 4 different functions & queries
+to write.
+
+With the dynamic parameters you can update your `find` function to accept optional
+parameters like so:
+
+```rs
+use serde_json::json;
+
+impl Book {
+  fn find_by_author_id<'a>(id: &str, params: impl QueryBuilderInjecter<'a> + 'a) -> Vec<Self> {
+    let filter = Where(json!({"author": id}));
+    let combined_params = (filter, params);
+
+    let (query, params) = select("*", "Book", combined_params).unwrap();
+
+    DB.query(query)
+      .bind(params)
+      .await.unwrap()
+      .get(..).unwrap()
+  }
+}
+```
+So you can now do:
+```rs
+let books = Book::find_by_author_id("User:john", ());
+let paginated_books = Book::find_by_author_id("User:john", Pagination(0..25));
+let paginated_books_with_author_data = Book::find_by_author_id(
+  "User:john",
+  (
+    Pagination(0..25),
+    Fetch(["author"])
+  )
+);
+```
+
 ## The `model` macro
 The `model` macro allows you to quickly create structs (aka models) with fields
 that match the nodes of your database.
