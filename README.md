@@ -97,14 +97,14 @@ impl Book {
 }
 ```
 
-You'll need the list of books and nothing else, another time you'll need
+In some cases ou'll need the list of books and nothing else, another time you'll need
 the results to be paginated, and sometimes you'll want to fetch the author data
-on top of the books. Considering you may also want to have the book with both pagination
+on top of the books. Considering you may also want to have the books with both pagination
 and fetch this could potentially result in at least 4 different functions & queries
 to write.
 
 With the dynamic parameters you can update your `find` function to accept optional
-parameters like so:
+parameters so that only 1 simple function is needed:
 
 ```rs
 use serde_json::json;
