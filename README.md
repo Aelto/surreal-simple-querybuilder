@@ -137,10 +137,10 @@ let paginated_books_with_author_data = Book::find_by_author_id(
 ```
 
 The dynamic parameters & premade queries are made with the [model](#the-model-macro) macro in mind,
-you don't necessarily need it but if you wanted both systems can be used for some
+you don't necessarily need it but if you wanted, both systems can be used for some
 compile time checks + dynamic parameters to enjoy the extra freedom dynamic parameters
 provide while being sure all of the fields & nodes you reference in them are valid
-thanks to the models. A complete example on how to combine both system is [available here](examples/6-queries-and-params.rs)
+thanks to the models. A complete example on how to combine both system is [available here](examples/6-queries-and-params.rs).
 
 ## The `model` macro
 The `model` macro allows you to quickly create structs (aka models) with fields
