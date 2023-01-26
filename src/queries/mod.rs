@@ -2,21 +2,15 @@ use std::collections::HashMap;
 
 use crate::prelude::QueryBuilder;
 
+mod create;
 mod impls;
 mod select;
 mod update;
 
+pub use create::create;
 pub use impls::*;
 pub use select::select;
 pub use update::update;
-
-// TODO:
-// - create a Equals, PlusEquals, GreaterThan, LowerThan, etc... instead of Filter
-// - make them combinable with Select,Update,Delete and have different outputs based on the combinations
-//   thanks to traits
-// - find a clean solution for Fetch: at the moment it clones the Cow
-//
-//
 
 pub trait QueryBuilderInjecter<'a> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
