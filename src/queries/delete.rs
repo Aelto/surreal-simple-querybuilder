@@ -24,4 +24,9 @@ fn test_delete() {
   assert_eq!("DELETE User WHERE age = $age AND name = $name", query);
   assert_eq!(params.get("name"), Some(&"\"John\"".to_owned()));
   assert_eq!(params.get("age"), Some(&"10".to_owned()));
+
+  let (query, params) = delete("User:john", ()).unwrap();
+
+  assert_eq!("DELETE User:john", query);
+  assert!(params.is_empty());
 }
