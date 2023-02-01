@@ -77,11 +77,7 @@ where
   usize: QueryResult<R>,
 {
   let (query, params) = surreal_simple_querybuilder::queries::select("*", table, params)?;
-  let items = client
-    .query(dbg!(query))
-    .bind(dbg!(params))
-    .await?
-    .take(0)?;
+  let items = client.query(query).bind(params).await?.take(0)?;
 
   Ok(items)
 }
