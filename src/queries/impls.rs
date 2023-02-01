@@ -19,7 +19,7 @@ where
     querybuilder
   }
 
-  fn params(self, map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  fn params(self, map: &mut BindingMap) -> serde_json::Result<()>
   where
     Self: Sized,
   {
@@ -40,7 +40,7 @@ where
     self.1.inject(self.0.inject(querybuilder))
   }
 
-  fn params(self, map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  fn params(self, map: &mut BindingMap) -> serde_json::Result<()>
   where
     Self: Sized,
   {
@@ -58,7 +58,7 @@ where
     self.2.inject(self.1.inject(self.0.inject(querybuilder)))
   }
 
-  fn params(self, map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  fn params(self, map: &mut BindingMap) -> serde_json::Result<()>
   where
     Self: Sized,
   {
@@ -82,7 +82,7 @@ where
       .inject(self.2.inject(self.1.inject(self.0.inject(querybuilder))))
   }
 
-  fn params(self, map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  fn params(self, map: &mut BindingMap) -> serde_json::Result<()>
   where
     Self: Sized,
   {

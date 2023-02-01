@@ -1,15 +1,14 @@
-use std::collections::HashMap;
-
 use crate::types::From;
 use crate::types::Select;
 
 use super::bindings;
 use super::query;
+use super::BindingMap;
 use super::QueryBuilderInjecter;
 
 pub fn select<'a>(
   what: &'static str, from: &'static str, component: impl QueryBuilderInjecter<'a> + 'a,
-) -> serde_json::Result<(String, HashMap<String, String>)> {
+) -> serde_json::Result<(String, BindingMap)> {
   let params = (Select(what), From(from), component);
   let query = query(&params)?;
   let bindings = bindings(params)?;
@@ -20,6 +19,7 @@ pub fn select<'a>(
 #[test]
 fn test_select() {
   use crate::prelude::*;
+  use serde_json::Value;
 
   let filter = serde_json::json!({ "name": "John", "age": 10 });
   let pagination = Pagination::from(10..25);
@@ -33,6 +33,6 @@ fn test_select() {
     query
   );
 
-  assert_eq!(params.get("name"), Some(&"\"John\"".to_owned()));
-  assert_eq!(params.get("age"), Some(&"10".to_owned()));
+  assert_eq!(params.get("name"), Some(&Value::from("John".to_owned())));
+  assert_eq!(params.get("age"), Some(&Value::from(10)));
 }

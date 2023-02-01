@@ -1,9 +1,9 @@
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 
-pub struct Delete(pub &'static str);
+pub struct Delete<T>(pub T);
 
-impl<'a> QueryBuilderInjecter<'a> for Delete {
+impl<'a> QueryBuilderInjecter<'a> for Delete<&'a str> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.delete(self.0)
   }

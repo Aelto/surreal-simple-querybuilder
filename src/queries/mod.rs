@@ -14,12 +14,14 @@ pub use impls::*;
 pub use select::select;
 pub use update::update;
 
+pub type BindingMap = HashMap<String, serde_json::Value>;
+
 pub trait QueryBuilderInjecter<'a> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder
   }
 
-  fn params(self, _map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  fn params(self, _map: &mut BindingMap) -> serde_json::Result<()>
   where
     Self: Sized,
   {
@@ -39,7 +41,7 @@ pub fn query<'a>(component: &impl QueryBuilderInjecter<'a>) -> serde_json::Resul
 
 pub fn bindings<'a>(
   component: impl QueryBuilderInjecter<'a> + 'a,
-) -> serde_json::Result<HashMap<String, String>> {
+) -> serde_json::Result<BindingMap> {
   let mut params = HashMap::new();
   component.params(&mut params)?;
 

@@ -1,9 +1,9 @@
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 
-pub struct Create(pub &'static str);
+pub struct Create<T>(pub T);
 
-impl<'a> QueryBuilderInjecter<'a> for Create {
+impl<'a> QueryBuilderInjecter<'a> for Create<&'a str> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.create(self.0)
   }

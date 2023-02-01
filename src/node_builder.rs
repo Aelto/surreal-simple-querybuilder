@@ -56,6 +56,14 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{label_name}:{self}")
   }
 
+  fn as_param(&self) -> String {
+    self
+      .to_string()
+      .replace(".", "_")
+      .replace("->", "_")
+      .replace("<-", "_")
+  }
+
   /// # Example
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
@@ -80,7 +88,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("account = $account", s);
   /// ```
   fn equals_parameterized(&self) -> String {
-    format!("{self} = ${self}")
+    format!("{self} = ${}", self.as_param())
   }
 
   /// Take the current string and add `+= $current_string` after it
@@ -94,7 +102,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("account += $account", s);
   /// ```
   fn plus_equal_parameterized(&self) -> String {
-    format!("{self} += ${self}")
+    format!("{self} += ${}", self.as_param())
   }
 
   /// Take the current string and add `> $current_string` after it
@@ -108,7 +116,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("age > $age", s);
   /// ```
   fn greater_parameterized(&self) -> String {
-    format!("{self} > ${self}")
+    format!("{self} > ${}", self.as_param())
   }
 
   /// Take the current string and add `< $current_string` after it
@@ -122,7 +130,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("age < $age", s);
   /// ```
   fn lower_parameterized(&self) -> String {
-    format!("{self} < ${self}")
+    format!("{self} < ${}", self.as_param())
   }
 
   /// Take the current string and add `> value` after it

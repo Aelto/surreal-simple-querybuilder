@@ -9,7 +9,7 @@ use surreal_simple_querybuilder::prelude::*;
 
 // a fake query function, imagine it calls to the DB client of your choices and
 // returns what you expect
-fn fake_query<T>(query: String, params: HashMap<String, String>) -> T {
+fn fake_query<T>(query: String, params: HashMap<String, serde_json::Value>) -> T {
   todo!()
 }
 

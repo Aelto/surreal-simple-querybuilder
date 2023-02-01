@@ -3,3 +3,4 @@
 
 mod query_params;
 mod querybuilder;
+mod surrealdb_client;

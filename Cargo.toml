@@ -21,7 +21,10 @@ serde_json = "1.0.91"
 surreal-simple-querybuilder-proc-macro = { path = "model-proc-macro", version = "0.2.0" }
 
 [dev-dependencies]
-serde_json = "1.0"
+serde_json = "1.0.91"
+surrealdb = { git = "https://github.com/surrealdb/surrealdb", features = ["kv-mem"] }
+tokio = { version = "1.21.2", features = ["full"] }
+serde = { version = "1.0.152", features = ["serde_derive"] }
 
 [[example]]
 name = "querybuilder-basics"

@@ -5,6 +5,9 @@ use serde_json::Value;
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 use crate::prelude::ToNodeBuilder;
+use crate::queries::BindingMap;
+
+use super::to_param_value;
 
 pub struct PlusEqual(pub Value);
 
@@ -21,12 +24,12 @@ impl<'a> QueryBuilderInjecter<'a> for PlusEqual {
     query
   }
 
-  fn params(self, params: &mut HashMap<String, String>) -> serde_json::Result<()> {
+  fn params(self, params: &mut BindingMap) -> serde_json::Result<()> {
     match self.0 {
       Value::Object(map) => {
         let iter = map
           .into_iter()
-          .map(|(key, value)| (key, serde_json::to_string(&value).unwrap()));
+          .map(|(key, value)| (key.as_param(), to_param_value(value).unwrap()));
 
         params.extend(iter);
       }
