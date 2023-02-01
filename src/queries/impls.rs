@@ -2,9 +2,34 @@ use std::collections::HashMap;
 
 use crate::prelude::*;
 
-/// Blanked implementation for the unit type so it can be passed as a "null" type
+/// Blanket implementation for the unit type so it can be passed as a "null" type
 /// of param
 impl<'a> QueryBuilderInjecter<'a> for () {}
+
+/// Allows to pass a vec of Injecters
+impl<'a, Injecters> QueryBuilderInjecter<'a> for Vec<Injecters>
+where
+  Injecters: QueryBuilderInjecter<'a>,
+{
+  fn inject(&self, mut querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    for injecter in self {
+      querybuilder = injecter.inject(querybuilder);
+    }
+
+    querybuilder
+  }
+
+  fn params(self, map: &mut HashMap<String, String>) -> serde_json::Result<()>
+  where
+    Self: Sized,
+  {
+    for injecter in self {
+      injecter.params(map)?;
+    }
+
+    Ok(())
+  }
+}
 
 impl<'a, I1, I2> QueryBuilderInjecter<'a> for (I1, I2)
 where
