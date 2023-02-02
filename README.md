@@ -10,7 +10,8 @@ Aims at being simple to use and not too verbose first.
 - [Compiler requirements/features](#compiler-requirementsfeatures)
 - [Examples](#examples)
   - [Premade queries with dynamic parameters](#premade-queries-with-dynamic-parameters)
-  - [Why dynamic parameters](#why-dynamic-parameters)
+    - [Why dynamic parameters](#why-dynamic-parameters)
+    - [Limitations \& recommandations for premade queries \& params](#limitations--recommandations-for-premade-queries--params)
   - [The `model` macro](#the-model-macro)
     - [public \& private fields in models](#public--private-fields-in-models)
     - [Relations between your models](#relations-between-your-models)
@@ -18,6 +19,7 @@ Aims at being simple to use and not too verbose first.
   - [The `QueryBuilder` type](#the-querybuilder-type)
   - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
     - [`ForeignKey` and loaded data during serialization](#foreignkey-and-loaded-data-during-serialization)
+  - [Using the querybuilder in combination of the official SurrealDB client](#using-the-querybuilder-in-combination-of-the-official-surrealdb-client)
 
 # Why a query-builder
 Query builders allow you to dynamically build your queries with some compile time
@@ -47,7 +49,7 @@ any program using the crate has to add the following at the root of the main fil
 
 # Examples
  - A series of [examples are available](/examples/) to offer a **guided introduction** to the core features of the crate
- - An all-in-one exapmle can be found in the [`tests project`](/tests/src/querybuilder.rs).
+ - An all-in-one example can be found in the [`querybuilder test project`](/tests/src/querybuilder.rs) and the [official surrealdb-client interface test](/tests/src/surrealdb_client.rs).
  - For an explanation of what each component in the crate does, refer to the chapters below.
 
 ## Premade queries with dynamic parameters
@@ -81,7 +83,7 @@ fn main() {
 ```
 
 ---
-## Why dynamic parameters
+### Why dynamic parameters
 
 At a first glance these pre-made queries offer nothing the querybuilder doesn't,
 but in reality they allow you to easily make functions in your backends (for example)
@@ -141,6 +143,42 @@ you don't necessarily need it but if you wanted, both systems can be used for so
 compile time checks + dynamic parameters to enjoy the extra freedom dynamic parameters
 provide while being sure all of the fields & nodes you reference in them are valid
 thanks to the models. A complete example on how to combine both system is [available here](examples/6-queries-and-params.rs).
+
+### Limitations & recommandations for premade queries & params
+The [short example](examples/6-queries-and-params.rs) and [complete test case](test/../tests/src/surrealdb_client.rs) demonstrate
+the premade queries can work in 99% of the cases and can seriously simplify the
+code you write. However there are limitations one must be aware of before going
+too deep into the premade queries.
+
+The premade queries and composable parameters are made for those simple cases where
+you just want to select/create/etc... elements without complex filtering in the WHERE
+clause or anything. For example selecting books by one of their field is perfect
+for the premade queries as you can add a fetch clause without having to rewrite
+anything. It allows you to have somewhat generic functions in your codebase for the simple cases.
+
+But as soon as it gets complex, the [`QueryBuilder`](src/querybuilder.rs) type should
+be used instead of the pre-made queries. It will offer both better performances & more predictable results (nesting lots of params may yield unexpected queries). Note that you can still use a query-builder and pass it params (aka injecters)
+if need:
+```rs
+use surreal_simple_querybuilder::prelude::*;
+
+let params = (
+  Where(("name", "john")),
+  Fetch(["articles"])
+);
+
+let query = QueryBuilder::new()
+  .select("*")
+  .from("user")
+  .injecter(&params) // <-- pass the injecter to the builder
+  .build();
+
+let _params = bindings(params); // <-- get the variables so you can bind them
+
+assert(query, "SELECT * FROM user WHERE name = $name FETCH articles");
+```
+
+And as you can see, even in the more complex cases the params can still be used but the pre-made queries should not however.
 
 ## The `model` macro
 The `model` macro allows you to quickly create structs (aka models) with fields
@@ -443,3 +481,25 @@ file.author.disallow_value_serialize();
 
 You may note that mutability is not needed, the methods use interior mutability
 to work even on immutable ForeignKeys if needed.
+
+## Using the querybuilder in combination of the [official SurrealDB client](https://github.com/surrealdb/surrealdb/tree/main/lib)
+There is an important thing to keep in mind with this querybuilding crate, it is meant to serve as an utility crate that is completely independant of the client you use. For this reason it does not offer anything to send the queries and getting the responses directly but since you'll rarely want to use this crate without a client one of the test cases demonstrates how to write `create`, `select`, `update` functions that would connect the querybuilder to the officiel surrealdb client.
+
+While it is not convenient to have to write these functions yourself it allows you to use a fixed version of the querybuilder crate while still getting the latest breaking updates on your favorite client.
+
+[Here is a link to the file](test/../tests/src/surrealdb_client.rs). And here are snippets of what the functions allow you to do:
+```rs
+update(book_id, Set((book.read, true))).await?;
+
+let all_books: Vec<IBook> = select(&book, ()).await?;
+let user0_books: Vec<IBook> = select(&book, Where((book.author, user0_id))).await?;
+
+let books_with_author: Vec<IBook> = select(
+    &book,
+    (
+      Where((book.author, user1_id)),
+      Fetch([book.author.as_ref()]),
+    ),
+  )
+  .await?;
+```
