@@ -88,19 +88,13 @@ where
   Ok(items)
 }
 
-/// Automatically construct a CREATE query based on the `filters` that were
-/// passed. The filters is a json object, obtained from the `json!({})` macro
-/// offered by serde_json. Each key is added in the WHERE clause of the query
-///
-/// # Example
-/// ```rs
-/// let created = create(model, self).await?;
-/// ```
 pub async fn create<Table, Object>(table: Table, object: &Object) -> DbResult<Object>
 where
   Object: Serialize + DeserializeOwned + Default,
   Table: Into<Cow<'static, str>> + Serialize + Display,
 {
+  // Note how it doesn't use the params but instead use the model to know which
+  // field it should include in the object:
   let item: Option<Object> = DB
     .query(
       QueryBuilder::new()
@@ -123,6 +117,9 @@ pub async fn update<'a>(
 
   Ok(response)
 }
+
+//------------------------------------------------------------------------------
+// STEP 2: use the functions
 
 #[tokio::test]
 async fn main() -> DbResult<()> {

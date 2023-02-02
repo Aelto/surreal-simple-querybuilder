@@ -483,11 +483,11 @@ You may note that mutability is not needed, the methods use interior mutability
 to work even on immutable ForeignKeys if needed.
 
 ## Using the querybuilder in combination of the [official SurrealDB client](https://github.com/surrealdb/surrealdb/tree/main/lib)
-There is an important thing to keep in mind with this querybuilding crate, it is meant to serve as an utility crate that is completely independant of the client you use. For this reason it does not offer anything to send the queries and getting the responses directly but since you'll rarely want to use this crate without a client one of the test cases demonstrates how to write `create`, `select`, `update` functions that would connect the querybuilder to the officiel surrealdb client.
+There is an important thing to keep in mind with this querybuilding crate, it is meant to serve as an utility crate that is completely independant of the client you use. For this reason it does not offer anything to send the queries and getting the responses directly but since you'll rarely want to use this crate without a client one of the test cases demonstrates how to write `create`, `select`, `update` functions that would connect the querybuilder to the official surrealdb client.
 
 While it is not convenient to have to write these functions yourself it allows you to use a fixed version of the querybuilder crate while still getting the latest breaking updates on your favorite client.
 
-[Here is a link to the file](test/../tests/src/surrealdb_client.rs). And here are snippets of what the functions allow you to do:
+[Here is a link to the file](test/../tests/src/surrealdb_client.rs), the functions are created in the part 1 section. And here are snippets of what the functions allow you to do:
 ```rs
 update(book_id, Set((book.read, true))).await?;
 
