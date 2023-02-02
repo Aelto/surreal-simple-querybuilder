@@ -66,16 +66,24 @@ use book_model::model as book;
 
 pub type DbResult<T> = Result<T, Box<dyn std::error::Error>>;
 pub type SurrealClient = Surreal<Db>;
+pub static DB: SurrealClient = Surreal::init();
+
+pub async fn connect_db() -> DbResult<()> {
+  DB.connect::<Mem>(()).await?;
+  DB.use_ns("namespace").use_db("database").await?;
+
+  Ok(())
+}
 
 pub async fn select<'a, R>(
-  client: &SurrealClient, table: &'static str, params: impl QueryBuilderInjecter<'a> + 'a,
+  table: &'static str, params: impl QueryBuilderInjecter<'a> + 'a,
 ) -> DbResult<R>
 where
   R: DeserializeOwned,
   usize: QueryResult<R>,
 {
   let (query, params) = surreal_simple_querybuilder::queries::select("*", table, params)?;
-  let items = client.query(query).bind(params).await?.take(0)?;
+  let items = DB.query(query).bind(params).await?.take(0)?;
 
   Ok(items)
 }
@@ -88,14 +96,12 @@ where
 /// ```rs
 /// let created = create(model, self).await?;
 /// ```
-pub async fn create<Table, Object>(
-  client: &SurrealClient, table: Table, object: &Object,
-) -> DbResult<Object>
+pub async fn create<Table, Object>(table: Table, object: &Object) -> DbResult<Object>
 where
   Object: Serialize + DeserializeOwned + Default,
   Table: Into<Cow<'static, str>> + Serialize + Display,
 {
-  let item: Option<Object> = client
+  let item: Option<Object> = DB
     .query(
       QueryBuilder::new()
         .create(table.to_string())
@@ -110,21 +116,19 @@ where
 }
 
 pub async fn update<'a>(
-  client: &SurrealClient, table: &'a str, params: impl QueryBuilderInjecter<'a> + 'a,
+  table: &'a str, params: impl QueryBuilderInjecter<'a> + 'a,
 ) -> DbResult<Response> {
   let (query, params) = surreal_simple_querybuilder::queries::update(table, params)?;
-  let response = client.query(query).bind(params).await?;
+  let response = DB.query(query).bind(params).await?;
 
   Ok(response)
 }
 
 #[tokio::test]
 async fn main() -> DbResult<()> {
-  let db = Surreal::new::<Mem>(()).await?;
-  db.use_ns("namespace").use_db("database").await?;
+  connect_db().await?;
 
   let user0 = create(
-    &db,
     user,
     &IUser {
       id: None,
@@ -135,7 +139,6 @@ async fn main() -> DbResult<()> {
   .await?;
 
   let user1 = create(
-    &db,
     user,
     &IUser {
       id: None,
@@ -153,17 +156,13 @@ async fn main() -> DbResult<()> {
   let user0_id = user0.id.as_ref().unwrap();
   let user1_id = user1.id.as_ref().unwrap();
 
-  db.query("create User:test set name = 'name' , email = 'email' ")
-    .await?;
+  create_books(&user0_id, 10).await?;
+  create_books(&user1_id, 5).await?;
 
-  create_books(&db, &user0_id, 10).await?;
-  create_books(&db, &user1_id, 5).await?;
-
-  let all_books: Vec<IBook> = select(&db, &book, ()).await?;
-  let user0_books: Vec<IBook> = select(&db, &book, Where((book.author, user0_id))).await?;
-  let user1_books: Vec<IBook> = select(&db, &book, Where((book.author, user1_id))).await?;
+  let all_books: Vec<IBook> = select(&book, ()).await?;
+  let user0_books: Vec<IBook> = select(&book, Where((book.author, user0_id))).await?;
+  let user1_books: Vec<IBook> = select(&book, Where((book.author, user1_id))).await?;
   let both_users_books: Vec<IBook> = select(
-    &db,
     &book,
     Where(Or(json!({
       book.author: user0_id,
@@ -187,16 +186,15 @@ async fn main() -> DbResult<()> {
 
   for id in books_to_read {
     if let Some(id) = id {
-      read_book(&db, &id).await?;
+      read_book(&id).await?;
     }
   }
 
-  let read_books: Vec<IBook> = select(&db, &book, Where(json!({ book.read: true }))).await?;
+  let read_books: Vec<IBook> = select(&book, Where((book.read, true))).await?;
   println!("read books: {read_books:#?}");
   assert_eq!(read_books.len(), 2);
 
   let books_with_author: Vec<IBook> = select(
-    &db,
     &book,
     (
       Where((book.author, user1_id)),
@@ -220,10 +218,9 @@ async fn main() -> DbResult<()> {
   Ok(())
 }
 
-async fn create_books(client: &SurrealClient, author_id: &str, amount: usize) -> DbResult<()> {
+async fn create_books(author_id: &str, amount: usize) -> DbResult<()> {
   for i in 0..amount {
     create(
-      &client,
       book,
       &IBook {
         id: None,
@@ -238,8 +235,8 @@ async fn create_books(client: &SurrealClient, author_id: &str, amount: usize) ->
   Ok(())
 }
 
-async fn read_book(client: &SurrealClient, book_id: &str) -> DbResult<()> {
-  update(client, book_id, Set(json!({ book.read: true }))).await?;
+async fn read_book(book_id: &str) -> DbResult<()> {
+  update(book_id, Set((book.read, true))).await?;
 
   Ok(())
 }
