@@ -6,9 +6,19 @@ use crate::prelude::SqlSerializeResult;
 
 pub type CowSegment<'a> = Cow<'a, str>;
 
+#[derive(Debug)]
+enum QueryBuilderInsertExceptions {
+  None,
+  AndOr,
+}
+
 pub struct QueryBuilder<'a> {
   segments: Vec<CowSegment<'a>>,
   parameters: HashMap<&'a str, &'a str>,
+
+  /// this private enum is used as a marker for the next segment that will be
+  /// inserted to detect if it should be cancelled/replaced or not.
+  insert_exceptions: QueryBuilderInsertExceptions,
 }
 
 impl<'a> QueryBuilder<'a> {
@@ -16,6 +26,7 @@ impl<'a> QueryBuilder<'a> {
     QueryBuilder {
       segments: Vec::new(),
       parameters: HashMap::new(),
+      insert_exceptions: QueryBuilderInsertExceptions::None,
     }
   }
 
@@ -251,7 +262,10 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "OR handle = ?1");
   /// ```
   pub fn or<T: Into<CowSegment<'a>>>(mut self, condition: T) -> Self {
-    self.add_segment_p("OR", condition);
+    match self.insert_exceptions {
+      QueryBuilderInsertExceptions::AndOr => self.add_segment(condition),
+      _ => self.add_segment_p("OR", condition),
+    };
 
     self
   }
@@ -269,7 +283,10 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "AND handle = ?1");
   /// ```
   pub fn and<T: Into<CowSegment<'a>>>(mut self, condition: T) -> Self {
-    self.add_segment_p("AND", condition);
+    match self.insert_exceptions {
+      QueryBuilderInsertExceptions::AndOr => self.add_segment(condition),
+      _ => self.add_segment_p("AND", condition),
+    };
 
     self
   }
@@ -626,6 +643,37 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// Start a queue where all of the new pushed actions are separated by `OR`s.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .ors(|query| query
+  ///     .raw("foo")
+  ///     .raw("bar")
+  ///   ).build();
+  ///
+  /// assert_eq!(query, "foo OR bar");
+  /// ```
+  pub fn ors<F>(mut self, action: F) -> Self
+  where
+    F: Fn(Self) -> Self,
+  {
+    let other = action(QueryBuilder::new());
+
+    for (index, segment) in other.segments.into_iter().enumerate() {
+      if index <= 0 {
+        self.add_segment(segment);
+      } else {
+        self = self.or(segment);
+      }
+    }
+
+    self
+  }
+
   /// Start a LIMIT clause.
   ///
   /// # Example
@@ -677,6 +725,24 @@ impl<'a> QueryBuilder<'a> {
     if into.is_empty() {
       return self;
     }
+
+    match (&self.insert_exceptions, into.as_ref()) {
+      // if the previous segment is already a OR or an AND and the new one is
+      // one of the two again, the new one replaces the old one:
+      (QueryBuilderInsertExceptions::AndOr, "AND" | "OR") => {
+        if let Some(last) = self.segments.last_mut() {
+          *last = into;
+        }
+
+        return self;
+      }
+      (_, "AND" | "OR") => {
+        self.insert_exceptions = QueryBuilderInsertExceptions::AndOr;
+      }
+      _ => {
+        self.insert_exceptions = QueryBuilderInsertExceptions::None;
+      }
+    };
 
     self.segments.push(into);
 

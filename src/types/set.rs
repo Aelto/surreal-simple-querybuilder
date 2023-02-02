@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 use crate::queries::BindingMap;

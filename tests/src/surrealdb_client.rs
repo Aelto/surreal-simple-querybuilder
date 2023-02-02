@@ -1,6 +1,5 @@
 use std::borrow::Cow;
 use std::fmt::Display;
-use std::mem::take;
 
 use serde::de::DeserializeOwned;
 use serde::Deserialize;
@@ -61,10 +60,9 @@ model!(Book as book_model {
 });
 
 use book_model::model as book;
-use book_model::Book;
 
 //------------------------------------------------------------------------------
-// STEP 1: create functions that connect the querybuilder to the client
+// STEP 1: create functions that connect the querybuilder to the DB client
 
 pub type DbResult<T> = Result<T, Box<dyn std::error::Error>>;
 pub type SurrealClient = Surreal<Db>;
@@ -162,8 +160,17 @@ async fn main() -> DbResult<()> {
   create_books(&db, &user1_id, 5).await?;
 
   let all_books: Vec<IBook> = select(&db, &book, ()).await?;
-  let user0_books: Vec<IBook> = select(&db, &book, Where(json!({ book.author: user0_id }))).await?;
-  let user1_books: Vec<IBook> = select(&db, &book, Where(json!({ book.author: user1_id }))).await?;
+  let user0_books: Vec<IBook> = select(&db, &book, Where((book.author, user0_id))).await?;
+  let user1_books: Vec<IBook> = select(&db, &book, Where((book.author, user1_id))).await?;
+  let both_users_books: Vec<IBook> = select(
+    &db,
+    &book,
+    Where(Or(json!({
+      book.author: user0_id,
+      book.author: user1_id
+    }))),
+  )
+  .await?;
 
   assert_eq!(all_books.len(), 15);
   assert_eq!(user0_books.len(), 10);
@@ -172,6 +179,7 @@ async fn main() -> DbResult<()> {
   println!("all books: {all_books:#?}");
   println!("user0 books: {user0_books:#?}");
   println!("user1 books: {user1_books:#?}");
+  println!("both users books: {both_users_books:#?}");
 
   // let's mark a few random books as read,
   // we're using raw indices here to keep it simple:
@@ -186,6 +194,28 @@ async fn main() -> DbResult<()> {
   let read_books: Vec<IBook> = select(&db, &book, Where(json!({ book.read: true }))).await?;
   println!("read books: {read_books:#?}");
   assert_eq!(read_books.len(), 2);
+
+  let books_with_author: Vec<IBook> = select(
+    &db,
+    &book,
+    (
+      Where((book.author, user1_id)),
+      Fetch([book.author.as_ref()]),
+    ),
+  )
+  .await?;
+
+  assert!(!books_with_author.is_empty());
+
+  if let Some(first) = books_with_author.first() {
+    assert!(!first.author.is_unloaded());
+
+    if let Some(author) = first.author.value() {
+      assert_eq!(author.id, user1.id);
+    }
+  }
+
+  println!("books with author: {books_with_author:#?}");
 
   Ok(())
 }

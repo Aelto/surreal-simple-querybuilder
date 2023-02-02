@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::prelude::*;
 
 /// Blanket implementation for the unit type so it can be passed as a "null" type

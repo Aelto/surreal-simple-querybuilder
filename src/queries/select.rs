@@ -35,4 +35,25 @@ fn test_select() {
 
   assert_eq!(params.get("name"), Some(&Value::from("John".to_owned())));
   assert_eq!(params.get("age"), Some(&Value::from(10)));
+
+  let (query, params) = select(
+    "*",
+    "User",
+    Where((
+      Or(serde_json::json!({
+        "one": 1,
+        "two": 2
+      })),
+      ("three", 3),
+    )),
+  )
+  .unwrap();
+
+  assert_eq!(
+    "SELECT * FROM User WHERE one = $one OR two = $two AND three = $three",
+    query
+  );
+  assert_eq!(params.get("one"), Some(&Value::from(1)));
+  assert_eq!(params.get("two"), Some(&Value::from(2)));
+  assert_eq!(params.get("three"), Some(&Value::from(3)));
 }
