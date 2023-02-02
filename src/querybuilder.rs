@@ -3,6 +3,7 @@ use std::{borrow::Cow, collections::HashMap};
 use serde::Serialize;
 
 use crate::prelude::SqlSerializeResult;
+use crate::queries::QueryBuilderInjecter;
 
 pub type CowSegment<'a> = Cow<'a, str>;
 
@@ -828,5 +829,32 @@ impl<'a> QueryBuilder<'a> {
     self.add_segment_p("UPDATE", parameters);
 
     Ok(self)
+  }
+
+  /// Allows passing a custom injecter in a chainable way. The injecter will add
+  /// its related SQL to the querybuilder and then pass out the resulting builder
+  /// so it can be chained again.
+  ///
+  /// Note that injecters often avoid writing the values into the builder to avoid
+  /// SQL injections, and so it is expected you use the [bindings] function to
+  /// extract the variables out of the injecters afterward.
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let filter = Where(("name", "john"));
+  /// let query = QueryBuilder::new()
+  ///   .select("*")
+  ///   .from("user")
+  ///   .injecter(&filter) // <-- pass the injecter to the builder
+  ///   .build();
+  ///
+  /// let _params = bindings(filter); // <-- get the variables so you can bind them
+  ///
+  /// assert_eq!(query, "SELECT * FROM user WHERE name = $name");
+  /// ```
+  pub fn injecter(self, injecter: &impl QueryBuilderInjecter<'a>) -> Self {
+    injecter.inject(self)
   }
 }
