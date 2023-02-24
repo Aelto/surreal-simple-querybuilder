@@ -4,8 +4,7 @@ use lalrpop_util::lalrpop_mod;
 use proc_macro::TokenStream;
 
 mod ast;
-
-lalrpop_mod!(parser);
+mod parser;
 
 /// The `model` macro allows you to quickly create structs (aka models) with fields
 /// that match the nodes of your database.

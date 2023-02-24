@@ -9,8 +9,6 @@ keywords = ["surrealdb", "querybuilder", "query", "builder"]
 categories = ["database"]
 repository = "https://github.com/Aelto/surreal-simple-querybuilder"
 
-build = "build.rs"
-
 [lib]
 proc-macro = true
 
