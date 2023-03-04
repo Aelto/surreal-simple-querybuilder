@@ -9,15 +9,15 @@ Aims at being simple to use and not too verbose first.
 - [SQL injections](#sql-injections)
 - [Compiler requirements/features](#compiler-requirementsfeatures)
 - [Examples](#examples)
-  - [Premade queries with dynamic parameters](#premade-queries-with-dynamic-parameters)
+  - [Premade queries with dynamic parameters (`queries` feature)](#premade-queries-with-dynamic-parameters-queries-feature)
     - [Why dynamic parameters](#why-dynamic-parameters)
     - [Limitations \& recommandations for premade queries \& params](#limitations--recommandations-for-premade-queries--params)
-  - [The `model` macro](#the-model-macro)
+  - [The `model` macro (`model` feature)](#the-model-macro-model-feature)
     - [public \& private fields in models](#public--private-fields-in-models)
     - [Relations between your models](#relations-between-your-models)
-  - [The `NodeBuilder` traits](#the-nodebuilder-traits)
-  - [The `QueryBuilder` type](#the-querybuilder-type)
-  - [The `ForeignKey` and `Foreign` types](#the-foreignkey-and-foreign-types)
+  - [The `NodeBuilder` traits (`querybuilder` feature)](#the-nodebuilder-traits-querybuilder-feature)
+  - [The `QueryBuilder` type (`querybuilder` feature)](#the-querybuilder-type-querybuilder-feature)
+  - [The `ForeignKey` and `Foreign` types (`foreign` feature)](#the-foreignkey-and-foreign-types-foreign-feature)
     - [`ForeignKey` and loaded data during serialization](#foreignkey-and-loaded-data-during-serialization)
   - [Using the querybuilder in combination of the official SurrealDB client](#using-the-querybuilder-in-combination-of-the-official-surrealdb-client)
 
@@ -52,12 +52,15 @@ any program using the crate has to add the following at the root of the main fil
 > Keep in mind all of the demonstrated features can be used independently of the
 > rest. They can all be combined if you want to, but if you prefer a lightweight
 > solution then it is possible as well.
+>
+> By default only the querybuilder is available, other modules require you to
+> enable their respective crate features.
 
  - A series of [examples are available](/examples/) to offer a **guided introduction** to the core features of the crate
  - An all-in-one example can be found in the [`querybuilder test project`](/tests/src/querybuilder.rs) and the [official surrealdb-client interface test](/tests/src/surrealdb_client.rs).
  - For an explanation of what each component in the crate does, refer to the chapters below.
 
-## Premade queries with dynamic parameters
+## Premade queries with dynamic parameters (`queries` feature)
 The crate offers a set of premade queries you can access in [`surreal_simple_querybuilder::queries::*;`](src/queries) or
 in the prelude for easier access.
 ```rust
@@ -185,7 +188,7 @@ assert(query, "SELECT * FROM user WHERE name = $name FETCH articles");
 
 And as you can see, even in the more complex cases the params can still be used but the pre-made queries should not however.
 
-## The `model` macro
+## The `model` macro (`model` feature)
 The `model` macro allows you to quickly create structs (aka models) with fields
 that match the nodes of your database.
 
@@ -291,7 +294,7 @@ fn main() {
   }
 ```
 
-## The `NodeBuilder` traits
+## The `NodeBuilder` traits (`querybuilder` feature)
 These traits add a few utility functions to the `String` and `str` types that can
 be used alongside the querybuilder for even more flexibility.
 
@@ -309,7 +312,7 @@ assert_eq!("Account:John->FRIEND->Account:Mark", my_relation);
 ```
 
 
-## The `QueryBuilder` type
+## The `QueryBuilder` type (`querybuilder` feature)
 It allows you to dynamically build complex or simple queries out of _segments_ and easy to use
 methods.
 <details>
@@ -354,7 +357,7 @@ methods.
 </details>
 
 
-## The `ForeignKey` and `Foreign` types
+## The `ForeignKey` and `Foreign` types (`foreign` feature)
 SurrealDB has the ability to fetch the data out of foreign keys. For example:
 ```sql
 create Author:JussiAdlerOlsen set name = "Jussi Adler-Olsen";
