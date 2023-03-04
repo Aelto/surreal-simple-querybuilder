@@ -48,6 +48,11 @@ any program using the crate has to add the following at the root of the main fil
 ```
 
 # Examples
+
+> Keep in mind all of the demonstrated features can be used independently of the
+> rest. They can all be combined if you want to, but if you prefer a lightweight
+> solution then it is possible as well.
+
  - A series of [examples are available](/examples/) to offer a **guided introduction** to the core features of the crate
  - An all-in-one example can be found in the [`querybuilder test project`](/tests/src/querybuilder.rs) and the [official surrealdb-client interface test](/tests/src/surrealdb_client.rs).
  - For an explanation of what each component in the crate does, refer to the chapters below.
@@ -55,7 +60,7 @@ any program using the crate has to add the following at the root of the main fil
 ## Premade queries with dynamic parameters
 The crate offers a set of premade queries you can access in [`surreal_simple_querybuilder::queries::*;`](src/queries) or
 in the prelude for easier access.
-```rs
+```rust
 use surreal_simple_querybuilder::prelude::*;
 
 fn main() {
@@ -68,7 +73,7 @@ fn main() {
 these pre-made query functions accept all types of parameters to further extend
 the queries. If dynamic values (variables) are passed among these parameters then
 the functions will automatically add them to the list of bindings:
-```rs
+```rust
 use surreal_simple_querybuilder::prelude::*;
 use serde_json::json;
 
@@ -91,7 +96,7 @@ that you can extend if need be.
 
 The first scenario that comes to mind is a standard function to retrieve books
 by the author:
-```rs
+```rust
 impl Book {
   fn find_by_author_id(id: &str) -> Vec<Self> {
     // ...
@@ -99,7 +104,7 @@ impl Book {
 }
 ```
 
-In some cases ou'll need the list of books and nothing else, another time you'll need
+In some cases you'll need the list of books and nothing else, another time you'll need
 the results to be paginated, and sometimes you'll want to fetch the author data
 on top of the books. Considering you may also want to have the books with both pagination
 and fetch this could potentially result in at least 4 different functions & queries
@@ -108,7 +113,7 @@ to write.
 With the dynamic parameters you can update your `find` function to accept optional
 parameters so that only 1 simple function is needed:
 
-```rs
+```rust
 use serde_json::json;
 
 impl Book {
@@ -126,7 +131,7 @@ impl Book {
 }
 ```
 So you can now do:
-```rs
+```rust
 let books = Book::find_by_author_id("User:john", ());
 let paginated_books = Book::find_by_author_id("User:john", Pagination(0..25));
 let paginated_books_with_author_data = Book::find_by_author_id(
@@ -159,7 +164,7 @@ anything. It allows you to have somewhat generic functions in your codebase for 
 But as soon as it gets complex, the [`QueryBuilder`](src/querybuilder.rs) type should
 be used instead of the pre-made queries. It will offer both better performances & more predictable results (nesting lots of params may yield unexpected queries). Note that you can still use a query-builder and pass it params (aka injecters)
 if need:
-```rs
+```rust
 use surreal_simple_querybuilder::prelude::*;
 
 let params = (
@@ -229,7 +234,7 @@ like the `id` for example the model macro has the `pub` keyword to mark a field
 as serializable. Any field without the `pub` keyword in front of it will not
 be serialized by these methods.
 
-```rs
+```rust
 model!(Project {
   id, // <- won't be serialized
   pub name, // <- will be serialized
@@ -488,7 +493,7 @@ There is an important thing to keep in mind with this querybuilding crate, it is
 While it is not convenient to have to write these functions yourself it allows you to use a fixed version of the querybuilder crate while still getting the latest breaking updates on your favorite client.
 
 [Here is a link to the file](test/../tests/src/surrealdb_client.rs), the functions are created in the part 1 section. And here are snippets of what the functions allow you to do:
-```rs
+```rust
 update(book_id, Set((book.read, true))).await?;
 
 let all_books: Vec<IBook> = select(&book, ()).await?;

@@ -14,11 +14,20 @@ members = [
   "model-proc-macro"
 ]
 
+[features]
+default = ["querybuilder"]
+querybuilder = []
+queries = []
+model = ["dep:surreal-simple-querybuilder-proc-macro"]
+foreign = []
+
+all = ["querybuilder", "queries", "model", "foreign"]
+
 [dependencies]
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = "1.0.91"
 
-surreal-simple-querybuilder-proc-macro = { path = "model-proc-macro", version = "0.2.0" }
+surreal-simple-querybuilder-proc-macro = { path = "model-proc-macro", version = "0.2.0", optional = true }
 
 [dev-dependencies]
 serde_json = "1.0.91"
@@ -29,3 +38,34 @@ serde = { version = "1.0.152", features = ["serde_derive"] }
 [[example]]
 name = "querybuilder-basics"
 path = "examples/0-querybuilder-basics.rs"
+required-features = ["querybuilder"]
+
+[[example]]
+name = "model-basics"
+path = "examples/1-model-basics.rs"
+required-features = ["querybuilder", "model"]
+
+[[example]]
+name = "model-foreign-nodes"
+path = "examples/2-model-foreign-nodes.rs"
+required-features = ["querybuilder", "model", "foreign"]
+
+[[example]]
+name = "model-edges"
+path = "examples/3-model-edges.rs"
+required-features = ["querybuilder", "model", "foreign"]
+
+[[example]]
+name = "querybuilder-conditional"
+path = "examples/4-querybuilder-conditional.rs"
+required-features = ["querybuilder", "model"]
+
+[[example]]
+name = "model-serializer"
+path = "examples/5-model-serializer.rs"
+required-features = ["querybuilder", "model"]
+
+[[example]]
+name = "queries-and-params"
+path = "examples/6-queries-and-params.rs"
+required-features = ["model", "queries"]

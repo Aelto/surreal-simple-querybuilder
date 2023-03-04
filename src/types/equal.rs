@@ -5,7 +5,6 @@ use serde_json::Value;
 
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
-use crate::prelude::SchemaField;
 use crate::prelude::ToNodeBuilder;
 use crate::queries::BindingMap;
 
@@ -65,6 +64,10 @@ where
   }
 }
 
+#[cfg(feature = "model")]
+use crate::prelude::SchemaField;
+
+#[cfg(feature = "model")]
 impl<'a, Value, const N: usize> QueryBuilderInjecter<'a> for (SchemaField<N>, Value)
 where
   Value: Serialize,

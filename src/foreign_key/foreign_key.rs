@@ -14,7 +14,7 @@ use super::LoadedValue;
 /// during the query or else it won't be loaded or it will simply be the ID to a
 /// foreign node.
 ///
-/// A [ForeignKey] field may have one of the following values:
+/// A [ForeignKey] field may be in one of the following forms:
 ///  - Loaded data,
 ///  - An ID,
 ///  - None of the above (`null`)
