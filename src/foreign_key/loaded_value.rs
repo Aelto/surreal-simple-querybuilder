@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone, PartialEq, Eq)]
 #[serde(untagged)]
 pub enum LoadedValue<V, K> {
   Loaded(V),

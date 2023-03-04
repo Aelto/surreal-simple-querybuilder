@@ -78,7 +78,7 @@ use super::LoadedValue;
 /// **Note** that if you plan to use `ForeignKey<T, String>` (where the second generic
 /// type is a string), you can use the `Foreign<T>` type in the same module to
 /// shorten the declaration.
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 #[serde(from = "LoadedValue<V, K>")]
 pub struct ForeignKey<V, K> {
   inner: LoadedValue<V, K>,
@@ -193,4 +193,23 @@ where
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     self.inner.fmt(f)
   }
+}
+
+/// Custom implementation of PartialEq as the allow_value_serialize flag should
+/// NOT be used during the comparison
+impl<V, K> PartialEq for ForeignKey<V, K>
+where
+  V: PartialEq,
+  K: PartialEq,
+{
+  fn eq(&self, other: &Self) -> bool {
+    self.inner == other.inner
+  }
+}
+
+impl<V, K> Eq for ForeignKey<V, K>
+where
+  V: Eq,
+  K: Eq,
+{
 }
