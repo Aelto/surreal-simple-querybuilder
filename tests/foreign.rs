@@ -1,7 +1,11 @@
-use surreal_simple_querybuilder::prelude::*;
+#![allow(incomplete_features)]
+#![feature(generic_const_exprs)]
 
 #[test]
+#[cfg(feature = "foreign")]
 fn foreign_key_impl_eq() {
+  use surreal_simple_querybuilder::prelude::*;
+
   #[derive(Clone, PartialEq, Debug)]
   struct TestA(pub &'static str);
 
@@ -71,7 +75,10 @@ fn foreign_key_impl_eq() {
 ///
 /// ... It also relies heavily on the implementation of Eq
 #[test]
+#[cfg(feature = "foreign")]
 fn foreign_key_impl_clone() {
+  use surreal_simple_querybuilder::prelude::*;
+
   #[derive(Clone, PartialEq, Debug)]
   struct TestA(pub &'static str);
 
