@@ -3,6 +3,7 @@ use std::fmt::Debug;
 use std::ops::Deref;
 use std::ops::DerefMut;
 
+use once_cell::sync::OnceCell;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -84,14 +85,14 @@ pub struct ForeignKey<V, K> {
   inner: LoadedValue<V, K>,
 
   #[serde(skip)]
-  allow_value_serialize: Cell<bool>,
+  allow_value_serialize: OnceCell<bool>,
 }
 
 impl<V, K> Default for ForeignKey<V, K> {
   fn default() -> Self {
     Self {
       inner: Default::default(),
-      allow_value_serialize: Cell::new(false),
+      allow_value_serialize: OnceCell::new(),
     }
   }
 }
@@ -151,11 +152,11 @@ where
 
 impl<V, K> KeySerializeControl for ForeignKey<V, K> {
   fn allow_value_serialize(&self) {
-    self.allow_value_serialize.replace(true);
+    if let Err(_) = self.allow_value_serialize.set(true) {}
   }
 
-  fn disallow_value_serialize(&self) {
-    self.allow_value_serialize.replace(false);
+  fn disallow_value_serialize(&mut self) {
+    self.allow_value_serialize = OnceCell::new();
   }
 }
 
@@ -169,7 +170,10 @@ where
   where
     S: serde::Serializer,
   {
-    match (&self.inner, self.allow_value_serialize.take()) {
+    match (
+      &self.inner,
+      self.allow_value_serialize.get().unwrap_or(&false),
+    ) {
       (LoadedValue::Loaded(v), false) => v.into_key()?.serialize(serializer),
       (inner, _) => inner.serialize(serializer),
     }
