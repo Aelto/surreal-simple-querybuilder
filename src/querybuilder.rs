@@ -6,8 +6,7 @@ use serde::Serialize;
 #[cfg(feature = "model")]
 use crate::prelude::SqlSerializeResult;
 
-#[cfg(feature = "queries")]
-use crate::queries::QueryBuilderInjecter;
+
 
 pub type CowSegment<'a> = Cow<'a, str>;
 
