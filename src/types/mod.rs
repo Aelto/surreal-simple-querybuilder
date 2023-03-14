@@ -1,6 +1,7 @@
 mod create;
 mod delete;
 mod equal;
+mod ext;
 mod fetch;
 mod filter;
 mod from;
@@ -16,6 +17,7 @@ mod update;
 pub use create::Create;
 pub use delete::Delete;
 pub use equal::Equal;
+pub use ext::*;
 pub use fetch::Fetch;
 pub use filter::Where;
 pub use from::From;
