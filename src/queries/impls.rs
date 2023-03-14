@@ -4,6 +4,33 @@ use crate::prelude::*;
 /// of param
 impl<'a> QueryBuilderInjecter<'a> for () {}
 
+/// Allows to pass Option<T> types of injecters, useful for optional injecters:
+/// ```rs
+/// let should_fetch = false;
+/// let maybe_fetch = false.then(|| Some(Fetch(["author"])));
+/// ```
+impl<'a, Injecters> QueryBuilderInjecter<'a> for Option<Injecters>
+where
+  Injecters: QueryBuilderInjecter<'a>,
+{
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    match self {
+      Some(inner) => inner.inject(querybuilder),
+      None => querybuilder,
+    }
+  }
+
+  fn params(self, map: &mut BindingMap) -> serde_json::Result<()>
+  where
+    Self: Sized,
+  {
+    match self {
+      Some(inner) => inner.params(map),
+      None => Ok(()),
+    }
+  }
+}
+
 /// Allows to pass a vec of Injecters
 impl<'a, Injecters> QueryBuilderInjecter<'a> for Vec<Injecters>
 where
