@@ -557,6 +557,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ce7134b9999ecaf8bcd65542e436736ef32ddca1b3e06094cb6ec5755203b80"
 
 [[package]]
+name = "flatten-json-object"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9539d6d8c87acbf7c3189fb4d1c8ce926de16369212e97ba1629b62febb3d512"
+dependencies = [
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "float_next_after"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1868,6 +1878,7 @@ checksum = "6bdef32e8150c2a081110b42772ffe7d7c9032b606bc226c8260fd97e0976601"
 name = "surreal-simple-querybuilder"
 version = "0.5.0"
 dependencies = [
+ "flatten-json-object",
  "once_cell",
  "serde",
  "serde_json",
