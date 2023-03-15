@@ -6,12 +6,14 @@ use quote::format_ident;
 use quote::quote;
 
 use super::Field;
+use super::ModelOptions;
 
 #[derive(Debug)]
 pub struct Model {
   pub name: String,
   pub fields: Vec<Field>,
   pub alias: Option<String>,
+  pub options: ModelOptions,
 }
 
 impl Display for Model {
@@ -27,6 +29,56 @@ impl Display for Model {
         #[serde(skip_serializing)]
         origin: Option<OriginHolder<N>>,
         #(#field_declarations),*
+      }
+    };
+
+    let partial_declaration = match self.options.partial {
+      false => quote! {},
+      true => {
+        let partial_name = format_ident!("Partial{}", self.name);
+        let partial_declaration = quote! {
+          #[derive(serde::Serialize, Debug)]
+          #[serde(transparent)]
+          pub struct #partial_name (
+            serde_json::Map<String, serde_json::Value>,
+            #[serde(skip)] serde_json::Result<()>,
+          );
+        };
+
+        let field_setter_functions: Vec<TokenStream> = self
+          .fields
+          .iter()
+          .map(|field| field.emit_partial_setter_field_function())
+          .collect();
+
+        quote!(
+          #partial_declaration
+
+          impl #partial_name {
+            pub fn new() -> Self {
+              Self(serde_json::Map::new(), Ok(()))
+            }
+
+            fn __insert_value_result(mut self, key: &str, value: impl Serialize) -> Self {
+              match surreal_simple_querybuilder::types::ser_to_param_value(value) {
+                Ok(v) => {
+                  self.0.insert(key.to_owned(), v);
+                }
+                Err(e) => {
+                  self.1 = self.1.and(Err(e));
+                }
+              };
+
+              self
+            }
+
+            pub fn ok(self) -> serde_json::Result<Self> {
+              self.1.and_then(|_| Ok(Self(self.0, Ok(()))))
+            }
+
+            #(#field_setter_functions)*
+          }
+        )
       }
     };
 
@@ -111,6 +163,8 @@ impl Display for Model {
 
         #struct_declaration
         #implementations
+
+        #partial_declaration
 
         pub const model: #name<0> = #name::new();
       }

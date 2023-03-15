@@ -1,12 +1,12 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 6c99215a868db4dcacf9529d7eb3127527f8210558d2742f50c4275007321234
+// sha3: 9d57c0780898d188e025897957620d4927185a37a98f030899af137290f52af8
 use crate::ast::*;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
 use self::__lalrpop_util::state_machine as __state_machine;
-extern crate core;
 extern crate alloc;
+extern crate core;
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
 mod __parse__Model {
@@ -27,100 +27,138 @@ mod __parse__Model {
         Variant1(Field),
         Variant2(alloc::vec::Vec<Field>),
         Variant3(String),
-        Variant4(core::option::Option<String>),
-        Variant5(Vec<Field>),
-        Variant6(core::option::Option<Field>),
-        Variant7(bool),
-        Variant8(FieldForeignNode),
-        Variant9(FieldRelation),
-        Variant10(FieldProperty),
-        Variant11(core::option::Option<&'input str>),
-        Variant12(Model),
+        Variant4(alloc::vec::Vec<String>),
+        Variant5(core::option::Option<String>),
+        Variant6(Vec<Field>),
+        Variant7(core::option::Option<Field>),
+        Variant8(bool),
+        Variant9(FieldForeignNode),
+        Variant10(FieldRelation),
+        Variant11(FieldProperty),
+        Variant12(core::option::Option<&'input str>),
+        Variant13(Model),
+        Variant14(ModelOptions),
+        Variant15(core::option::Option<ModelOptions>),
+        Variant16(Vec<String>),
     }
     const __ACTION: &[i8] = &[
         // State 0
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 1
-        0, 0, 0, 0, -28, 0, -17, 0, -17, -17, 24,
+        0, 0, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 23,
         // State 2
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, -40, 0, -22, 0, -22, -22, 31, 0,
         // State 3
-        0, 0, 0, 0, -30, 0, -17, 0, -17, -17, 24,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 4
-        0, 0, 0, 0, 0, 0, 16, 0, 6, 7, 0,
+        0, 0, 0, 0, 0, 0, -40, 0, -22, 0, -22, -22, 31, 0,
         // State 5
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, -42, 0, -22, 0, -22, -22, 31, 0,
         // State 6
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 10, 11, 0, 0,
         // State 7
-        0, 0, 0, 0, -28, 0, -17, 0, -17, -17, 24,
+        0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 23,
         // State 8
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, -44, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 9
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 10
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 11
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, -40, 0, -22, 0, -22, -22, 31, 0,
         // State 12
-        0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, -46, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 13
-        0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 14
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, -40, 0, -22, 0, -22, -22, 31, 0,
         // State 15
-        -22, -22, -22, -22, -22, 0, 0, -22, -22, -22, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 16
-        0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 17
-        28, 0, 0, 0, -27, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 18
-        -11, 0, 0, 0, -11, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0,
         // State 19
-        -13, 0, 0, 0, -13, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 20
-        -10, 0, 0, 0, -10, 0, 0, 0, 0, 0, 0,
+        0, -27, -27, -27, -27, -27, -27, 0, 0, -27, -27, -27, 0, -27,
         // State 21
-        -12, 0, 0, 0, -12, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 22
-        0, 0, 0, 0, -9, 0, 0, 0, 0, 0, 0,
+        9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 23
-        0, 0, 0, 0, 0, 0, -16, 0, -16, -16, 0,
+        0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0,
         // State 24
-        0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 35, 0, 0, 0, -39, 0, 0, 0, 0, 0, 0, 0,
         // State 25
-        30, 0, 0, 0, -29, 0, 0, 0, 0, 0, 0,
+        0, 0, -16, 0, 0, 0, -16, 0, 0, 0, 0, 0, 0, 0,
         // State 26
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, -18, 0, 0, 0, -18, 0, 0, 0, 0, 0, 0, 0,
         // State 27
-        0, 0, 0, 0, -4, 0, -4, 0, -4, -4, -4,
+        0, 0, -15, 0, 0, 0, -15, 0, 0, 0, 0, 0, 0, 0,
         // State 28
-        -20, 9, 0, 0, -20, 0, 0, 0, 0, 0, 0,
+        0, 0, -17, 0, 0, 0, -17, 0, 0, 0, 0, 0, 0, 0,
         // State 29
-        0, 0, 0, 0, -5, 0, -5, 0, -5, -5, -5,
+        0, 0, 0, 0, 0, 0, -14, 0, 0, 0, 0, 0, 0, 0,
         // State 30
-        0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, -21, 0, -21, -21, 0, 0,
         // State 31
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0,
+        0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0,
         // State 32
-        0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0,
+        0, 0, 41, 0, 0, 0, -41, 0, 0, 0, 0, 0, 0, 0,
         // State 33
-        0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 34
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, -4, 0, -4, 0, -4, -4, -4, 0,
         // State 35
-        -18, 0, 0, 0, -18, 0, 0, 0, 0, 0, 0,
+        0, 0, -25, 14, 0, 0, -25, 0, 0, 0, 0, 0, 0, 0,
         // State 36
-        0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0,
+        0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 37
-        0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0,
+        0, -43, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 38
-        -19, 0, 0, 0, -19, 0, 0, 0, 0, 0, 0,
+        0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 39
-        -21, 0, 0, 0, -21, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 40
+        0, 0, 0, 0, 0, 0, -5, 0, -5, 0, -5, -5, -5, 0,
+        // State 41
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0,
+        // State 42
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0,
+        // State 43
+        0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0,
+        // State 44
+        0, -45, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 45
+        0, -9, 0, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0,
+        // State 46
+        0, 0, 0, 0, 0, -36, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 47
+        0, 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 48
+        0, 0, 0, 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 0,
+        // State 49
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 50
+        0, -10, 0, 0, 0, 0, 0, 0, -10, 0, 0, 0, 0, 0,
+        // State 51
+        0, 0, -23, 0, 0, 0, -23, 0, 0, 0, 0, 0, 0, 0,
+        // State 52
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0,
+        // State 53
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0,
+        // State 54
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 55
+        0, 0, -24, 0, 0, 0, -24, 0, 0, 0, 0, 0, 0, 0,
+        // State 56
+        0, 0, -26, 0, 0, 0, -26, 0, 0, 0, 0, 0, 0, 0,
     ];
     fn __action(state: i8, integer: usize) -> i8 {
-        __ACTION[(state as usize) * 11 + integer]
+        __ACTION[(state as usize) * 14 + integer]
     }
     const __EOF_ACTION: &[i8] = &[
         // State 0
@@ -152,7 +190,7 @@ mod __parse__Model {
         // State 13
         0,
         // State 14
-        -31,
+        0,
         // State 15
         0,
         // State 16
@@ -162,7 +200,7 @@ mod __parse__Model {
         // State 18
         0,
         // State 19
-        0,
+        -47,
         // State 20
         0,
         // State 21
@@ -176,7 +214,7 @@ mod __parse__Model {
         // State 25
         0,
         // State 26
-        -26,
+        0,
         // State 27
         0,
         // State 28
@@ -190,9 +228,9 @@ mod __parse__Model {
         // State 32
         0,
         // State 33
-        0,
+        -35,
         // State 34
-        -25,
+        0,
         // State 35
         0,
         // State 36
@@ -202,43 +240,89 @@ mod __parse__Model {
         // State 38
         0,
         // State 39
+        -34,
+        // State 40
+        0,
+        // State 41
+        0,
+        // State 42
+        0,
+        // State 43
+        0,
+        // State 44
+        0,
+        // State 45
+        0,
+        // State 46
+        0,
+        // State 47
+        0,
+        // State 48
+        0,
+        // State 49
+        -33,
+        // State 50
+        0,
+        // State 51
+        0,
+        // State 52
+        0,
+        // State 53
+        0,
+        // State 54
+        -32,
+        // State 55
+        0,
+        // State 56
         0,
     ];
     fn __goto(state: i8, nt: usize) -> i8 {
         match nt {
-            2 => 3,
-            5 => match state {
-                7 => 32,
-                _ => 16,
+            2 => 5,
+            5 => 12,
+            8 => match state {
+                4 => 31,
+                11 => 43,
+                14 => 48,
+                _ => 23,
             },
-            6 => match state {
-                3 => 25,
-                _ => 17,
+            9 => match state {
+                5 => 32,
+                _ => 24,
             },
-            8 => 4,
-            9 => 18,
-            10 => 19,
-            11 => 20,
-            12 => 21,
-            13 => match state {
-                2 => 24,
-                4 => 28,
-                5 => 30,
-                6 => 31,
-                8 => 33,
-                9 => 36,
-                10 => 37,
-                11 => 38,
-                12 => 39,
-                _ => 13,
+            11 => 6,
+            12 => 25,
+            13 => 26,
+            14 => 27,
+            15 => 28,
+            16 => match state {
+                3 => 7,
+                6 => 35,
+                8 => 37,
+                9 => 41,
+                10 => 42,
+                12 => 44,
+                13 => 47,
+                15 => 52,
+                16 => 53,
+                17 => 55,
+                18 => 56,
+                _ => 1,
             },
-            15 => 14,
-            16 => 22,
+            19 => 19,
+            20 => match state {
+                7 => 36,
+                _ => 21,
+            },
+            22 => 29,
+            23 => 38,
             _ => 0,
         }
     }
     fn __expected_tokens(__state: i8) -> alloc::vec::Vec<alloc::string::String> {
         const __TERMINAL: &[&str] = &[
+            r###""(""###,
+            r###"")""###,
             r###"",""###,
             r###""<""###,
             r###"">""###,
@@ -250,6 +334,7 @@ mod __parse__Model {
             r###"KeywordIncomingEdge"###,
             r###"KeywordOutgoingEdge"###,
             r###"KeywordPub"###,
+            r###"KeywordWith"###,
         ];
         __TERMINAL.iter().enumerate().filter_map(|(index, terminal)| {
             let next_state = __action(__state, index);
@@ -302,7 +387,7 @@ mod __parse__Model {
 
         #[inline]
         fn error_action(&self, state: i8) -> i8 {
-            __action(state, 11 - 1)
+            __action(state, 14 - 1)
         }
 
         #[inline]
@@ -370,12 +455,15 @@ mod __parse__Model {
             Token(2, _) if true => Some(2),
             Token(3, _) if true => Some(3),
             Token(4, _) if true => Some(4),
-            Token(9, _) if true => Some(5),
+            Token(5, _) if true => Some(5),
             Token(6, _) if true => Some(6),
-            Token(12, _) if true => Some(7),
-            Token(11, _) if true => Some(8),
-            Token(10, _) if true => Some(9),
+            Token(11, _) if true => Some(7),
+            Token(8, _) if true => Some(8),
+            Token(14, _) if true => Some(9),
             Token(13, _) if true => Some(10),
+            Token(12, _) if true => Some(11),
+            Token(15, _) if true => Some(12),
+            Token(16, _) if true => Some(13),
             _ => None,
         }
     }
@@ -388,8 +476,8 @@ mod __parse__Model {
     ) -> __Symbol<'input>
     {
         match __token_index {
-            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 => match __token {
-                Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) | Token(9, __tok0) | Token(6, __tok0) | Token(12, __tok0) | Token(11, __tok0) | Token(10, __tok0) | Token(13, __tok0) if true => __Symbol::Variant0(__tok0),
+            0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 => match __token {
+                Token(0, __tok0) | Token(1, __tok0) | Token(2, __tok0) | Token(3, __tok0) | Token(4, __tok0) | Token(5, __tok0) | Token(6, __tok0) | Token(11, __tok0) | Token(8, __tok0) | Token(14, __tok0) | Token(13, __tok0) | Token(12, __tok0) | Token(15, __tok0) | Token(16, __tok0) if true => __Symbol::Variant0(__tok0),
                 _ => unreachable!(),
             },
             _ => unreachable!(),
@@ -530,8 +618,56 @@ mod __parse__Model {
                 __reduce29(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             30 => {
+                __reduce30(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            31 => {
+                __reduce31(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            32 => {
+                __reduce32(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            33 => {
+                __reduce33(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            34 => {
+                __reduce34(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            35 => {
+                __reduce35(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            36 => {
+                __reduce36(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            37 => {
+                __reduce37(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            38 => {
+                __reduce38(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            39 => {
+                __reduce39(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            40 => {
+                __reduce40(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            41 => {
+                __reduce41(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            42 => {
+                __reduce42(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            43 => {
+                __reduce43(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            44 => {
+                __reduce44(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            45 => {
+                __reduce45(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
+            }
+            46 => {
                 // __Model = Model => ActionFn(0);
-                let __sym0 = __pop_Variant12(__symbols);
+                let __sym0 = __pop_Variant13(__symbols);
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
                 let __nt = super::__action0::<>(input, __sym0);
@@ -561,14 +697,25 @@ mod __parse__Model {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant8<
+    fn __pop_Variant9<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, FieldForeignNode, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant11<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, FieldProperty, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -576,32 +723,32 @@ mod __parse__Model {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, FieldProperty, usize)
+    ) -> (usize, FieldRelation, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant10(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant9<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, FieldRelation, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant12<
+    fn __pop_Variant13<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Model, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant14<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, ModelOptions, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -616,14 +763,25 @@ mod __parse__Model {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant5<
+    fn __pop_Variant6<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<Field>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant5(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant16<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<String>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant16(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -638,47 +796,69 @@ mod __parse__Model {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant7<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, bool, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant6<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, core::option::Option<Field>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
     fn __pop_Variant4<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, core::option::Option<String>, usize)
+    ) -> (usize, alloc::vec::Vec<String>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant4(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant8<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, bool, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant7<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<Field>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant15<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<ModelOptions>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant5<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<String>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant5(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant12<
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, core::option::Option<&'input str>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -702,13 +882,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (<Field> ",") = Field, "," => ActionFn(23);
+        // (<Field> ",") = Field, "," => ActionFn(32);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action23::<>(input, __sym0, __sym1);
+        let __nt = super::__action32::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (2, 0)
     }
@@ -721,10 +901,10 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (<Field> ",")* =  => ActionFn(21);
+        // (<Field> ",")* =  => ActionFn(30);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
-        let __nt = super::__action21::<>(input, &__start, &__end);
+        let __nt = super::__action30::<>(input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (0, 1)
     }
@@ -737,11 +917,11 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (<Field> ",")* = (<Field> ",")+ => ActionFn(22);
+        // (<Field> ",")* = (<Field> ",")+ => ActionFn(31);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action22::<>(input, __sym0);
+        let __nt = super::__action31::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -754,13 +934,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (<Field> ",")+ = Field, "," => ActionFn(26);
+        // (<Field> ",")+ = Field, "," => ActionFn(37);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action26::<>(input, __sym0, __sym1);
+        let __nt = super::__action37::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (2, 2)
     }
@@ -773,14 +953,14 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (<Field> ",")+ = (<Field> ",")+, Field, "," => ActionFn(27);
+        // (<Field> ",")+ = (<Field> ",")+, Field, "," => ActionFn(38);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action38::<>(input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (3, 2)
     }
@@ -793,13 +973,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (KeywordAs <Identifier>) = KeywordAs, Identifier => ActionFn(18);
+        // (<Identifier> ",") = Identifier, "," => ActionFn(27);
         assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action18::<>(input, __sym0, __sym1);
+        let __nt = super::__action27::<>(input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 3)
     }
@@ -812,15 +992,12 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (KeywordAs <Identifier>)? = KeywordAs, Identifier => ActionFn(30);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym1.2.clone();
-        let __nt = super::__action30::<>(input, __sym0, __sym1);
+        // (<Identifier> ",")* =  => ActionFn(25);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action25::<>(input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
-        (2, 4)
+        (0, 4)
     }
     pub(crate) fn __reduce7<
         'input,
@@ -831,12 +1008,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // (KeywordAs <Identifier>)? =  => ActionFn(17);
-        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
-        let __end = __start.clone();
-        let __nt = super::__action17::<>(input, &__start, &__end);
+        // (<Identifier> ",")* = (<Identifier> ",")+ => ActionFn(26);
+        let __sym0 = __pop_Variant4(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action26::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
-        (0, 4)
+        (1, 4)
     }
     pub(crate) fn __reduce8<
         'input,
@@ -847,13 +1025,15 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // CommaSeparatedFields = TrailingComma<Field> => ActionFn(2);
-        let __sym0 = __pop_Variant5(__symbols);
+        // (<Identifier> ",")+ = Identifier, "," => ActionFn(41);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action2::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
-        (1, 5)
+        let __end = __sym1.2.clone();
+        let __nt = super::__action41::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant4(__nt), __end));
+        (2, 5)
     }
     pub(crate) fn __reduce9<
         'input,
@@ -864,13 +1044,16 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Field = FieldProperty => ActionFn(3);
-        let __sym0 = __pop_Variant10(__symbols);
+        // (<Identifier> ",")+ = (<Identifier> ",")+, Identifier, "," => ActionFn(42);
+        assert!(__symbols.len() >= 3);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action3::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
-        (1, 6)
+        let __end = __sym2.2.clone();
+        let __nt = super::__action42::<>(input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant4(__nt), __end));
+        (3, 5)
     }
     pub(crate) fn __reduce10<
         'input,
@@ -881,13 +1064,15 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Field = FieldForeignNode => ActionFn(4);
-        let __sym0 = __pop_Variant8(__symbols);
+        // (KeywordAs <Identifier>) = KeywordAs, Identifier => ActionFn(22);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
-        (1, 6)
+        let __end = __sym1.2.clone();
+        let __nt = super::__action22::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant3(__nt), __end));
+        (2, 6)
     }
     pub(crate) fn __reduce11<
         'input,
@@ -898,13 +1083,15 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Field = FieldRelation => ActionFn(5);
-        let __sym0 = __pop_Variant9(__symbols);
+        // (KeywordAs <Identifier>)? = KeywordAs, Identifier => ActionFn(45);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
-        (1, 6)
+        let __end = __sym1.2.clone();
+        let __nt = super::__action45::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        (2, 7)
     }
     pub(crate) fn __reduce12<
         'input,
@@ -915,13 +1102,12 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Field = FieldForeignRelation => ActionFn(6);
-        let __sym0 = __pop_Variant9(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action6::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
-        (1, 6)
+        // (KeywordAs <Identifier>)? =  => ActionFn(21);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action21::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        (0, 7)
     }
     pub(crate) fn __reduce13<
         'input,
@@ -932,13 +1118,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Field? = Field => ActionFn(19);
-        let __sym0 = __pop_Variant1(__symbols);
+        // CommaSeparatedFields = TrailingComma<Field> => ActionFn(3);
+        let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action3::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (1, 7)
+        (1, 8)
     }
     pub(crate) fn __reduce14<
         'input,
@@ -949,12 +1135,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Field? =  => ActionFn(20);
-        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
-        let __end = __start.clone();
-        let __nt = super::__action20::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
-        (0, 7)
+        // Field = FieldProperty => ActionFn(4);
+        let __sym0 = __pop_Variant11(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action4::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce15<
         'input,
@@ -965,13 +1152,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // FieldEncapsulation = KeywordPub => ActionFn(37);
-        let __sym0 = __pop_Variant0(__symbols);
+        // Field = FieldForeignNode => ActionFn(5);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action37::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (1, 8)
+        let __nt = super::__action5::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce16<
         'input,
@@ -982,12 +1169,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // FieldEncapsulation =  => ActionFn(38);
-        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
-        let __end = __start.clone();
-        let __nt = super::__action38::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
-        (0, 8)
+        // Field = FieldRelation => ActionFn(6);
+        let __sym0 = __pop_Variant10(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action6::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce17<
         'input,
@@ -998,18 +1186,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // FieldForeignNode = FieldEncapsulation, Identifier, "<", Identifier, ">" => ActionFn(8);
-        assert!(__symbols.len() >= 5);
-        let __sym4 = __pop_Variant0(__symbols);
-        let __sym3 = __pop_Variant3(__symbols);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Field = FieldForeignRelation => ActionFn(7);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym4.2.clone();
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
-        (5, 9)
+        let __end = __sym0.2.clone();
+        let __nt = super::__action7::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
+        (1, 9)
     }
     pub(crate) fn __reduce18<
         'input,
@@ -1020,20 +1203,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // FieldForeignRelation = FieldEncapsulation, KeywordIncomingEdge, Identifier, KeywordIncomingEdge, Identifier, KeywordAs, Identifier => ActionFn(10);
-        assert!(__symbols.len() >= 7);
-        let __sym6 = __pop_Variant3(__symbols);
-        let __sym5 = __pop_Variant0(__symbols);
-        let __sym4 = __pop_Variant3(__symbols);
-        let __sym3 = __pop_Variant0(__symbols);
-        let __sym2 = __pop_Variant3(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // Field? = Field => ActionFn(28);
+        let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym6.2.clone();
-        let __nt = super::__action10::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (7, 10)
+        let __end = __sym0.2.clone();
+        let __nt = super::__action28::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (1, 10)
     }
     pub(crate) fn __reduce19<
         'input,
@@ -1044,15 +1220,12 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // FieldProperty = FieldEncapsulation, Identifier => ActionFn(7);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant3(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym1.2.clone();
-        let __nt = super::__action7::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
-        (2, 11)
+        // Field? =  => ActionFn(29);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action29::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant7(__nt), __end));
+        (0, 10)
     }
     pub(crate) fn __reduce20<
         'input,
@@ -1063,20 +1236,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // FieldRelation = FieldEncapsulation, KeywordOutgoingEdge, Identifier, KeywordOutgoingEdge, Identifier, KeywordAs, Identifier => ActionFn(9);
-        assert!(__symbols.len() >= 7);
-        let __sym6 = __pop_Variant3(__symbols);
-        let __sym5 = __pop_Variant0(__symbols);
-        let __sym4 = __pop_Variant3(__symbols);
-        let __sym3 = __pop_Variant0(__symbols);
-        let __sym2 = __pop_Variant3(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant7(__symbols);
+        // FieldEncapsulation = KeywordPub => ActionFn(56);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym6.2.clone();
-        let __nt = super::__action9::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
-        (7, 12)
+        let __end = __sym0.2.clone();
+        let __nt = super::__action56::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (1, 11)
     }
     pub(crate) fn __reduce21<
         'input,
@@ -1087,13 +1253,12 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Identifier = IdentifierRegex => ActionFn(12);
-        let __sym0 = __pop_Variant0(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action12::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant3(__nt), __end));
-        (1, 13)
+        // FieldEncapsulation =  => ActionFn(57);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action57::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        (0, 11)
     }
     pub(crate) fn __reduce22<
         'input,
@@ -1104,13 +1269,18 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // KeywordPub? = KeywordPub => ActionFn(13);
-        let __sym0 = __pop_Variant0(__symbols);
+        // FieldForeignNode = FieldEncapsulation, Identifier, "<", Identifier, ">" => ActionFn(9);
+        assert!(__symbols.len() >= 5);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant3(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action13::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (1, 14)
+        let __end = __sym4.2.clone();
+        let __nt = super::__action9::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        (5, 12)
     }
     pub(crate) fn __reduce23<
         'input,
@@ -1121,12 +1291,20 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // KeywordPub? =  => ActionFn(14);
-        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
-        let __end = __start.clone();
-        let __nt = super::__action14::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
-        (0, 14)
+        // FieldForeignRelation = FieldEncapsulation, KeywordIncomingEdge, Identifier, KeywordIncomingEdge, Identifier, KeywordAs, Identifier => ActionFn(11);
+        assert!(__symbols.len() >= 7);
+        let __sym6 = __pop_Variant3(__symbols);
+        let __sym5 = __pop_Variant0(__symbols);
+        let __sym4 = __pop_Variant3(__symbols);
+        let __sym3 = __pop_Variant0(__symbols);
+        let __sym2 = __pop_Variant3(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant8(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym6.2.clone();
+        let __nt = super::__action11::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (7, 13)
     }
     pub(crate) fn __reduce24<
         'input,
@@ -1137,19 +1315,15 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Model = Identifier, KeywordAs, Identifier, "{", CommaSeparatedFields, "}" => ActionFn(31);
-        assert!(__symbols.len() >= 6);
-        let __sym5 = __pop_Variant0(__symbols);
-        let __sym4 = __pop_Variant5(__symbols);
-        let __sym3 = __pop_Variant0(__symbols);
-        let __sym2 = __pop_Variant3(__symbols);
-        let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant3(__symbols);
+        // FieldProperty = FieldEncapsulation, Identifier => ActionFn(8);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym5.2.clone();
-        let __nt = super::__action31::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (6, 15)
+        let __end = __sym1.2.clone();
+        let __nt = super::__action8::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        (2, 14)
     }
     pub(crate) fn __reduce25<
         'input,
@@ -1160,17 +1334,20 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // Model = Identifier, "{", CommaSeparatedFields, "}" => ActionFn(32);
-        assert!(__symbols.len() >= 4);
+        // FieldRelation = FieldEncapsulation, KeywordOutgoingEdge, Identifier, KeywordOutgoingEdge, Identifier, KeywordAs, Identifier => ActionFn(10);
+        assert!(__symbols.len() >= 7);
+        let __sym6 = __pop_Variant3(__symbols);
+        let __sym5 = __pop_Variant0(__symbols);
+        let __sym4 = __pop_Variant3(__symbols);
         let __sym3 = __pop_Variant0(__symbols);
-        let __sym2 = __pop_Variant5(__symbols);
+        let __sym2 = __pop_Variant3(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym3.2.clone();
-        let __nt = super::__action32::<>(input, __sym0, __sym1, __sym2, __sym3);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (4, 15)
+        let __end = __sym6.2.clone();
+        let __nt = super::__action10::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        (7, 15)
     }
     pub(crate) fn __reduce26<
         'input,
@@ -1181,12 +1358,12 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // TrailingComma<Field> = Field => ActionFn(33);
-        let __sym0 = __pop_Variant1(__symbols);
+        // Identifier = IdentifierRegex => ActionFn(13);
+        let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action33::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action13::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (1, 16)
     }
     pub(crate) fn __reduce27<
@@ -1198,12 +1375,13 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // TrailingComma<Field> =  => ActionFn(34);
-        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
-        let __end = __start.clone();
-        let __nt = super::__action34::<>(input, &__start, &__end);
+        // Identifier? = Identifier => ActionFn(23);
+        let __sym0 = __pop_Variant3(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action23::<>(input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
-        (0, 16)
+        (1, 17)
     }
     pub(crate) fn __reduce28<
         'input,
@@ -1214,15 +1392,12 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // TrailingComma<Field> = (<Field> ",")+, Field => ActionFn(35);
-        assert!(__symbols.len() >= 2);
-        let __sym1 = __pop_Variant1(__symbols);
-        let __sym0 = __pop_Variant2(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym1.2.clone();
-        let __nt = super::__action35::<>(input, __sym0, __sym1);
+        // Identifier? =  => ActionFn(24);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action24::<>(input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
-        (2, 16)
+        (0, 17)
     }
     pub(crate) fn __reduce29<
         'input,
@@ -1233,13 +1408,311 @@ mod __parse__Model {
         _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
-        // TrailingComma<Field> = (<Field> ",")+ => ActionFn(36);
+        // KeywordPub? = KeywordPub => ActionFn(14);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action14::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (1, 18)
+    }
+    pub(crate) fn __reduce30<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // KeywordPub? =  => ActionFn(15);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action15::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        (0, 18)
+    }
+    pub(crate) fn __reduce31<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // Model = Identifier, KeywordAs, Identifier, ModelOptions, "{", CommaSeparatedFields, "}" => ActionFn(58);
+        assert!(__symbols.len() >= 7);
+        let __sym6 = __pop_Variant0(__symbols);
+        let __sym5 = __pop_Variant6(__symbols);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant14(__symbols);
+        let __sym2 = __pop_Variant3(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant3(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym6.2.clone();
+        let __nt = super::__action58::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (7, 19)
+    }
+    pub(crate) fn __reduce32<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // Model = Identifier, KeywordAs, Identifier, "{", CommaSeparatedFields, "}" => ActionFn(59);
+        assert!(__symbols.len() >= 6);
+        let __sym5 = __pop_Variant0(__symbols);
+        let __sym4 = __pop_Variant6(__symbols);
+        let __sym3 = __pop_Variant0(__symbols);
+        let __sym2 = __pop_Variant3(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant3(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym5.2.clone();
+        let __nt = super::__action59::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (6, 19)
+    }
+    pub(crate) fn __reduce33<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // Model = Identifier, ModelOptions, "{", CommaSeparatedFields, "}" => ActionFn(60);
+        assert!(__symbols.len() >= 5);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant6(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant14(__symbols);
+        let __sym0 = __pop_Variant3(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym4.2.clone();
+        let __nt = super::__action60::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (5, 19)
+    }
+    pub(crate) fn __reduce34<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // Model = Identifier, "{", CommaSeparatedFields, "}" => ActionFn(61);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant0(__symbols);
+        let __sym2 = __pop_Variant6(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant3(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym3.2.clone();
+        let __nt = super::__action61::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (4, 19)
+    }
+    pub(crate) fn __reduce35<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // ModelOptions = KeywordWith, "(", TrailingComma<Identifier>, ")" => ActionFn(2);
+        assert!(__symbols.len() >= 4);
+        let __sym3 = __pop_Variant0(__symbols);
+        let __sym2 = __pop_Variant16(__symbols);
+        let __sym1 = __pop_Variant0(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym3.2.clone();
+        let __nt = super::__action2::<>(input, __sym0, __sym1, __sym2, __sym3);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (4, 20)
+    }
+    pub(crate) fn __reduce36<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // ModelOptions? = ModelOptions => ActionFn(18);
+        let __sym0 = __pop_Variant14(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action18::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (1, 21)
+    }
+    pub(crate) fn __reduce37<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // ModelOptions? =  => ActionFn(19);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action19::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        (0, 21)
+    }
+    pub(crate) fn __reduce38<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Field> = Field => ActionFn(48);
+        let __sym0 = __pop_Variant1(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action48::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce39<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Field> =  => ActionFn(49);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action49::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (0, 22)
+    }
+    pub(crate) fn __reduce40<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Field> = (<Field> ",")+, Field => ActionFn(50);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant1(__symbols);
+        let __sym0 = __pop_Variant2(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym1.2.clone();
+        let __nt = super::__action50::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (2, 22)
+    }
+    pub(crate) fn __reduce41<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Field> = (<Field> ",")+ => ActionFn(51);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
-        (1, 16)
+        let __nt = super::__action51::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant6(__nt), __end));
+        (1, 22)
+    }
+    pub(crate) fn __reduce42<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Identifier> = Identifier => ActionFn(52);
+        let __sym0 = __pop_Variant3(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action52::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 23)
+    }
+    pub(crate) fn __reduce43<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Identifier> =  => ActionFn(53);
+        let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
+        let __end = __start.clone();
+        let __nt = super::__action53::<>(input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (0, 23)
+    }
+    pub(crate) fn __reduce44<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Identifier> = (<Identifier> ",")+, Identifier => ActionFn(54);
+        assert!(__symbols.len() >= 2);
+        let __sym1 = __pop_Variant3(__symbols);
+        let __sym0 = __pop_Variant4(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym1.2.clone();
+        let __nt = super::__action54::<>(input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (2, 23)
+    }
+    pub(crate) fn __reduce45<
+        'input,
+    >(
+        input: &'input str,
+        __lookahead_start: Option<&usize>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: core::marker::PhantomData<(&'input ())>,
+    ) -> (usize, usize)
+    {
+        // TrailingComma<Identifier> = (<Identifier> ",")+ => ActionFn(55);
+        let __sym0 = __pop_Variant4(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action55::<>(input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 23)
     }
 }
 pub use self::__parse__Model::ModelParser;
@@ -1255,6 +1728,8 @@ mod __intern_token {
     extern crate alloc;
     pub fn new_builder() -> __lalrpop_util::lexer::MatcherBuilder {
         let __strs: &[(&str, bool)] = &[
+            ("^(\\()", false),
+            ("^(\\))", false),
             ("^(,)", false),
             ("^(<)", false),
             ("^(>)", false),
@@ -1269,6 +1744,7 @@ mod __intern_token {
             ("^(<\\-)", false),
             ("^(as)", false),
             ("^(pub)", false),
+            ("^(with)", false),
         ];
         __lalrpop_util::lexer::MatcherBuilder::new(__strs.iter().copied()).unwrap()
     }
@@ -1276,654 +1752,619 @@ mod __intern_token {
 pub(crate) use self::__lalrpop_util::lexer::Token;
 
 #[allow(unused_variables)]
-fn __action0<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Model, usize),
-) -> Model
-{
-    __0
+fn __action0<'input>(input: &'input str, (_, __0, _): (usize, Model, usize)) -> Model {
+  __0
 }
 
 #[allow(unused_variables)]
-fn __action1<
-    'input,
->(
-    input: &'input str,
-    (_, name, _): (usize, String, usize),
-    (_, alias, _): (usize, core::option::Option<String>, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, fields, _): (usize, Vec<Field>, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> Model
-{
-    Model { name, fields, alias }
-}
-
-#[allow(unused_variables)]
-fn __action2<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Vec<Field>, usize),
-) -> Vec<Field>
-{
-    __0
-}
-
-#[allow(unused_variables)]
-fn __action3<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldProperty, usize),
-) -> Field
-{
-    Field::Property(__0)
-}
-
-#[allow(unused_variables)]
-fn __action4<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldForeignNode, usize),
-) -> Field
-{
-    Field::ForeignNode(__0)
-}
-
-#[allow(unused_variables)]
-fn __action5<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldRelation, usize),
-) -> Field
-{
-    Field::Relation(__0)
-}
-
-#[allow(unused_variables)]
-fn __action6<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldRelation, usize),
-) -> Field
-{
-    Field::Relation(__0)
-}
-
-#[allow(unused_variables)]
-fn __action7<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, name, _): (usize, String, usize),
-) -> FieldProperty
-{
-    FieldProperty { name, is_public }
-}
-
-#[allow(unused_variables)]
-fn __action8<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, name, _): (usize, String, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, foreign_type, _): (usize, String, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> FieldForeignNode
-{
-    FieldForeignNode { name, foreign_type, is_public }
-}
-
-#[allow(unused_variables)]
-fn __action9<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, name, _): (usize, String, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, foreign_type, _): (usize, String, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, alias, _): (usize, String, usize),
-) -> FieldRelation
-{
-    FieldRelation { name, foreign_type, alias, relation_type: FieldRelationType::OutgoingEdge, is_public }
-}
-
-#[allow(unused_variables)]
-fn __action10<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, name, _): (usize, String, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, foreign_type, _): (usize, String, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, alias, _): (usize, String, usize),
-) -> FieldRelation
-{
-    FieldRelation { name, foreign_type, alias, relation_type: FieldRelationType::IncomingEdge, is_public }
-}
-
-#[allow(unused_variables)]
-fn __action11<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, core::option::Option<&'input str>, usize),
-) -> bool
-{
-    is_public.is_some()
-}
-
-#[allow(unused_variables)]
-fn __action12<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, &'input str, usize),
-) -> String
-{
-    String::from(__0)
-}
-
-#[allow(unused_variables)]
-fn __action13<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, &'input str, usize),
-) -> core::option::Option<&'input str>
-{
-    Some(__0)
-}
-
-#[allow(unused_variables)]
-fn __action14<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<&'input str>
-{
-    None
-}
-
-#[allow(unused_variables)]
-fn __action15<
-    'input,
->(
-    input: &'input str,
-    (_, mut v, _): (usize, alloc::vec::Vec<Field>, usize),
-    (_, e, _): (usize, core::option::Option<Field>, usize),
-) -> Vec<Field>
-{
-    match e {
-      None => v,
-      Some(e) => {
-          v.push(e);
-          v
-      }
+fn __action1<'input>(
+  input: &'input str, (_, name, _): (usize, String, usize),
+  (_, alias, _): (usize, core::option::Option<String>, usize),
+  (_, options, _): (usize, core::option::Option<ModelOptions>, usize),
+  (_, _, _): (usize, &'input str, usize), (_, fields, _): (usize, Vec<Field>, usize),
+  (_, _, _): (usize, &'input str, usize),
+) -> Model {
+  Model {
+    name,
+    fields,
+    alias,
+    options: options.unwrap_or_default(),
   }
 }
 
 #[allow(unused_variables)]
-fn __action16<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, String, usize),
-) -> core::option::Option<String>
-{
-    Some(__0)
+fn __action2<'input>(
+  input: &'input str, (_, _, _): (usize, &'input str, usize),
+  (_, _, _): (usize, &'input str, usize), (_, flags, _): (usize, Vec<String>, usize),
+  (_, _, _): (usize, &'input str, usize),
+) -> ModelOptions {
+  ModelOptions::from(flags)
 }
 
 #[allow(unused_variables)]
-fn __action17<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<String>
-{
-    None
+fn __action3<'input>(input: &'input str, (_, __0, _): (usize, Vec<Field>, usize)) -> Vec<Field> {
+  __0
 }
 
 #[allow(unused_variables)]
-fn __action18<
-    'input,
->(
-    input: &'input str,
-    (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, String, usize),
-) -> String
-{
-    __0
+fn __action4<'input>(input: &'input str, (_, __0, _): (usize, FieldProperty, usize)) -> Field {
+  Field::Property(__0)
 }
 
 #[allow(unused_variables)]
-fn __action19<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Field, usize),
-) -> core::option::Option<Field>
-{
-    Some(__0)
+fn __action5<'input>(input: &'input str, (_, __0, _): (usize, FieldForeignNode, usize)) -> Field {
+  Field::ForeignNode(__0)
 }
 
 #[allow(unused_variables)]
-fn __action20<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<Field>
-{
-    None
+fn __action6<'input>(input: &'input str, (_, __0, _): (usize, FieldRelation, usize)) -> Field {
+  Field::Relation(__0)
 }
 
 #[allow(unused_variables)]
-fn __action21<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> alloc::vec::Vec<Field>
-{
-    alloc::vec![]
+fn __action7<'input>(input: &'input str, (_, __0, _): (usize, FieldRelation, usize)) -> Field {
+  Field::Relation(__0)
 }
 
 #[allow(unused_variables)]
-fn __action22<
-    'input,
->(
-    input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
-) -> alloc::vec::Vec<Field>
-{
+fn __action8<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize), (_, name, _): (usize, String, usize),
+) -> FieldProperty {
+  FieldProperty { name, is_public }
+}
+
+#[allow(unused_variables)]
+fn __action9<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, name, _): (usize, String, usize), (_, _, _): (usize, &'input str, usize),
+  (_, foreign_type, _): (usize, String, usize), (_, _, _): (usize, &'input str, usize),
+) -> FieldForeignNode {
+  FieldForeignNode {
+    name,
+    foreign_type,
+    is_public,
+  }
+}
+
+#[allow(unused_variables)]
+fn __action10<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, _, _): (usize, &'input str, usize), (_, name, _): (usize, String, usize),
+  (_, _, _): (usize, &'input str, usize), (_, foreign_type, _): (usize, String, usize),
+  (_, _, _): (usize, &'input str, usize), (_, alias, _): (usize, String, usize),
+) -> FieldRelation {
+  FieldRelation {
+    name,
+    foreign_type,
+    alias,
+    relation_type: FieldRelationType::OutgoingEdge,
+    is_public,
+  }
+}
+
+#[allow(unused_variables)]
+fn __action11<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, _, _): (usize, &'input str, usize), (_, name, _): (usize, String, usize),
+  (_, _, _): (usize, &'input str, usize), (_, foreign_type, _): (usize, String, usize),
+  (_, _, _): (usize, &'input str, usize), (_, alias, _): (usize, String, usize),
+) -> FieldRelation {
+  FieldRelation {
+    name,
+    foreign_type,
+    alias,
+    relation_type: FieldRelationType::IncomingEdge,
+    is_public,
+  }
+}
+
+#[allow(unused_variables)]
+fn __action12<'input>(
+  input: &'input str, (_, is_public, _): (usize, core::option::Option<&'input str>, usize),
+) -> bool {
+  is_public.is_some()
+}
+
+#[allow(unused_variables)]
+fn __action13<'input>(input: &'input str, (_, __0, _): (usize, &'input str, usize)) -> String {
+  String::from(__0)
+}
+
+#[allow(unused_variables)]
+fn __action14<'input>(
+  input: &'input str, (_, __0, _): (usize, &'input str, usize),
+) -> core::option::Option<&'input str> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+fn __action15<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<&'input str> {
+  None
+}
+
+#[allow(unused_variables)]
+fn __action16<'input>(
+  input: &'input str, (_, mut v, _): (usize, alloc::vec::Vec<Field>, usize),
+  (_, e, _): (usize, core::option::Option<Field>, usize),
+) -> Vec<Field> {
+  match e {
+    None => v,
+    Some(e) => {
+      v.push(e);
+      v
+    }
+  }
+}
+
+#[allow(unused_variables)]
+fn __action17<'input>(
+  input: &'input str, (_, mut v, _): (usize, alloc::vec::Vec<String>, usize),
+  (_, e, _): (usize, core::option::Option<String>, usize),
+) -> Vec<String> {
+  match e {
+    None => v,
+    Some(e) => {
+      v.push(e);
+      v
+    }
+  }
+}
+
+#[allow(unused_variables)]
+fn __action18<'input>(
+  input: &'input str, (_, __0, _): (usize, ModelOptions, usize),
+) -> core::option::Option<ModelOptions> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+fn __action19<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<ModelOptions> {
+  None
+}
+
+#[allow(unused_variables)]
+fn __action20<'input>(
+  input: &'input str, (_, __0, _): (usize, String, usize),
+) -> core::option::Option<String> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+fn __action21<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<String> {
+  None
+}
+
+#[allow(unused_variables)]
+fn __action22<'input>(
+  input: &'input str, (_, _, _): (usize, &'input str, usize), (_, __0, _): (usize, String, usize),
+) -> String {
+  __0
+}
+
+#[allow(unused_variables)]
+fn __action23<'input>(
+  input: &'input str, (_, __0, _): (usize, String, usize),
+) -> core::option::Option<String> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+fn __action24<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<String> {
+  None
+}
+
+#[allow(unused_variables)]
+fn __action25<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> alloc::vec::Vec<String> {
+  alloc::vec![]
+}
+
+#[allow(unused_variables)]
+fn __action26<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<String>, usize),
+) -> alloc::vec::Vec<String> {
+  v
+}
+
+#[allow(unused_variables)]
+fn __action27<'input>(
+  input: &'input str, (_, __0, _): (usize, String, usize), (_, _, _): (usize, &'input str, usize),
+) -> String {
+  __0
+}
+
+#[allow(unused_variables)]
+fn __action28<'input>(
+  input: &'input str, (_, __0, _): (usize, Field, usize),
+) -> core::option::Option<Field> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+fn __action29<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<Field> {
+  None
+}
+
+#[allow(unused_variables)]
+fn __action30<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> alloc::vec::Vec<Field> {
+  alloc::vec![]
+}
+
+#[allow(unused_variables)]
+fn __action31<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
+) -> alloc::vec::Vec<Field> {
+  v
+}
+
+#[allow(unused_variables)]
+fn __action32<'input>(
+  input: &'input str, (_, __0, _): (usize, Field, usize), (_, _, _): (usize, &'input str, usize),
+) -> Field {
+  __0
+}
+
+#[allow(unused_variables)]
+fn __action33<'input>(
+  input: &'input str, (_, __0, _): (usize, Field, usize),
+) -> alloc::vec::Vec<Field> {
+  alloc::vec![__0]
+}
+
+#[allow(unused_variables)]
+fn __action34<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
+  (_, e, _): (usize, Field, usize),
+) -> alloc::vec::Vec<Field> {
+  {
+    let mut v = v;
+    v.push(e);
     v
+  }
 }
 
 #[allow(unused_variables)]
-fn __action23<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Field, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> Field
-{
-    __0
+fn __action35<'input>(
+  input: &'input str, (_, __0, _): (usize, String, usize),
+) -> alloc::vec::Vec<String> {
+  alloc::vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action24<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Field, usize),
-) -> alloc::vec::Vec<Field>
-{
-    alloc::vec![__0]
+fn __action36<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<String>, usize),
+  (_, e, _): (usize, String, usize),
+) -> alloc::vec::Vec<String> {
+  {
+    let mut v = v;
+    v.push(e);
+    v
+  }
 }
 
 #[allow(unused_variables)]
-fn __action25<
-    'input,
->(
-    input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
-    (_, e, _): (usize, Field, usize),
-) -> alloc::vec::Vec<Field>
-{
-    { let mut v = v; v.push(e); v }
+fn __action37<'input>(
+  input: &'input str, __0: (usize, Field, usize), __1: (usize, &'input str, usize),
+) -> alloc::vec::Vec<Field> {
+  let __start0 = __0.0.clone();
+  let __end0 = __1.2.clone();
+  let __temp0 = __action32(input, __0, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action33(input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action26<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Field, usize),
-    __1: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Field>
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __1.2.clone();
-    let __temp0 = __action23(
-        input,
-        __0,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action24(
-        input,
-        __temp0,
-    )
+fn __action38<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize), __1: (usize, Field, usize),
+  __2: (usize, &'input str, usize),
+) -> alloc::vec::Vec<Field> {
+  let __start0 = __1.0.clone();
+  let __end0 = __2.2.clone();
+  let __temp0 = __action32(input, __1, __2);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action34(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action27<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-    __1: (usize, Field, usize),
-    __2: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Field>
-{
-    let __start0 = __1.0.clone();
-    let __end0 = __2.2.clone();
-    let __temp0 = __action23(
-        input,
-        __1,
-        __2,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action25(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action39<'input>(
+  input: &'input str, __0: (usize, core::option::Option<Field>, usize),
+) -> Vec<Field> {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.0.clone();
+  let __temp0 = __action30(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action16(input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action28<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, core::option::Option<Field>, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __0.0.clone();
-    let __temp0 = __action21(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action15(
-        input,
-        __temp0,
-        __0,
-    )
+fn __action40<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize),
+  __1: (usize, core::option::Option<Field>, usize),
+) -> Vec<Field> {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action31(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action16(input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action29<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-    __1: (usize, core::option::Option<Field>, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action22(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action15(
-        input,
-        __temp0,
-        __1,
-    )
+fn __action41<'input>(
+  input: &'input str, __0: (usize, String, usize), __1: (usize, &'input str, usize),
+) -> alloc::vec::Vec<String> {
+  let __start0 = __0.0.clone();
+  let __end0 = __1.2.clone();
+  let __temp0 = __action27(input, __0, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action35(input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action30<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, &'input str, usize),
-    __1: (usize, String, usize),
-) -> core::option::Option<String>
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __1.2.clone();
-    let __temp0 = __action18(
-        input,
-        __0,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action16(
-        input,
-        __temp0,
-    )
+fn __action42<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<String>, usize), __1: (usize, String, usize),
+  __2: (usize, &'input str, usize),
+) -> alloc::vec::Vec<String> {
+  let __start0 = __1.0.clone();
+  let __end0 = __2.2.clone();
+  let __temp0 = __action27(input, __1, __2);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action36(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action31<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, String, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, String, usize),
-    __3: (usize, &'input str, usize),
-    __4: (usize, Vec<Field>, usize),
-    __5: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __1.0.clone();
-    let __end0 = __2.2.clone();
-    let __temp0 = __action30(
-        input,
-        __1,
-        __2,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action1(
-        input,
-        __0,
-        __temp0,
-        __3,
-        __4,
-        __5,
-    )
+fn __action43<'input>(
+  input: &'input str, __0: (usize, core::option::Option<String>, usize),
+) -> Vec<String> {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.0.clone();
+  let __temp0 = __action25(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action17(input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action32<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, String, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, Vec<Field>, usize),
-    __3: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __0.2.clone();
-    let __end0 = __1.0.clone();
-    let __temp0 = __action17(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action1(
-        input,
-        __0,
-        __temp0,
-        __1,
-        __2,
-        __3,
-    )
+fn __action44<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<String>, usize),
+  __1: (usize, core::option::Option<String>, usize),
+) -> Vec<String> {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action26(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action17(input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action33<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Field, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action19(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action28(
-        input,
-        __temp0,
-    )
+fn __action45<'input>(
+  input: &'input str, __0: (usize, &'input str, usize), __1: (usize, String, usize),
+) -> core::option::Option<String> {
+  let __start0 = __0.0.clone();
+  let __end0 = __1.2.clone();
+  let __temp0 = __action22(input, __0, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action20(input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action34<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> Vec<Field>
-{
-    let __start0 = __lookbehind.clone();
-    let __end0 = __lookahead.clone();
-    let __temp0 = __action20(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action28(
-        input,
-        __temp0,
-    )
+fn __action46<'input>(
+  input: &'input str, __0: (usize, String, usize), __1: (usize, &'input str, usize),
+  __2: (usize, String, usize), __3: (usize, core::option::Option<ModelOptions>, usize),
+  __4: (usize, &'input str, usize), __5: (usize, Vec<Field>, usize),
+  __6: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __1.0.clone();
+  let __end0 = __2.2.clone();
+  let __temp0 = __action45(input, __1, __2);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action1(input, __0, __temp0, __3, __4, __5, __6)
 }
 
 #[allow(unused_variables)]
-fn __action35<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-    __1: (usize, Field, usize),
-) -> Vec<Field>
-{
-    let __start0 = __1.0.clone();
-    let __end0 = __1.2.clone();
-    let __temp0 = __action19(
-        input,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action29(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action47<'input>(
+  input: &'input str, __0: (usize, String, usize),
+  __1: (usize, core::option::Option<ModelOptions>, usize), __2: (usize, &'input str, usize),
+  __3: (usize, Vec<Field>, usize), __4: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __0.2.clone();
+  let __end0 = __1.0.clone();
+  let __temp0 = __action21(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action1(input, __0, __temp0, __1, __2, __3, __4)
 }
 
 #[allow(unused_variables)]
-fn __action36<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.2.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action20(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action29(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action48<'input>(input: &'input str, __0: (usize, Field, usize)) -> Vec<Field> {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action28(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action39(input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action37<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, &'input str, usize),
-) -> bool
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action13(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action11(
-        input,
-        __temp0,
-    )
+fn __action49<'input>(input: &'input str, __lookbehind: &usize, __lookahead: &usize) -> Vec<Field> {
+  let __start0 = __lookbehind.clone();
+  let __end0 = __lookahead.clone();
+  let __temp0 = __action29(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action39(input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action38<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> bool
-{
-    let __start0 = __lookbehind.clone();
-    let __end0 = __lookahead.clone();
-    let __temp0 = __action14(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action11(
-        input,
-        __temp0,
-    )
+fn __action50<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize), __1: (usize, Field, usize),
+) -> Vec<Field> {
+  let __start0 = __1.0.clone();
+  let __end0 = __1.2.clone();
+  let __temp0 = __action28(input, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action40(input, __0, __temp0)
 }
 
-pub trait __ToTriple<'input, >
-{
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
+#[allow(unused_variables)]
+fn __action51<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize),
+) -> Vec<Field> {
+  let __start0 = __0.2.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action29(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action40(input, __0, __temp0)
 }
 
-impl<'input, > __ToTriple<'input, > for (usize, Token<'input>, usize)
-{
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
-        Ok(value)
+#[allow(unused_variables)]
+fn __action52<'input>(input: &'input str, __0: (usize, String, usize)) -> Vec<String> {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action23(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action43(input, __temp0)
+}
+
+#[allow(unused_variables)]
+fn __action53<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> Vec<String> {
+  let __start0 = __lookbehind.clone();
+  let __end0 = __lookahead.clone();
+  let __temp0 = __action24(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action43(input, __temp0)
+}
+
+#[allow(unused_variables)]
+fn __action54<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<String>, usize), __1: (usize, String, usize),
+) -> Vec<String> {
+  let __start0 = __1.0.clone();
+  let __end0 = __1.2.clone();
+  let __temp0 = __action23(input, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action44(input, __0, __temp0)
+}
+
+#[allow(unused_variables)]
+fn __action55<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<String>, usize),
+) -> Vec<String> {
+  let __start0 = __0.2.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action24(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action44(input, __0, __temp0)
+}
+
+#[allow(unused_variables)]
+fn __action56<'input>(input: &'input str, __0: (usize, &'input str, usize)) -> bool {
+  let __start0 = __0.0.clone();
+  let __end0 = __0.2.clone();
+  let __temp0 = __action14(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action12(input, __temp0)
+}
+
+#[allow(unused_variables)]
+fn __action57<'input>(input: &'input str, __lookbehind: &usize, __lookahead: &usize) -> bool {
+  let __start0 = __lookbehind.clone();
+  let __end0 = __lookahead.clone();
+  let __temp0 = __action15(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action12(input, __temp0)
+}
+
+#[allow(unused_variables)]
+fn __action58<'input>(
+  input: &'input str, __0: (usize, String, usize), __1: (usize, &'input str, usize),
+  __2: (usize, String, usize), __3: (usize, ModelOptions, usize), __4: (usize, &'input str, usize),
+  __5: (usize, Vec<Field>, usize), __6: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __3.0.clone();
+  let __end0 = __3.2.clone();
+  let __temp0 = __action18(input, __3);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action46(input, __0, __1, __2, __temp0, __4, __5, __6)
+}
+
+#[allow(unused_variables)]
+fn __action59<'input>(
+  input: &'input str, __0: (usize, String, usize), __1: (usize, &'input str, usize),
+  __2: (usize, String, usize), __3: (usize, &'input str, usize), __4: (usize, Vec<Field>, usize),
+  __5: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __2.2.clone();
+  let __end0 = __3.0.clone();
+  let __temp0 = __action19(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action46(input, __0, __1, __2, __temp0, __3, __4, __5)
+}
+
+#[allow(unused_variables)]
+fn __action60<'input>(
+  input: &'input str, __0: (usize, String, usize), __1: (usize, ModelOptions, usize),
+  __2: (usize, &'input str, usize), __3: (usize, Vec<Field>, usize),
+  __4: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __1.0.clone();
+  let __end0 = __1.2.clone();
+  let __temp0 = __action18(input, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action47(input, __0, __temp0, __2, __3, __4)
+}
+
+#[allow(unused_variables)]
+fn __action61<'input>(
+  input: &'input str, __0: (usize, String, usize), __1: (usize, &'input str, usize),
+  __2: (usize, Vec<Field>, usize), __3: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __0.2.clone();
+  let __end0 = __1.0.clone();
+  let __temp0 = __action19(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action47(input, __0, __temp0, __1, __2, __3)
+}
+
+pub trait __ToTriple<'input> {
+  fn to_triple(
+    value: Self,
+  ) -> Result<
+    (usize, Token<'input>, usize),
+    __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+  >;
+}
+
+impl<'input> __ToTriple<'input> for (usize, Token<'input>, usize) {
+  fn to_triple(
+    value: Self,
+  ) -> Result<
+    (usize, Token<'input>, usize),
+    __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+  > {
+    Ok(value)
+  }
+}
+impl<'input> __ToTriple<'input> for Result<(usize, Token<'input>, usize), &'static str> {
+  fn to_triple(
+    value: Self,
+  ) -> Result<
+    (usize, Token<'input>, usize),
+    __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+  > {
+    match value {
+      Ok(v) => Ok(v),
+      Err(error) => Err(__lalrpop_util::ParseError::User { error }),
     }
-}
-impl<'input, > __ToTriple<'input, > for Result<(usize, Token<'input>, usize), &'static str>
-{
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
-        match value {
-            Ok(v) => Ok(v),
-            Err(error) => Err(__lalrpop_util::ParseError::User { error }),
-        }
-    }
+  }
 }

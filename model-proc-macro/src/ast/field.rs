@@ -41,6 +41,22 @@ impl Field {
       Field::Relation(x) => x.emit_foreign_field_function(),
     }
   }
+
+  pub fn emit_partial_setter_field_function(&self) -> TokenStream {
+    let field_name = match self {
+      Field::Property(p) => &p.name,
+      Field::ForeignNode(f) => &f.name,
+      Field::Relation(r) => &r.name,
+    };
+
+    let name = format_ident!("{}", field_name);
+
+    quote!(
+      pub fn #name (mut self, value: impl serde::Serialize) -> Self {
+        self.__insert_value_result(stringify!(#name), value)
+      }
+    )
+  }
 }
 
 /// A simple property

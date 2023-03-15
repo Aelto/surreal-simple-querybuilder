@@ -4,7 +4,12 @@ use crate::ast::*;
 grammar();
 
 pub Model: Model = {
-  <name:Identifier> <alias:(KeywordAs <Identifier>)?> "{" <fields:CommaSeparatedFields> "}" => Model { name, fields, alias }
+  <name:Identifier> <alias:(KeywordAs <Identifier>)?> <options:ModelOptions?> "{" <fields:CommaSeparatedFields> "}" =>
+    Model { name, fields, alias, options: options.unwrap_or_default() }
+}
+
+ModelOptions: ModelOptions = {
+  KeywordWith "(" <flags:TrailingComma<Identifier>> ")" => ModelOptions::from(flags)
 }
 
 // -----------------------------------------------------------------------------
@@ -73,6 +78,7 @@ match {
   "->" => KeywordOutgoingEdge,
   "<-" => KeywordIncomingEdge,
   "pub" => KeywordPub,
+  "with" => KeywordWith,
 } else {
   // These items have next highest precedence.
 

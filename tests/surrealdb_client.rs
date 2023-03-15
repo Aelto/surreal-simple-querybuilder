@@ -61,7 +61,7 @@ mod test {
     pub read: bool,
   }
 
-  model!(Book as book_model {
+  model!(Book as book_model with(partial) {
     id,
     pub title,
     pub author<User>,
