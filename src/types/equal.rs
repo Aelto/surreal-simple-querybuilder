@@ -15,7 +15,7 @@ pub struct Equal<T>(pub T);
 
 /// Base functions for all implementations of the `QueryBuilderInjecter` trait
 impl Equal<()> {
-  fn equal_inject<'a>(
+  pub(crate) fn equal_inject<'a>(
     mut querybuilder: QueryBuilder<'a>, key: &impl ToNodeBuilder,
   ) -> QueryBuilder<'a> {
     querybuilder.add_segment(key.equals_parameterized());
@@ -23,7 +23,7 @@ impl Equal<()> {
     querybuilder
   }
 
-  fn equal_params(
+  pub(crate) fn equal_params(
     map: &mut BindingMap, key: &impl ToNodeBuilder, value: impl Serialize,
   ) -> serde_json::Result<()> {
     map.insert(key.as_param(), ser_to_param_value(value)?);
