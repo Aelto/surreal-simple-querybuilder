@@ -32,3 +32,5 @@ pub mod types;
 pub mod queries;
 
 pub mod prelude;
+
+pub use serde_json;
