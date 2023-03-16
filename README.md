@@ -15,6 +15,7 @@ Aims at being simple to use and not too verbose first.
   - [The `model` macro (`model` feature)](#the-model-macro-model-feature)
     - [public \& private fields in models](#public--private-fields-in-models)
     - [Relations between your models](#relations-between-your-models)
+    - [Partials builder generation](#partials-builder-generation)
   - [The `NodeBuilder` traits (`querybuilder` feature)](#the-nodebuilder-traits-querybuilder-feature)
   - [The `QueryBuilder` type (`querybuilder` feature)](#the-querybuilder-type-querybuilder-feature)
   - [The `ForeignKey` and `Foreign` types (`foreign` feature)](#the-foreignkey-and-foreign-types-foreign-feature)
@@ -294,6 +295,79 @@ fn main() {
   }
 ```
 
+### Partials builder generation
+The macro supports condition flags you can pass to generate more code for you. One
+of them is the generation of a "Partial" builder. A partial type is a copy of the
+model you created where all fields are `Option<serde_json::Value>` set with the serde
+flag to skip the fields that are `None` during serialization.
+
+Such a partial builder can be used like so:
+```rust
+// notice the `with(partial)`
+model!(Project with(partial) {
+  id,
+  pub name
+});
+
+let partial_user = PartialProject::new()
+  .name("John Doe");
+```
+
+This partial type comes handy when constructing queries with nested fields thanks
+to its `ok()` method:
+```rust
+let partial_post = PartialPost::new()
+  .title("My post title")
+  .author(PartialUser::new().name("John Doe"))
+  .ok()?;
+```
+which will output the following flattened json:
+```json
+{
+  "title": "My post title",
+  "author.name": "John Doe"
+}
+```
+If you'd like a normal nested object then you can skip the `ok` call and past the object to the serialize function of your choice.
+
+You can then use the builder in your queries:
+```rust
+let user = DB.update(user_id)
+  .merge(PartialUser::new()
+    .name("Jean")
+    .posts(vec![post1_id, post2_id])
+    .ok()?
+  ).await?
+
+// ...
+
+let filter = Where(PartialPost::new()
+  .title("My post title")
+  .author(PartialUser::new().name("John Doe"))
+  .ok()?);
+
+let posts = queries.select("*", "post", filter).await?;
+```
+
+Note that partial builders are an alternative syntax to building the json objects using the `serde_json::json!` macro combined with the models. The above example is the same as the following example, so pick whatever solution you prefer:
+```rust
+let user = DB.update(user_id)
+  .merge(json!({
+    model.name: "Jean",
+    model.posts: vec![post1_id, post2_id]
+  })).await?
+
+// ...
+
+// the wjson! macro is a shortcut to `Where(json!())`
+let filter = wjson!({
+  model.title: "My post title",
+  model.author().name: "John Doe"
+});
+
+let posts = select("*", "post", filter).await?;
+```
+
 ## The `NodeBuilder` traits (`querybuilder` feature)
 These traits add a few utility functions to the `String` and `str` types that can
 be used alongside the querybuilder for even more flexibility.
@@ -491,23 +565,7 @@ You may note that mutability is not needed, the methods use interior mutability
 to work even on immutable ForeignKeys if needed.
 
 ## Using the querybuilder in combination of the [official SurrealDB client](https://github.com/surrealdb/surrealdb/tree/main/lib)
-There is an important thing to keep in mind with this querybuilding crate, it is meant to serve as an utility crate that is completely independant of the client you use. For this reason it does not offer anything to send the queries and getting the responses directly but since you'll rarely want to use this crate without a client one of the test cases demonstrates how to write `create`, `select`, `update` functions that would connect the querybuilder to the official surrealdb client.
+There is an important thing to keep in mind with this querybuilding crate, it is meant to serve as an utility crate that is completely independant of the client you use. For this reason it does not offer anything to send the queries and getting the responses directly but since you'll rarely want to use this crate without a client, I am maintaining an [external repository as a demo of how to combine the official client & the surreal-simple-querybuilder crate](https://github.com/Aelto/surrealdb-architecture).
 
 While it is not convenient to have to write these functions yourself it allows you to use a fixed version of the querybuilder crate while still getting the latest breaking updates on your favorite client.
 
-[Here is a link to the file](test/../tests/src/surrealdb_client.rs), the functions are created in the part 1 section. And here are snippets of what the functions allow you to do:
-```rust
-update(book_id, Set((book.read, true))).await?;
-
-let all_books: Vec<IBook> = select(&book, ()).await?;
-let user0_books: Vec<IBook> = select(&book, Where((book.author, user0_id))).await?;
-
-let books_with_author: Vec<IBook> = select(
-    &book,
-    (
-      Where((book.author, user1_id)),
-      Fetch([book.author.as_ref()]),
-    ),
-  )
-  .await?;
-```
