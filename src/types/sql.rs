@@ -4,7 +4,7 @@ use crate::queries::BindingMap;
 
 /// Acts as a way to send raw unaltered SQL as a parameter. It is the same as
 /// doing
-/// ```
+/// ```rs
 /// QueryBuilder.raw("my string")
 /// ```
 pub struct Sql<T>(pub T);

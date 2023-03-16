@@ -1,5 +1,6 @@
 mod bind;
 mod build;
+mod cmp;
 mod create;
 mod delete;
 mod equal;
@@ -21,6 +22,7 @@ mod update;
 
 pub use bind::Bind;
 pub use build::Build;
+pub use cmp::Cmp;
 pub use create::Create;
 pub use delete::Delete;
 pub use equal::Equal;

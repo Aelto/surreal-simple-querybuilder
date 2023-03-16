@@ -160,8 +160,12 @@ impl<const N: usize> std::ops::Deref for SchemaField<N> {
   }
 }
 
-impl<const N: usize> AsRef<str> for SchemaField<N> {
-  fn as_ref(&self) -> &str {
-    self.identifier
+impl<const N: usize, T> AsRef<T> for SchemaField<N>
+where
+  T: ?Sized,
+  <SchemaField<N> as std::ops::Deref>::Target: AsRef<T>,
+{
+  fn as_ref(&self) -> &T {
+    std::ops::Deref::deref(self).as_ref()
   }
 }

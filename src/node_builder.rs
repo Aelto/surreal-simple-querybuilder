@@ -77,6 +77,32 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
     format!("{self} = {value}")
   }
 
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "age".compares(">=", "45");
+  ///
+  /// assert_eq!("age >= 45", s);
+  /// ```
+  fn compares(&self, operator: &str, value: &str) -> String {
+    format!("{self} {operator} {value}")
+  }
+
+  /// Take the current string and add the given operator plus ` $current_string` after it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "age".compares_parameterized(">=");
+  ///
+  /// assert_eq!("age >= $age", s);
+  /// ```
+  fn compares_parameterized(&self, operator: &str) -> String {
+    format!("{self} {operator} ${}", self.as_param())
+  }
+
   /// Take the current string and add `= $current_string` after it
   ///
   /// # Example
