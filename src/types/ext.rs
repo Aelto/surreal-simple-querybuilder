@@ -1,3 +1,8 @@
+use std::error::Error;
+use std::fmt::Display;
+
+use serde::Serialize;
+
 use crate::queries::QueryBuilderInjecter;
 
 pub trait IntoOptionalInjecterExt
@@ -28,4 +33,55 @@ where
       false => None,
     }
   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// Function  to easily serialize+flatten serializable types into injecters that
+/// accept the `Value` type
+
+#[derive(Debug)]
+pub enum FlattenSerializeError {
+  Serialize(serde_json::Error),
+  Flatten(flatten_json_object::Error),
+}
+
+impl Display for FlattenSerializeError {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      FlattenSerializeError::Serialize(e) => e.fmt(f),
+      FlattenSerializeError::Flatten(e) => e.fmt(f),
+    }
+  }
+}
+
+impl Error for FlattenSerializeError {
+  fn source(&self) -> Option<&(dyn Error + 'static)> {
+    match self {
+      FlattenSerializeError::Serialize(e) => e.source(),
+      FlattenSerializeError::Flatten(e) => e.source(),
+    }
+  }
+}
+
+impl From<serde_json::Error> for FlattenSerializeError {
+  fn from(value: serde_json::Error) -> Self {
+    Self::Serialize(value)
+  }
+}
+
+impl From<flatten_json_object::Error> for FlattenSerializeError {
+  fn from(value: flatten_json_object::Error) -> Self {
+    Self::Flatten(value)
+  }
+}
+
+pub fn flatten_serialize(
+  value: impl Serialize,
+) -> std::result::Result<serde_json::Value, FlattenSerializeError> {
+  let value = serde_json::to_value(value)?;
+  let flattened = flatten_json_object::Flattener::new()
+    .set_key_separator(".")
+    .flatten(&value)?;
+
+  Ok(flattened)
 }
