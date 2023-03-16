@@ -23,9 +23,24 @@ impl<'a> QueryBuilderInjecter<'a> for OrderBy<OrderDesc, &'a str> {
     querybuilder.order_by_desc(self.1)
   }
 }
-
 impl<'a> QueryBuilderInjecter<'a> for OrderBy<OrderAsc, &'a str> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.order_by_asc(self.1)
+  }
+}
+
+#[cfg(feature = "model")]
+use crate::model::SchemaField;
+
+#[cfg(feature = "model")]
+impl<'a, const N: usize> QueryBuilderInjecter<'a> for OrderBy<OrderDesc, SchemaField<N>> {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    querybuilder.order_by_desc(self.1.to_string())
+  }
+}
+#[cfg(feature = "model")]
+impl<'a, const N: usize> QueryBuilderInjecter<'a> for OrderBy<OrderAsc, SchemaField<N>> {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    querybuilder.order_by_asc(self.1.to_string())
   }
 }
