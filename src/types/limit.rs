@@ -2,7 +2,7 @@ use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 
 /// Dynamically add a limit statement to the query.
-/// ```
+/// ```rs
 /// Limit(10);
 /// Limit("10");
 /// ```

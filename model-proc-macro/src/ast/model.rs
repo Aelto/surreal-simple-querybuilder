@@ -40,8 +40,8 @@ impl Display for Model {
           #[derive(serde::Serialize, Debug)]
           #[serde(transparent)]
           pub struct #partial_name (
-            serde_json::Map<String, serde_json::Value>,
-            #[serde(skip)] serde_json::Result<()>,
+            surreal_simple_querybuilder::serde_json::Map<String, serde_json::Value>,
+            #[serde(skip)] surreal_simple_querybuilder::serde_json::Result<()>,
           );
         };
 
@@ -56,7 +56,7 @@ impl Display for Model {
 
           impl #partial_name {
             pub fn new() -> Self {
-              Self(serde_json::Map::new(), Ok(()))
+              Self(surreal_simple_querybuilder::serde_json::Map::new(), Ok(()))
             }
 
             fn __insert_value_result(mut self, key: &str, value: impl Serialize) -> Self {
@@ -72,8 +72,11 @@ impl Display for Model {
               self
             }
 
-            pub fn ok(self) -> serde_json::Result<Self> {
-              self.1.and_then(|_| Ok(Self(self.0, Ok(()))))
+
+            pub fn ok(self) -> std::result::Result<serde_json::Value, surreal_simple_querybuilder::types::FlattenSerializeError> {
+              self.1?;
+
+              surreal_simple_querybuilder::types::flatten_serialize(self.0)
             }
 
             #(#field_setter_functions)*
