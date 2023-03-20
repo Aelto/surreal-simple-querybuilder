@@ -1,4 +1,3 @@
-
 use std::fmt::Debug;
 use std::ops::Deref;
 use std::ops::DerefMut;
@@ -216,4 +215,16 @@ where
   V: Eq,
   K: Eq,
 {
+}
+
+impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
+  /// Custom implementation of a `len` function to get the length of the inner
+  /// vectors. If the ForeignKey is in the `Unloaded` state then 0 is returned.
+  pub fn len(&self) -> usize {
+    match (self.key(), self.value()) {
+      (Some(v), _) => v.len(),
+      (_, Some(v)) => v.len(),
+      _ => 0,
+    }
+  }
 }
