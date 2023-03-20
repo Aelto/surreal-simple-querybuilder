@@ -220,11 +220,24 @@ where
 impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
   /// Custom implementation of a `len` function to get the length of the inner
   /// vectors. If the ForeignKey is in the `Unloaded` state then 0 is returned.
+  ///
+  /// If you wish to know when no length is available then use the `len_loaded()`
+  /// function
   pub fn len(&self) -> usize {
+    self.len_loaded().unwrap_or_default()
+  }
+
+  /// Returns the length of the inner vectors if they are loaded, which means that
+  /// self must be either a vector of keys or a vector of values. If self is in
+  /// the `Unloaded` state then `None` is returned.
+  ///
+  /// If you wish to get a raw `usize` that defaults to `0` when the ForeignVec is
+  /// unloaded then use the `len()` function
+  pub fn len_loaded(&self) -> Option<usize> {
     match (self.key(), self.value()) {
-      (Some(v), _) => v.len(),
-      (_, Some(v)) => v.len(),
-      _ => 0,
+      (Some(v), _) => Some(v.len()),
+      (_, Some(v)) => Some(v.len()),
+      _ => None,
     }
   }
 }
