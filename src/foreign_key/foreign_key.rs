@@ -131,6 +131,10 @@ impl<V, K> ForeignKey<V, K> {
       ..Default::default()
     }
   }
+
+  pub fn into_inner(self) -> LoadedValue<V, K> {
+    self.inner
+  }
 }
 
 impl<V, K> ForeignKey<V, K>

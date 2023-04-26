@@ -37,6 +37,15 @@ impl<V, K> LoadedValue<V, K> {
 
   /// Consumes `Self` to get the inner value. If the enum is in any other state
   /// than `Loaded` then a `None` is returned.
+  ///
+  /// Depending on how the [LoadedValue] value is obtained, for example if it is
+  /// obtained by a Deref from a [ForeignKey](crate::foreign_key::ForeignKey)
+  /// and if the stored types do not implement `Copy`, then calling `ForeignKey::into_inner()`
+  /// might be needed:
+  /// ```rs
+  /// let foreign = Foreign::new(User::new("John"));
+  /// let id: Option<String> = foreign.into_inner().into_value();
+  /// ```
   pub fn into_value(self) -> Option<V> {
     match self {
       Self::Loaded(v) => Some(v),
@@ -64,6 +73,15 @@ impl<V, K> LoadedValue<V, K> {
   /// Consumes `Self` to get the inner key. If the enum is in the `Loaded`
   /// variant, then the [IntoKey](crate::foreign_key::IntoKey) implementation of the value is silently called
   /// and any error during this process will cause a `None` to be returned.
+  ///
+  /// Depending on how the [LoadedValue] value is obtained, for example if it is
+  /// obtained by a Deref from a [ForeignKey](crate::foreign_key::ForeignKey)
+  /// and if the stored types do not implement `Copy`, then calling `ForeignKey::into_inner()`
+  /// might be needed:
+  /// ```rs
+  /// let foreign = Foreign::new(User::new("John"));
+  /// let id: Option<String> = foreign.into_inner().into_key();
+  /// ```
   pub fn into_key(self) -> Option<K>
   where
     V: super::IntoKey<K>,
