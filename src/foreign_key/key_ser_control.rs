@@ -15,6 +15,16 @@ pub trait KeySerializeControl {
   /// a mutable reference.
   fn allow_value_serialize(&self);
 
+  /// Perform a [allow_value_serialize()](KeySerializeControl::allow_value_serialize()) and return self
+  fn with_allowed_value_ser(self) -> Self
+  where
+    Self: Sized,
+  {
+    self.allow_value_serialize();
+
+    self
+  }
+
   /// By default a ForeignKey does not serialize its value if it is in the `Loaded`
   /// state. The value would be transformed into a key using the [IntoKey] trait
   /// methods before serializing it.
@@ -28,6 +38,16 @@ pub trait KeySerializeControl {
   ///
   /// _Unlike the [allow_value_serialize] method, this one requires a mutable reference._
   fn disallow_value_serialize(&mut self);
+
+  /// Perform a [disallow_value_serialize()](KeySerializeControl::disallow_value_serialize()) and return self
+  fn with_disallowed_value_ser(self) -> Self
+  where
+    Self: Sized,
+  {
+    self.allow_value_serialize();
+
+    self
+  }
 }
 
 /// Blanket implementation for anything that implements KeySerializeControl and
