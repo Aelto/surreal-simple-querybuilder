@@ -71,3 +71,25 @@ where
       .for_each(KeySerializeControl::disallow_value_serialize);
   }
 }
+
+/// Blanket implementation for anything that implements KeySerializeControl and
+/// that is in an Option.
+///
+/// This implementation allows calling KeySerializeControl methods directly on
+/// the option itself to mutate every single child element.
+impl<T> KeySerializeControl for Option<T>
+where
+  T: KeySerializeControl,
+{
+  fn allow_value_serialize(&self) {
+    self
+      .iter()
+      .for_each(KeySerializeControl::allow_value_serialize);
+  }
+
+  fn disallow_value_serialize(&mut self) {
+    self
+      .iter_mut()
+      .for_each(KeySerializeControl::disallow_value_serialize);
+  }
+}
