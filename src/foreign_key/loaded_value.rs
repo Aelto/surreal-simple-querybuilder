@@ -28,12 +28,49 @@ impl<V, K> LoadedValue<V, K> {
     }
   }
 
+  pub fn value_mut(&mut self) -> Option<&mut V> {
+    match self {
+      Self::Loaded(v) => Some(v),
+      _ => None,
+    }
+  }
+
+  /// Consumes `Self` to get the inner value. If the enum is in any other state
+  /// than `Loaded` then a `None` is returned.
+  pub fn into_value(self) -> Option<V> {
+    match self {
+      Self::Loaded(v) => Some(v),
+      _ => None,
+    }
+  }
+
   /// Access the inner key by checking if the foreign key is currently
   /// holding the key, thus returning a `Some<&I>` if it is one and `None`
   /// if it isn't.
   pub fn key(&self) -> Option<&K> {
     match self {
       Self::Key(i) => Some(i),
+      _ => None,
+    }
+  }
+
+  pub fn key_mut(&mut self) -> Option<&mut K> {
+    match self {
+      Self::Key(i) => Some(i),
+      _ => None,
+    }
+  }
+
+  /// Consumes `Self` to get the inner key. If the enum is in the `Loaded`
+  /// variant, then the [IntoKey](crate::foreign_key::IntoKey) implementation of the value is silently called
+  /// and any error during this process will cause a `None` to be returned.
+  pub fn into_key(self) -> Option<K>
+  where
+    V: super::IntoKey<K>,
+  {
+    match self {
+      Self::Key(i) => Some(i),
+      Self::Loaded(v) => v.into_key::<serde_json::Error>().ok(),
       _ => None,
     }
   }
