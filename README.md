@@ -58,7 +58,7 @@ any program using the crate has to add the following at the root of the main fil
 > enable their respective crate features.
 
  - A series of [examples are available](/examples/) to offer a **guided introduction** to the core features of the crate
- - An all-in-one example can be found in the [`querybuilder test project`](/tests/src/querybuilder.rs) and the [official surrealdb-client interface test](/tests/src/surrealdb_client.rs).
+ - An all-in-one example can be found in the alternate [surrealdb-architecture](https://github.com/Aelto/surrealdb-architecture) repository
  - For an explanation of what each component in the crate does, refer to the chapters below.
 
 ## Premade queries with dynamic parameters (`queries` feature)
