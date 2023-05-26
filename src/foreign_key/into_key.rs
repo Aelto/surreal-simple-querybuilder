@@ -11,7 +11,7 @@ pub trait IntoKey<I> {
 impl<V, K> IntoKey<Vec<K>> for Vec<V>
 where
   V: IntoKey<K>,
-  K: std::iter::FromIterator<K>,
+  Vec<K>: std::iter::FromIterator<K>,
 {
   fn into_key<E>(&self) -> Result<Vec<K>, E>
   where
