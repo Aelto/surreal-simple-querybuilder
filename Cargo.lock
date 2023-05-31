@@ -1876,7 +1876,7 @@ checksum = "6bdef32e8150c2a081110b42772ffe7d7c9032b606bc226c8260fd97e0976601"
 
 [[package]]
 name = "surreal-simple-querybuilder"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "flatten-json-object",
  "once_cell",
@@ -1889,7 +1889,7 @@ dependencies = [
 
 [[package]]
 name = "surreal-simple-querybuilder-proc-macro"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "lalrpop",
  "lalrpop-util",
