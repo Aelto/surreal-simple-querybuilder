@@ -111,6 +111,19 @@ impl<V, K> DerefMut for ForeignKey<V, K> {
 }
 
 impl<V, K> ForeignKey<V, K> {
+  /// Construct a new `ForeignKey` that is in the `Loaded` state holding the
+  /// supplied value.
+  ///
+  /// [`ForeignKey<V, K>`] implements [`From<V>`] so `ForeignKey::new_value(V)`
+  /// can be replaced with `ForeignKey::from(V)` or `V.into()`
+  ///
+  /// ```
+  /// let a: ForeignKey<String, String> = ForeignKey::new_value("Hello".to_owned());
+  /// let b: ForeignKey<String, String> = "Hello".to_owned().into();
+  ///
+  /// assert_eq!(a, b);
+  /// assert!(a.is_loaded());
+  /// ```
   pub fn new_value(value: V) -> Self {
     Self {
       inner: LoadedValue::Loaded(value),
@@ -219,6 +232,12 @@ where
   V: Eq,
   K: Eq,
 {
+}
+
+impl<V, K> From<V> for ForeignKey<V, K> {
+  fn from(value: V) -> Self {
+    Self::new_value(value)
+  }
 }
 
 impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
