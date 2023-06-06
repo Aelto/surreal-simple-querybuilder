@@ -244,4 +244,27 @@ impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
       _ => None,
     }
   }
+
+  /// Appends the item to the back of the inner collection.
+  /// - If `Self` is in the [LoadedValue::Unloaded] state then it is changed to
+  /// [LoadedValue::Loaded] with the supplied `value` in it.
+  /// - If `Self` is in the [LoadedValue::Key] state then the supplied `value`
+  /// is pushed to the inner list of keys after  it is turned into a key using
+  /// the [IntoKey] trait.
+  /// - If `Self` is in the [LoadedValue::Loaded] state then the supplied `value`
+  /// is directly pushed to the list of values with no prior transformation.
+  pub fn push(&mut self, value: V)
+  where
+    V: IntoKey<K>,
+  {
+    if self.is_unloaded() {
+      self.inner = LoadedValue::Loaded(vec![value]);
+    } else {
+      match self.inner {
+        LoadedValue::Unloaded => {}
+        LoadedValue::Key(mut v) => v.push(value.into_key()),
+        LoadedValue::Loaded(mut v) => v.push(value),
+      }
+    }
+  }
 }
