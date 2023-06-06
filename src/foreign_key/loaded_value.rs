@@ -102,6 +102,22 @@ impl<V, K> LoadedValue<V, K> {
     }
   }
 
+  /// Returns `true` if `Self` is in the `Key` state, or `false` otherwise
+  pub fn is_key(&self) -> bool {
+    match &self {
+      Self::Key(_) => true,
+      _ => false,
+    }
+  }
+
+  /// Returns `true` if `Self` is in the `Loaded` state, or `false` otherwise
+  pub fn is_loaded(&self) -> bool {
+    match &self {
+      Self::Loaded(_) => true,
+      _ => false,
+    }
+  }
+
   /// Drop any data `self` may currently hold and set it to the `Loaded` variant
   /// with the given value.
   pub fn set_value(&mut self, value: V) {
