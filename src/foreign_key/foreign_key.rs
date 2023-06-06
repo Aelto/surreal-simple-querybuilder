@@ -272,18 +272,19 @@ impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
   /// the [IntoKey] trait.
   /// - If `Self` is in the [LoadedValue::Loaded] state then the supplied `value`
   /// is directly pushed to the list of values with no prior transformation.
-  pub fn push(&mut self, value: V)
+  pub fn push<E>(&mut self, value: V) -> Result<(), E>
   where
     V: IntoKey<K>,
+    E: serde::ser::Error,
   {
     if self.is_unloaded() {
       self.inner = LoadedValue::Loaded(vec![value]);
-    } else {
-      match self.inner {
-        LoadedValue::Unloaded => {}
-        LoadedValue::Key(mut v) => v.push(value.into_key()),
-        LoadedValue::Loaded(mut v) => v.push(value),
-      }
+    } else if let Some(ref mut v) = self.inner.key_mut() {
+      v.push(value.into_key()?);
+    } else if let Some(ref mut v) = self.inner.value_mut() {
+      v.push(value);
     }
+
+    Ok(())
   }
 }
