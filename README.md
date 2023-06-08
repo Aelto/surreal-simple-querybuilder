@@ -153,6 +153,10 @@ compile time checks + dynamic parameters to enjoy the extra freedom dynamic para
 provide while being sure all of the fields & nodes you reference in them are valid
 thanks to the models. A complete example on how to combine both system is [available here](examples/6-queries-and-params.rs).
 
+Alternatively if the use of a generic argument is not your cup of tea, you can use an enum that implements
+`QueryBuilderInjecter`. The [surrealdb-architecture](https://github.com/Aelto/surrealdb-architecture#models-queries--params)
+repository demonstrates how to setup one.
+
 ### Limitations & recommandations for premade queries & params
 The [short example](examples/6-queries-and-params.rs) and [complete test case](test/../tests/src/surrealdb_client.rs) demonstrate
 the premade queries can work in 99% of the cases and can seriously simplify the
@@ -167,7 +171,7 @@ anything. It allows you to have somewhat generic functions in your codebase for 
 
 But as soon as it gets complex, the [`QueryBuilder`](src/querybuilder.rs) type should
 be used instead of the pre-made queries. It will offer both better performances & more predictable results (nesting lots of params may yield unexpected queries). Note that you can still use a query-builder and pass it params (aka injecters)
-if need:
+if needed:
 ```rust
 use surreal_simple_querybuilder::prelude::*;
 
