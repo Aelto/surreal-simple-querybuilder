@@ -47,3 +47,26 @@ impl<V: IntoKey<K>, K> IntoKey<K> for Box<V> {
     self.deref().into_key()
   }
 }
+
+/// A blanket implementation for `Option<V>` as long as V implements `IntoKey<K>`
+/// so it is easier to implement on types that have a `id: Option<Id>` field.
+impl<V: IntoKey<K>, K> IntoKey<K> for Option<V> {
+  fn into_key(&self) -> Result<K, IntoKeyError> {
+    match self {
+      Some(id) => id.into_key(),
+      None => Err(IntoKeyError::MissingId),
+    }
+  }
+}
+
+impl IntoKey<String> for &str {
+  fn into_key(&self) -> Result<String, IntoKeyError> {
+    Ok(self.to_string())
+  }
+}
+
+impl IntoKey<String> for String {
+  fn into_key(&self) -> Result<String, IntoKeyError> {
+    Ok(self.to_owned())
+  }
+}
