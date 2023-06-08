@@ -1,3 +1,4 @@
+mod and;
 mod bind;
 mod build;
 mod cmp;
@@ -20,6 +21,7 @@ mod set;
 mod sql;
 mod update;
 
+pub use and::And;
 pub use bind::Bind;
 pub use build::Build;
 pub use cmp::Cmp;
@@ -34,7 +36,9 @@ pub use greater::Greater;
 pub use limit::Limit;
 pub use lower::Lower;
 pub use or::Or;
+pub use order_by::OrderAsc;
 pub use order_by::OrderBy;
+pub use order_by::OrderDesc;
 pub use pagination::Pagination;
 pub use plus_equal::PlusEqual;
 pub use select::Select;
