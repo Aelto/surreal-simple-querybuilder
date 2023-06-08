@@ -7,6 +7,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use super::IntoKey;
+use super::IntoKeyError;
 use super::KeySerializeControl;
 use super::LoadedValue;
 
@@ -78,7 +79,7 @@ use super::LoadedValue;
 /// **Note** that if you plan to use `ForeignKey<T, String>` (where the second generic
 /// type is a string), you can use the `Foreign<T>` type in the same module to
 /// shorten the declaration.
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize)]
 #[serde(from = "LoadedValue<V, K>")]
 pub struct ForeignKey<V, K> {
   inner: LoadedValue<V, K>,
@@ -107,6 +108,15 @@ impl<V, K> Deref for ForeignKey<V, K> {
 impl<V, K> DerefMut for ForeignKey<V, K> {
   fn deref_mut(&mut self) -> &mut Self::Target {
     &mut self.inner
+  }
+}
+
+impl<V: Clone, K: Clone> Clone for ForeignKey<V, K> {
+  fn clone(&self) -> Self {
+    Self {
+      inner: self.inner.clone(),
+      allow_value_serialize: self.allow_value_serialize.clone(),
+    }
   }
 }
 
@@ -154,10 +164,7 @@ impl<V, K> ForeignKey<V, K>
 where
   V: IntoKey<K>,
 {
-  pub fn to_key<E>(&mut self) -> Result<(), E>
-  where
-    E: serde::ser::Error,
-  {
+  pub fn to_key(&mut self) -> Result<(), IntoKeyError> {
     if let Some(value) = self.value() {
       self.inner.set_key(value.into_key()?);
     }
@@ -190,7 +197,10 @@ where
       &self.inner,
       self.allow_value_serialize.get().unwrap_or(&false),
     ) {
-      (LoadedValue::Loaded(v), false) => v.into_key()?.serialize(serializer),
+      (LoadedValue::Loaded(v), false) => v
+        .into_key()
+        .map_err(|intokeyerr| serde::ser::Error::custom(intokeyerr))?
+        .serialize(serializer),
       (inner, _) => inner.serialize(serializer),
     }
   }
@@ -272,10 +282,9 @@ impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
   /// the [IntoKey] trait.
   /// - If `Self` is in the [LoadedValue::Loaded] state then the supplied `value`
   /// is directly pushed to the list of values with no prior transformation.
-  pub fn push<E>(&mut self, value: V) -> Result<(), E>
+  pub fn push(&mut self, value: V) -> Result<(), IntoKeyError>
   where
     V: IntoKey<K>,
-    E: serde::ser::Error,
   {
     if self.is_unloaded() {
       self.inner = LoadedValue::Loaded(vec![value]);
