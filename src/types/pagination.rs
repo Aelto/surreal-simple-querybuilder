@@ -27,7 +27,7 @@ impl Pagination {
   /// 0, so `Pagination::new_page(1, 20)` is the second page with elements from
   /// the `20..40` range.
   pub fn new_page(page: u64, page_size: u64) -> Self {
-    Self::new(page * 20..(page + 1) * 20)
+    Self::new(page * page_size..(page + 1) * page_size)
   }
 
   pub fn limit(&self) -> u64 {
