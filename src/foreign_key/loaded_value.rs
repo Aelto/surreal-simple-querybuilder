@@ -3,6 +3,8 @@ use std::fmt::Debug;
 use serde::Deserialize;
 use serde::Serialize;
 
+use super::IntoKey;
+
 #[derive(Deserialize, Clone, PartialEq, Eq)]
 #[serde(untagged)]
 pub enum LoadedValue<V, K> {
@@ -80,15 +82,15 @@ impl<V, K> LoadedValue<V, K> {
   /// might be needed:
   /// ```rs
   /// let foreign = Foreign::new(User::new("John"));
-  /// let id: Option<String> = foreign.into_inner().into_key();
+  /// let id: Option<String> = foreign.into_inner().unwrap_key();
   /// ```
-  pub fn into_key(self) -> Option<K>
+  pub fn unwrap_key(self) -> Option<K>
   where
     V: super::IntoKey<K>,
   {
     match self {
       Self::Key(i) => Some(i),
-      Self::Loaded(v) => v.into_key::<serde_json::Error>().ok(),
+      Self::Loaded(v) => v.into_key().ok(),
       _ => None,
     }
   }
