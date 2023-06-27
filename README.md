@@ -2,6 +2,34 @@
 A simple query-builder for the Surreal Query Language, for [SurrealDB](https://surrealdb.com/).
 Aims at being simple to use and not too verbose first.
 
+```rs
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct IUser {
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub id: Option<Id>,
+  pub handle: String,
+  pub messages: ForeignVec<IMessage>,
+}
+
+model!(User {
+  id,
+  pub handle,
+  pub messages
+});
+
+impl IUser {
+  pub fn find_by_handle(handle: &str) -> ApiResult<Vec<Self>> {
+    use surreal_simple_querybuilder::queries::select;
+    use schema::model as user;
+    
+    let (query, params) = select("*", user, (Where(user.handle, handle), Fetch([&*user.messages]))?;
+    let items = DB.query(query).bind(params).await?.take(0)?;
+
+    items
+  }
+}
+```
+
 # Summary
 - [Surreal simple querybuilder](#surreal-simple-querybuilder)
 - [Summary](#summary)
