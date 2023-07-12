@@ -167,15 +167,11 @@ impl<V, K> ForeignKey<V, K> {
   /// - If the foreign key is in any other state then it is untouched and `None`
   /// is returned instead
   pub fn take_value(&mut self) -> Option<V> {
-    match self.inner {
-      LoadedValue::Loaded(v) => {
-        self.inner = LoadedValue::Unloaded;
-
-        Some(v)
-      }
-
-      _ => None,
+    if !self.inner.is_loaded() {
+      return None;
     }
+
+    std::mem::replace(&mut self.inner, LoadedValue::Unloaded).into_value()
   }
 
   /// Take the owned key from this `ForeignKey`, leaving an `Unloaded` value
@@ -186,15 +182,11 @@ impl<V, K> ForeignKey<V, K> {
   /// - If the foreign key is in any other state then it is untouched and `None`
   /// is returned instead
   pub fn take_key(&mut self) -> Option<K> {
-    match self.inner {
-      LoadedValue::Key(k) => {
-        self.inner = LoadedValue::Unloaded;
-
-        Some(k)
-      }
-
-      _ => None,
+    if !self.is_key() {
+      return None;
     }
+
+    std::mem::replace(&mut self.inner, LoadedValue::Unloaded).into_key()
   }
 }
 
