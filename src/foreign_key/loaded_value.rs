@@ -3,8 +3,6 @@ use std::fmt::Debug;
 use serde::Deserialize;
 use serde::Serialize;
 
-use super::IntoKey;
-
 #[derive(Deserialize, Clone, PartialEq, Eq)]
 #[serde(untagged)]
 pub enum LoadedValue<V, K> {
@@ -46,11 +44,29 @@ impl<V, K> LoadedValue<V, K> {
   /// might be needed:
   /// ```rs
   /// let foreign = Foreign::new(User::new("John"));
-  /// let id: Option<String> = foreign.into_inner().into_value();
+  /// let user: Option<User> = foreign.into_inner().into_value();
   /// ```
   pub fn into_value(self) -> Option<V> {
     match self {
       Self::Loaded(v) => Some(v),
+      _ => None,
+    }
+  }
+
+  /// Consumes `Self` to get the inner key. If the enum is in any other state
+  /// than `Key` then a `None` is returned.
+  ///
+  /// Depending on how the [LoadedValue] value is obtained, for example if it is
+  /// obtained by a Deref from a [ForeignKey](crate::foreign_key::ForeignKey)
+  /// and if the stored types do not implement `Copy`, then calling `ForeignKey::into_inner()`
+  /// might be needed:
+  /// ```rs
+  /// let foreign = Foreign::new_key(Id::from("user:john")));
+  /// let id: Option<Id> = foreign.into_inner().into_key();
+  /// ```
+  pub fn into_key(self) -> Option<K> {
+    match self {
+      Self::Key(k) => Some(k),
       _ => None,
     }
   }
