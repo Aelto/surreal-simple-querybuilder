@@ -2,6 +2,33 @@ use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 use crate::queries::BindingMap;
 
+/// Add a WHERE clause to the query, the `Where` type is made to accept anything
+/// that implements the [QueryBuilderInjecter] trait, meaning any of the injecter
+/// types that come with the crate + your own.
+///
+/// # Examples
+/// ```rs
+/// // a single field:
+/// let filter = Where(("username", "John"));
+///
+/// // if you use the `model` macro:
+/// let filter = Where((schema.username, "John"));
+/// ```
+///
+/// ```rs
+/// // multiple fields:
+/// let filter = Where(json!({ "username": "John", schema.slug: "john-doe" }));
+///
+/// // or using the shorter alias macro:
+/// let filter = wjson!({ "username": "John", schema.slug: "john-doe" });
+/// ```
+///
+/// # Note
+/// Both the json macro (that results in a `serde_json::Value`) and
+/// the tuple can work when inside a `Where` because they both work the same way
+/// as the [Equal] injecter. In the same style, passing an `Option<T>` as the value
+/// can be used to pass an optional filter, where the whole key/value pair will
+/// be ignored on a `None`
 pub struct Where<T>(pub T);
 
 /// An alias macro for
