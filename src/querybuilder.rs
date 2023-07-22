@@ -6,8 +6,6 @@ use serde::Serialize;
 #[cfg(feature = "model")]
 use crate::prelude::SqlSerializeResult;
 
-
-
 pub type CowSegment<'a> = Cow<'a, str>;
 
 #[derive(Debug)]
@@ -859,8 +857,8 @@ impl<'a> QueryBuilder<'a> {
   ///
   /// assert_eq!(query, "SELECT * FROM user WHERE name = $name");
   /// ```
-  #[cfg(feature = "params")]
-  pub fn injecter(self, injecter: &impl QueryBuilderInjecter<'a>) -> Self {
+  #[cfg(feature = "queries")]
+  pub fn injecter(self, injecter: &impl crate::queries::QueryBuilderInjecter<'a>) -> Self {
     injecter.inject(self)
   }
 }
