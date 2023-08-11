@@ -338,6 +338,23 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   fn with_id(&self, id: &str) -> String {
     format!("{self}:{id}")
   }
+
+  /// Add the supplied composite `id` right after the current string in order to
+  /// get the a new string in the following format `current:⟨id⟩`. The `⟨` and `⟩`
+  /// are automatically added around the id, if you wish to set a regular id then
+  /// refer to [with_id()](ToNodeBuilder::with_id)
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = "Account".with_id("John/Doe");
+  ///
+  /// assert_eq!(query, "Account:⟨John/Doe⟩");
+  /// ```
+  fn with_composite_id(&self, id: &str) -> String {
+    format!("{self}:⟨{id}⟩")
+  }
 }
 
 impl<'a> ToNodeBuilder for &'a str {

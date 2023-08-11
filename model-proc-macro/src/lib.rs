@@ -27,7 +27,7 @@ mod parser;
 /// });
 ///
 /// fn main() {
-///   the schema module is created by the macro
+///   // the schema module is created by the macro
 ///   use schema::model as account;
 ///
 ///   let query = format!("select {} from {account}", account.handle);
