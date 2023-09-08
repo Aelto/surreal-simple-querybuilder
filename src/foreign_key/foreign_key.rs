@@ -229,7 +229,8 @@ impl<V, K> ForeignKey<V, K>
 where
   V: IntoKey<K>,
 {
-  pub fn to_key(&mut self) -> Result<(), IntoKeyError> {
+  /// Set the foreign key to hold a key if it was currently holding a value.
+  pub fn as_key(&mut self) -> Result<(), IntoKeyError> {
     if let Some(value) = self.value() {
       self.inner.set_key(value.into_key()?);
     }

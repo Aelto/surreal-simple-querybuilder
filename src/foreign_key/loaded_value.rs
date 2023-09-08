@@ -88,6 +88,24 @@ impl<V, K> LoadedValue<V, K> {
     }
   }
 
+  /// Attempt to construct a key from a reference to the inner value. If the
+  /// foreign key:
+  /// - is currently holding a key then it is cloned and returned.
+  /// - is currently holding a value that implements [IntoKey](crate::foreign_key::IntoKey)
+  /// then it constructs the key and returns the result
+  /// - is unloaded, then `Ok(None)` is returned.
+  pub fn to_key(&self) -> Result<Option<K>, super::IntoKeyError>
+  where
+    K: Clone,
+    V: super::IntoKey<K>,
+  {
+    match self {
+      Self::Key(i) => Ok(Some(i.clone())),
+      Self::Loaded(v) => v.into_key().map(|k| Some(k)),
+      Self::Unloaded => Ok(None),
+    }
+  }
+
   /// Consumes `Self` to get the inner key. If the enum is in the `Loaded`
   /// variant, then the [IntoKey](crate::foreign_key::IntoKey) implementation of the value is silently called
   /// and any error during this process will cause a `None` to be returned.
