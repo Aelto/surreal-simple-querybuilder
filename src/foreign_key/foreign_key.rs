@@ -326,4 +326,12 @@ impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
 
     Ok(())
   }
+
+  /// Easily convert a `ForeignVec<V>` of values into a `ForeignVec<NEWV>`
+  pub fn convert_vec<NEWV>(self) -> ForeignKey<Vec<NEWV>, Vec<K>>
+  where
+    NEWV: From<V>,
+  {
+    self.map(|values| values.into_iter().map(NEWV::from).collect())
+  }
 }
