@@ -188,6 +188,41 @@ impl<V, K> ForeignKey<V, K> {
 
     std::mem::replace(&mut self.inner, LoadedValue::Unloaded).into_key()
   }
+
+  /// Map the current value of type `V` (if it is loaded) into a new value using
+  /// the provided [`mapper`] function. The resulting value of the mapper
+  /// function can be of any type and not necessarily `V`.
+  ///
+  /// If the foreign key is not in the loaded state then the mapper function
+  /// will not run.
+  ///
+  /// # Example
+  /// ```rs
+  /// let foreign_int = ForeignKey::new_value(5);
+  /// let foreign_str = foreign_int.map(|n| String::from(n));
+  /// ```
+  pub fn map<F, NEWV>(self, mapper: F) -> ForeignKey<NEWV, K>
+  where
+    F: FnOnce(V) -> NEWV,
+  {
+    match self.inner {
+      LoadedValue::Loaded(v) => ForeignKey::new_value(mapper(v)),
+      LoadedValue::Key(k) => ForeignKey::new_key(k),
+      LoadedValue::Unloaded => ForeignKey::new(),
+    }
+  }
+
+  /// Short-hand for `foreignkey.map(NewValueType::from)`. Convert a
+  /// `ForeignKey<V,K>` to a `ForeignKey<NEWV,K>` as long as `NEWV` implements
+  /// `From<V>`.
+  ///
+  /// Refer to the [map](#map) function for more information.
+  pub fn convert<NEWV>(self) -> ForeignKey<NEWV, K>
+  where
+    NEWV: From<V>,
+  {
+    self.map(NEWV::from)
+  }
 }
 
 impl<V, K> ForeignKey<V, K>
