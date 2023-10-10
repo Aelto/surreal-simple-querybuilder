@@ -363,6 +363,33 @@ impl<V, K> ForeignKey<Vec<V>, Vec<K>> {
     Ok(())
   }
 
+  /// Removes the last element from the inner collection.
+  /// - If `Self` is in the [LoadedValue::Unloaded] state then nothing is done
+  /// and `Ok(None)` is returned.
+  /// - If `Self` is in the [LoadedValue::Key] state then the last element is
+  /// popped and returned.
+  /// - If `Self` is in the [LoadedValue::Loaded] state then the last element
+  /// is popped, mapped to a key and returned .
+  pub fn pop(&mut self) -> Result<Option<K>, IntoKeyError>
+  where
+    V: IntoKey<K>,
+  {
+    if self.is_unloaded() {
+      return Ok(None);
+    } else if let Some(ref mut v) = self.inner.key_mut() {
+      return Ok(v.pop());
+    } else if let Some(ref mut v) = self.inner.value_mut() {
+      let value = v.pop();
+
+      return match value {
+        Some(value) => Ok(Some(value.into_key()?)),
+        None => Ok(None),
+      };
+    }
+
+    Ok(None)
+  }
+
   /// Easily convert a `ForeignVec<V>` of values into a `ForeignVec<NEWV>`
   pub fn convert_vec<NEWV>(self) -> ForeignKey<Vec<NEWV>, Vec<K>>
   where
