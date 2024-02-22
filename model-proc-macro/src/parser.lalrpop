@@ -47,8 +47,9 @@ FieldEncapsulation: bool = {
 
 // -----------------------------------------------------------------------------
 
-Identifier: String = {
-  IdentifierRegex => String::from(<>)
+Identifier: Identifier = {
+  <some_raw_literal:KeywordRawLiteral?> <value:IdentifierRegex> =>
+    Identifier { value: String::from(value), is_raw_literal: some_raw_literal.is_some() }
 }
 
 // -----------------------------------------------------------------------------
@@ -77,6 +78,7 @@ match {
   "as" => KeywordAs,
   "->" => KeywordOutgoingEdge,
   "<-" => KeywordIncomingEdge,
+  "r#" => KeywordRawLiteral,
   "pub" => KeywordPub,
   "with" => KeywordWith,
 } else {
