@@ -28,5 +28,21 @@ mod two {
   fn test_string_literal() {
     assert_eq!(schema::model.r#in.to_string(), "in");
     assert_eq!(schema::model.r#for.to_string(), "->relation->TestModel0");
+
+    assert_eq!(
+      serde_json::to_string(&schema::model.r#in).unwrap(),
+      "\"in\""
+    );
+
+    let filter = surreal_simple_querybuilder::types::Where((schema::model.r#in, "some_value"));
+    let (query, params) =
+      surreal_simple_querybuilder::queries::select("*", "table", filter).unwrap();
+
+    assert_eq!(query, "SELECT * FROM table WHERE in = $in");
+
+    assert_eq!(
+      params.get("in"),
+      Some(&serde_json::to_value("some_value").unwrap())
+    );
   }
 }
