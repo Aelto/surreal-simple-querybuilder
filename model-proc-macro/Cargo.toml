@@ -13,8 +13,8 @@ repository = "https://github.com/Aelto/surreal-simple-querybuilder"
 proc-macro = true
 
 [build-dependencies]
-lalrpop = "0.19.8"
+lalrpop = "0.20.0"
 
 [dependencies]
-lalrpop-util = { version = "0.19.7", features = ["lexer"] }
+lalrpop-util = { version = "0.20.0", features = ["lexer"] }
 quote = "1.0"
