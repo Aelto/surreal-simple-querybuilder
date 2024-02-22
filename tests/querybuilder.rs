@@ -66,6 +66,7 @@ mod test {
       pub password,
       pub email,
       friend<Account>,
+      r#in,
 
       ->manage->Project as managed_projects,
     });
@@ -81,41 +82,34 @@ mod test {
   }
 
   impl IntoKey<String> for Project {
-    fn into_key<E>(&self) -> Result<String, E>
-    where
-      E: serde::ser::Error,
-    {
+    fn into_key(&self) -> Result<String, IntoKeyError> {
+      account.r#in;
+
       self
         .id
         .as_ref()
         .map(String::clone)
-        .ok_or(serde::ser::Error::custom("The project has no ID"))
+        .ok_or(IntoKeyError::Custom("The project has no ID"))
     }
   }
 
   impl IntoKey<String> for Release {
-    fn into_key<E>(&self) -> Result<String, E>
-    where
-      E: serde::ser::Error,
-    {
+    fn into_key(&self) -> Result<String, IntoKeyError> {
       self
         .id
         .as_ref()
         .map(String::clone)
-        .ok_or(serde::ser::Error::custom("The release has no ID"))
+        .ok_or(IntoKeyError::Custom("The release has no ID"))
     }
   }
 
   impl IntoKey<String> for Account {
-    fn into_key<E>(&self) -> Result<String, E>
-    where
-      E: serde::ser::Error,
-    {
+    fn into_key(&self) -> Result<String, IntoKeyError> {
       self
         .id
         .as_ref()
         .map(String::clone)
-        .ok_or(serde::ser::Error::custom("The account has no ID"))
+        .ok_or(IntoKeyError::Custom("The account has no ID"))
     }
   }
 

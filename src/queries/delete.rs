@@ -21,7 +21,7 @@ fn test_delete() {
   let filter = Where(serde_json::json!({ "name": "John", "age": 10 }));
   let (query, params) = delete("User", filter).unwrap();
 
-  assert_eq!("DELETE User WHERE age = $age AND name = $name", query);
+  assert_eq!("DELETE User WHERE name = $name AND age = $age", query);
   assert_eq!(params.get("name"), Some(&Value::from("John".to_owned())));
   assert_eq!(params.get("age"), Some(&Value::from(10)));
 

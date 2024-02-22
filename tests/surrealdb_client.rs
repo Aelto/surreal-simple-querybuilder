@@ -16,6 +16,7 @@ mod test {
   use serde_json::json;
   use surreal_simple_querybuilder::prelude::*;
   use surrealdb::engine::local::Db;
+  use surrealdb::sql::Thing;
   use surrealdb::Response;
   use surrealdb::Surreal;
 
@@ -24,7 +25,7 @@ mod test {
 
   #[derive(Serialize, Deserialize, Default, Debug)]
   struct IUser {
-    pub id: Option<String>,
+    pub id: Option<Thing>,
     pub name: String,
     pub email: String,
   }
@@ -35,16 +36,13 @@ mod test {
     pub email
   });
 
-  impl IntoKey<String> for IUser {
-    fn into_key<E>(&self) -> Result<String, E>
-    where
-      E: serde::ser::Error,
-    {
+  impl IntoKey<Thing> for IUser {
+    fn into_key(&self) -> Result<Thing, IntoKeyError> {
       self
         .id
         .as_ref()
-        .map(String::clone)
-        .ok_or(serde::ser::Error::custom("The author has no ID"))
+        .map(Thing::clone)
+        .ok_or(IntoKeyError::Custom("The author has no ID"))
     }
   }
 
@@ -55,9 +53,9 @@ mod test {
 
   #[derive(Serialize, Deserialize, Default, Debug)]
   struct IBook {
-    pub id: Option<String>,
+    pub id: Option<Thing>,
     pub title: String,
-    pub author: Foreign<IUser>,
+    pub author: ForeignKey<IUser, Thing>,
     pub read: bool,
   }
 
@@ -74,8 +72,8 @@ mod test {
   // STEP 1: create functions that connect the querybuilder to the DB client
 
   pub type DbResult<T> = Result<T, Box<dyn std::error::Error>>;
-  pub type SurrealClient = Surreal<Db>;
-  pub static DB: SurrealClient = Surreal::init();
+  pub static DB: once_cell::sync::Lazy<Surreal<surrealdb::engine::local::Db>> =
+    once_cell::sync::Lazy::new(Surreal::init);
 
   pub async fn connect_db() -> DbResult<()> {
     DB.connect::<Mem>(()).await?;
@@ -92,7 +90,7 @@ mod test {
     usize: QueryResult<R>,
   {
     let (query, params) = surreal_simple_querybuilder::queries::select("*", table, params)?;
-    let items = DB.query(query).bind(params).await?.take(0)?;
+    let items = bind_params(DB.query(query), params).await?.take(0)?;
 
     Ok(items)
   }
@@ -122,9 +120,54 @@ mod test {
     table: &'a str, params: impl QueryBuilderInjecter<'a> + 'a,
   ) -> DbResult<Response> {
     let (query, params) = surreal_simple_querybuilder::queries::update(table, params)?;
-    let response = DB.query(query).bind(params).await?;
+    let response = bind_params(DB.query(query), params).await?;
 
     Ok(response)
+  }
+
+  /// There is currently a rough edge between the bindings from the querybuilder
+  /// and surrealdb itself because of the Serialize impl of [surrealdb::sql::Thing]
+  fn bind_params<N: surrealdb::Connection>(
+    mut query: surrealdb::method::Query<N>,
+    params: std::collections::HashMap<String, serde_json::Value>,
+  ) -> surrealdb::method::Query<N> {
+    for (key, value) in params {
+      match value {
+        serde_json::Value::Object(mut obj) => {
+          if obj.contains_key("id") && obj.contains_key("tb") {
+            use serde_json::Value;
+            use surrealdb::sql::Id;
+
+            let Some(Value::String(tb)) = obj.remove("tb") else {
+              continue;
+            };
+
+            let Some(Value::Object(mut id)) = obj.remove("id") else {
+              continue;
+            };
+
+            let Some(Value::String(id)) = id.remove("String") else {
+              continue;
+            };
+
+            query = query.bind((
+              key,
+              surrealdb::sql::Thing {
+                id: Id::from(id),
+                tb: tb,
+              },
+            ));
+          } else {
+            query = query.bind((key, obj));
+          }
+        }
+        _ => {
+          query = query.bind((key, value));
+        }
+      };
+    }
+
+    query
   }
 
   //------------------------------------------------------------------------------
@@ -224,13 +267,13 @@ mod test {
     Ok(())
   }
 
-  async fn create_books(author_id: &str, amount: usize) -> DbResult<()> {
+  async fn create_books(author_id: &Thing, amount: usize) -> DbResult<()> {
     for i in 0..amount {
       create(
         book,
         &IBook {
           id: None,
-          author: Foreign::new_key(author_id.to_owned()),
+          author: ForeignKey::new_key(author_id.to_owned()),
           title: format!("Lorem Ipsum {i}"),
           read: false,
         },
@@ -241,8 +284,10 @@ mod test {
     Ok(())
   }
 
-  async fn read_book(book_id: &str) -> DbResult<()> {
-    update(book_id, Set((book.read, true))).await?;
+  async fn read_book(book_id: &Thing) -> DbResult<()> {
+    let filter = Where((book.id, book_id));
+    let set = Set((book.read, true));
+    update(&book_id.tb, (set, filter)).await?;
 
     Ok(())
   }

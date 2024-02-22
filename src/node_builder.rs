@@ -348,7 +348,7 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
-  /// let query = "Account".with_id("John/Doe");
+  /// let query = "Account".with_composite_id("John/Doe");
   ///
   /// assert_eq!(query, "Account:⟨John/Doe⟩");
   /// ```

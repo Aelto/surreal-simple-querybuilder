@@ -128,6 +128,8 @@ impl<V, K> ForeignKey<V, K> {
   /// can be replaced with `ForeignKey::from(V)` or `V.into()`
   ///
   /// ```
+  /// use surreal_simple_querybuilder::foreign_key::ForeignKey;
+  ///
   /// let a: ForeignKey<String, String> = ForeignKey::new_value("Hello".to_owned());
   /// let b: ForeignKey<String, String> = "Hello".to_owned().into();
   ///

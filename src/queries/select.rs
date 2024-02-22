@@ -29,7 +29,7 @@ fn test_select() {
   let (query, params) = select("*", "User", components).unwrap();
 
   assert_eq!(
-    "SELECT * FROM User WHERE age = $age AND name = $name LIMIT 15 START AT 10 FETCH friends , articles",
+    "SELECT * FROM User WHERE name = $name AND age = $age LIMIT 15 START AT 10 FETCH friends , articles",
     query
   );
 

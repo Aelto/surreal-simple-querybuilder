@@ -36,7 +36,7 @@ fn test_create() {
   let set = Set(serde_json::json!({ "name": "John", "age": 10 }));
   let (query, params) = create("User", set).unwrap();
 
-  assert_eq!("CREATE User SET age = $age , name = $name", query);
+  assert_eq!("CREATE User SET name = $name , age = $age", query);
 
   assert_eq!(params.get("name"), Some(&Value::from("John".to_owned())));
   assert_eq!(params.get("age"), Some(&Value::from(10)));
