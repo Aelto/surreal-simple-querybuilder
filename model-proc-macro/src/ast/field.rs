@@ -1,6 +1,7 @@
 use quote::__private::TokenStream;
-use quote::format_ident;
 use quote::quote;
+
+use super::Identifier;
 
 #[derive(Debug, Clone)]
 pub enum Field {
@@ -49,7 +50,7 @@ impl Field {
       Field::Relation(r) => &r.name,
     };
 
-    let name = format_ident!("{}", field_name);
+    let name = field_name.to_ident();
 
     quote!(
       pub fn #name (mut self, value: impl serde::Serialize) -> Self {
@@ -62,14 +63,14 @@ impl Field {
 /// A simple property
 #[derive(Debug, Clone)]
 pub struct FieldProperty {
-  pub name: String,
+  pub name: Identifier,
 
   pub is_public: bool,
 }
 
 impl FieldProperty {
   fn emit_field(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
+    let name = self.name.to_ident();
     let attribute = match self.is_public {
       false => emit_skip_serializing_attribute(),
       true => quote!(),
@@ -83,15 +84,15 @@ impl FieldProperty {
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let name = self.name.to_ident();
+    let name_str: &str = self.name.as_ref();
 
     quote!(#name: SchemaField::new(#name_str, SchemaFieldType::Property))
   }
 
   pub fn emit_initialization_with_origin(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let name = self.name.to_ident();
+    let name_str: &str = self.name.as_ref();
 
     quote!(#name: SchemaField::with_origin(#name_str, SchemaFieldType::Property, origin.clone()))
   }
@@ -104,15 +105,15 @@ impl FieldProperty {
 /// A foreign node, like a foreign key that points to another `Model`
 #[derive(Debug, Clone)]
 pub struct FieldForeignNode {
-  pub name: String,
-  pub foreign_type: String,
+  pub name: Identifier,
+  pub foreign_type: Identifier,
 
   pub is_public: bool,
 }
 
 impl FieldForeignNode {
   fn emit_field(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
+    let name = self.name.to_ident();
     let attribute = match self.is_public {
       false => emit_skip_serializing_attribute(),
       true => quote!(),
@@ -125,22 +126,22 @@ impl FieldForeignNode {
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let name = self.name.to_ident();
+    let name_str: &str = self.name.as_ref();
 
     quote!(#name: SchemaField::new(#name_str, SchemaFieldType::Property))
   }
 
   pub fn emit_initialization_with_origin(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let name_str = &self.name;
+    let name = self.name.to_ident();
+    let name_str: &str = self.name.as_ref();
 
     quote!(#name: SchemaField::with_origin(#name_str, SchemaFieldType::Property, origin.clone()))
   }
 
   pub fn emit_foreign_field_function(&self) -> TokenStream {
-    let name = format_ident!("{}", self.name);
-    let foreign_type = format_ident!("{}", self.foreign_type);
+    let name = self.name.to_ident();
+    let foreign_type = self.foreign_type.to_ident();
 
     quote!(
       pub fn #name (self) -> #foreign_type <{ N + 2 }> {
@@ -163,9 +164,9 @@ impl FieldForeignNode {
 /// A named relation
 #[derive(Debug, Clone)]
 pub struct FieldRelation {
-  pub name: String,
-  pub foreign_type: String,
-  pub alias: String,
+  pub name: Identifier,
+  pub foreign_type: Identifier,
+  pub alias: Identifier,
   pub relation_type: FieldRelationType,
   pub is_public: bool,
 }
@@ -181,7 +182,7 @@ pub enum FieldRelationType {
 
 impl FieldRelation {
   fn emit_field(&self) -> TokenStream {
-    let alias = format_ident!("{}", self.alias);
+    let alias = self.alias.to_ident();
     let attribute = match self.is_public {
       false => emit_skip_serializing_attribute(),
       true => quote!(),
@@ -194,7 +195,7 @@ impl FieldRelation {
   }
 
   pub fn emit_initialization(&self) -> TokenStream {
-    let alias = format_ident!("{}", self.alias);
+    let alias = self.alias.to_ident();
     let name_str = format!("{}{}{}", self.name, self.edge(), self.foreign_type);
     let field_type = self.field_type();
 
@@ -202,7 +203,7 @@ impl FieldRelation {
   }
 
   pub fn emit_initialization_with_origin(&self) -> TokenStream {
-    let alias = format_ident!("{}", self.alias);
+    let alias = self.alias.to_ident();
     let name_str = format!("{}{}{}", self.name, self.edge(), self.foreign_type);
     let field_type = self.field_type();
 
@@ -210,8 +211,8 @@ impl FieldRelation {
   }
 
   pub fn emit_foreign_field_function(&self) -> TokenStream {
-    let alias = format_ident!("{}", self.alias);
-    let foreign_type = format_ident!("{}", self.foreign_type);
+    let alias = self.alias.to_ident();
+    let foreign_type = self.foreign_type.to_ident();
     let edge = self.edge();
 
     quote!(

@@ -6,19 +6,20 @@ use quote::format_ident;
 use quote::quote;
 
 use super::Field;
+use super::Identifier;
 use super::ModelOptions;
 
 #[derive(Debug)]
 pub struct Model {
-  pub name: String,
+  pub name: Identifier,
   pub fields: Vec<Field>,
-  pub alias: Option<String>,
+  pub alias: Option<Identifier>,
   pub options: ModelOptions,
 }
 
 impl Display for Model {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    let name = format_ident!("{}", self.name);
+    let name = self.name.to_ident();
 
     let field_declarations: Vec<TokenStream> =
       self.fields.iter().map(|field| field.emit_field()).collect();
@@ -35,7 +36,7 @@ impl Display for Model {
     let partial_declaration = match self.options.partial {
       false => quote! {},
       true => {
-        let partial_name = format_ident!("Partial{}", self.name);
+        let partial_name = format_ident!("Partial{}", self.name.as_ref());
         let partial_declaration = quote! {
           #[derive(serde::Serialize, Debug)]
           #[serde(transparent)]
