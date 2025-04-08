@@ -1,16 +1,18 @@
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 
-/// An unintuitive way to access the underlying querybuilder that is passed to
-/// the querybuilder injecters. It is considered unintuitive because if you want
-/// an access to the raw querybuilder while  in injecters then you may as well just
-/// use the querybuilder without the injecters, but there are special cases where
-/// you may want to use injecters everywhere (which is valid) and this `Build`
-/// type allows you to play around the current limitations of the injecters without
-/// completely giving up on them.
+/// An indirect way to access the underlying querybuilder that is passed to
+/// the injecters in special cases where you may use injecters everywhere but need
+/// to bypass an eventual limitation around them:
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
 ///
-/// If the function that mutates the builder uses variable then you should also
-/// use the [`Bind`] injecter to inject them.
+/// let param_where = Where(("id", Sql("5")));
+/// let param_build = Build(|querybuilder: QueryBuilder| querybuilder.and("name = 'john'"));
+/// let query = query(&(param_where, param_build)).unwrap();
+///
+/// assert_eq!(query, "WHERE id = 5 AND name = 'john'");
+/// ```
 pub struct Build<T>(pub T)
 where
   T: Fn(QueryBuilder) -> QueryBuilder;

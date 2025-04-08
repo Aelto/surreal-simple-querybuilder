@@ -4,7 +4,7 @@ use crate::queries::BindingMap;
 
 /// Add a WHERE clause to the query, the `Where` type is made to accept anything
 /// that implements the [QueryBuilderInjecter] trait, meaning any of the injecter
-/// types that come with the crate + your own.
+/// types that come with the crate or your own, or a string.
 ///
 /// # Examples
 /// ```rs
@@ -13,6 +13,9 @@ use crate::queries::BindingMap;
 ///
 /// // if you use the `model` macro:
 /// let filter = Where((schema.username, "John"));
+///
+/// // a raw string:
+/// let filter = Where("username = 'john'");
 /// ```
 ///
 /// ```rs
@@ -79,5 +82,18 @@ where
       true => Where((self.0, Some(other))),
       false => Where((self.0, None)),
     }
+  }
+}
+
+impl<'a> QueryBuilderInjecter<'a> for Where<&'a str> {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    querybuilder.and_where(self.0)
+  }
+
+  fn params(self, _map: &mut crate::queries::BindingMap) -> serde_json::Result<()>
+  where
+    Self: Sized,
+  {
+    Ok(())
   }
 }

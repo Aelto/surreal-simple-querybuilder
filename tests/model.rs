@@ -14,6 +14,10 @@ mod one {
   });
 }
 
+#[cfg(feature = "querybuilder")]
+#[cfg(feature = "queries")]
+#[cfg(feature = "model")]
+#[cfg(feature = "foreign")]
 mod two {
   use super::one::model_base::TestModel0;
 

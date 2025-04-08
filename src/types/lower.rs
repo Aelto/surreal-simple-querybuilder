@@ -10,6 +10,15 @@ use crate::queries::BindingMap;
 
 use super::ser_to_param_value;
 
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+///
+/// let param = Where(Lower(("id", 5)));
+/// let (query, params) = select("*", "users", param).unwrap();
+///
+/// assert_eq!(query, "SELECT * FROM users WHERE id < $id");
+/// assert_eq!(params.get("id"), Some(&serde_json::json!(5)));
+/// ```
 pub struct Lower<T>(pub T);
 
 /// Base functions for all implementations of the `QueryBuilderInjecter` trait

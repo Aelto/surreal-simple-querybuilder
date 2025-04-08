@@ -2,7 +2,7 @@ use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 use crate::queries::BindingMap;
 
-/// Acts as a way to send raw unaltered SQL as a parameter. It is the same as
+/// Acts as a way to send raw unaltered SQL as an injecter. It is the same as
 /// doing
 /// ```rs
 /// QueryBuilder.raw("my string")

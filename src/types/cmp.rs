@@ -12,6 +12,31 @@ use super::ser_to_param_value;
 
 type Operator = &'static str;
 
+/// Appends a comparison. This type is primarily made in case a pre-made injecter
+/// is not available in this crate, for the common operators then refer to:
+/// - [Equal](super::Equal)
+/// - [Greater](super::Greater)
+/// - [Lower](super::Lower)
+///
+/// # Example
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+///
+/// let param = (
+///   Select("*"),
+///   From("users"),
+///   Where(
+///     Cmp(
+///       "~=",
+///       ("roles", "premium")
+///     )
+///   )
+/// );
+///
+/// assert_eq!(query(&param).unwrap(), "SELECT * FROM users WHERE roles ~= $roles");
+/// let params = bindings(param).unwrap();
+/// assert_eq!(params.get("roles"), Some(&serde_json::json!("premium")));
+/// ```
 pub struct Cmp<T>(pub Operator, pub T);
 
 /// Base functions for all implementations of the `QueryBuilderInjecter` trait

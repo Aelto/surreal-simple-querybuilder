@@ -351,6 +351,32 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
+  /// Starts an INNER JOIN clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .join_inner("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "INNER JOIN author");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn join_inner<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
+    self.add_segment_p("INNER JOIN", field);
+
+    self
+  }
+
+  #[cfg(feature = "sql_standard")]
+  pub fn on<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
+    self.add_segment_p("ON", field);
+
+    self
+  }
+
   /// Starts a FETCH clause with zero or more fields,
   ///
   /// # Example

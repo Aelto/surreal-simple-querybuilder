@@ -22,9 +22,6 @@ pub mod querybuilder;
 #[cfg(feature = "foreign")]
 pub mod foreign_key;
 
-/// Contains utility types that can be used in your rust types and that play
-/// well with the querybuilder thanks to its [QueryBuilder::feed()](crate::querybuilder::QueryBuilder::feed) method and the
-/// [QueryBuilderConsumable](crate::querybuilder::QueryBuilderConsumable) trait.
 #[cfg(feature = "queries")]
 pub mod types;
 

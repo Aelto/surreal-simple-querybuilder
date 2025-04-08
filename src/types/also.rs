@@ -4,13 +4,15 @@ use crate::querybuilder::QueryBuilder;
 /// Can be used to add a comma to the query followed by a parameter or a string
 ///
 /// # Example
-/// ```rs
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+///
 /// let fetch = Fetch("profile");
 /// let other_fetch = Also("friends");
 ///
-/// let (query, params) = select("*", "User", (fetch, other_fetch)).unwrap();
+/// let (query, _params) = select("*", "users", (fetch, other_fetch)).unwrap();
 ///
-/// assert_eq!(query, "SELECT * from User FETCH profile , friends");
+/// assert_eq!(query, "SELECT * FROM users FETCH profile , friends");
 /// ```
 pub struct Also<T>(pub T);
 

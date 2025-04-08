@@ -2,14 +2,27 @@ use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 use crate::queries::BindingMap;
 
-/// # Example
-/// ```rs
-/// let filter = Set(serde_json::json!({ "name": "John", "age": 10 }));
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+/// use serde_json::json;
+/// let filter = Set(json!({ "name": "John", "age": 10 }));
 /// let (query, params) = update("User", filter).unwrap();
 ///
-/// assert_eq!("UPDATE User SET age = $age , name = $name", query);
-/// assert_eq!(params.get("name"), Some(&Value::from("John".to_owned())));
-/// assert_eq!(params.get("age"), Some(&Value::from(10)));
+/// assert_eq!("UPDATE User SET name = $name , age = $age", query);
+/// assert_eq!(params.get("name"), Some(&json!("John")) );
+/// assert_eq!(params.get("age"), Some(&json!(10)) );
+/// ```
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+///
+/// let param = Set((
+///   PlusEqual(("read_count", 1)),
+///   ("last_read", Sql("now()"))
+/// ));
+/// let (query, params) = update("articles", param).unwrap();
+///
+/// assert_eq!(query, "UPDATE articles SET read_count += $read_count , last_read = now()");
+/// assert_eq!(params.get("read_count"), Some(&serde_json::json!(1)));
 /// ```
 pub struct Set<T>(pub T);
 

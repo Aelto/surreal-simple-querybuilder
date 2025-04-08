@@ -2,13 +2,27 @@ use serde::Serialize;
 
 use crate::prelude::QueryBuilderInjecter;
 
-/// Used to explicitly bind a variable
-/// ```rs
-/// Bind(("key", "value"));
-/// Bind(serde_json::json!({
-///   "key": "value",
-///   "foo": 10
+/// Used to explicitly bind a variable in the final hashmap of bindings without
+/// altering the query string in any way.
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+/// use serde_json::json;
+///
+/// let param = Bind(("my_id", 5));
+/// let (query, bindings) = select("*", "users WHERE id = $my_id", param).unwrap();
+///
+/// assert_eq!(query, "SELECT * FROM users WHERE id = $my_id");
+/// assert_eq!(bindings.get("my_id"), Some(&json!(5)));
+///
+/// let param = Bind(json!({
+///   "my_id": 5,
+///   "created_at": 123456
 /// }));
+/// let (query, bindings) = select("*", "users WHERE id = $my_id AND created_at > $created_at", param).unwrap();
+///
+/// assert_eq!(query, "SELECT * FROM users WHERE id = $my_id AND created_at > $created_at");
+/// assert_eq!(bindings.get("my_id"), Some(&json!(5)));
+/// assert_eq!(bindings.get("created_at"), Some(&json!(123456)));
 /// ```
 pub struct Bind<T>(pub T);
 

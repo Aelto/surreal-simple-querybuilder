@@ -1,7 +1,23 @@
 use crate::prelude::QueryBuilder;
 use crate::prelude::QueryBuilderInjecter;
 
-pub struct OrderBy<Order, T>(Order, T);
+/// Appends a `ORDER BY` clause that is either ASC or DESC.
+///
+/// # Example
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+///
+/// let param = OrderBy(OrderDesc, "created_at");
+/// let q = query(&param).unwrap();
+/// assert_eq!(q, "ORDER BY created_at DESC");
+///
+/// // you can also use the available methods to construct it:
+/// let asc = OrderBy::asc("created_at");
+/// let desc = OrderBy::desc("created_at");
+/// assert_eq!(q, query(&desc).unwrap());
+/// assert_eq!(query(&asc).unwrap(), "ORDER BY created_at ASC");
+/// ```
+pub struct OrderBy<Order, T>(pub Order, pub T);
 
 pub struct OrderDesc;
 pub struct OrderAsc;

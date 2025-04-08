@@ -10,6 +10,15 @@ use crate::queries::BindingMap;
 
 use super::ser_to_param_value;
 
+/// ```
+/// use surreal_simple_querybuilder::prelude::*;
+///
+/// let param = Set(PlusEqual(("read_count", 1)));
+/// let (query, params) = update("articles", param).unwrap();
+///
+/// assert_eq!(query, "UPDATE articles SET read_count += $read_count");
+/// assert_eq!(params.get("read_count"), Some(&serde_json::json!(1)));
+/// ```
 pub struct PlusEqual<T>(pub T);
 
 /// Base functions for all implementations of the `QueryBuilderInjecter` trait
