@@ -442,6 +442,19 @@ pub trait NodeBuilder<T: Display = Self>: Display {
   /// assert_eq!("friends += account:john", s);
   /// ```
   fn plus_equal(&mut self, value: &str) -> &mut String;
+
+  /// Take the current string to add `DISTINCT` in front of it
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let s = "email".distinct();
+  ///
+  /// assert_eq!("DISTINCT email", s);
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  fn distinct(&mut self) -> &mut String;
 }
 
 impl NodeBuilder for String {
@@ -481,4 +494,10 @@ impl NodeBuilder for String {
   }
 }
 
-impl ToNodeBuilder for String {}
+  #[cfg(feature = "sql_standard")]
+  fn distinct(&mut self) -> &mut String {
+    self.insert_str(0, "DISTINCT ");
+
+    self
+  }
+}
