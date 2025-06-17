@@ -22,10 +22,10 @@ impl<'a> QueryBuilderInjecter<'a> for Distinct<&str> {
   }
 }
 
-#[cfg(feature = "model")]
+#[cfg(all(feature = "model", feature = "sql_standard"))]
 use crate::model::SchemaField;
 
-#[cfg(feature = "model")]
+#[cfg(all(feature = "model", feature = "sql_standard"))]
 impl<'a, const N: usize> QueryBuilderInjecter<'a> for Distinct<SchemaField<N>> {
   fn inject(&self, mut querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.add_segment(self.0.to_string().distinct());

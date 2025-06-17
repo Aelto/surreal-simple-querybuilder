@@ -494,7 +494,6 @@ impl<'a> QueryBuilder<'a> {
     self
   }
 
-  #[cfg(feature = "sql_standard")]
   pub fn on<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
     self.add_segment_p("ON", field);
 
