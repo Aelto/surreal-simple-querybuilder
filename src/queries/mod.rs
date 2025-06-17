@@ -34,12 +34,12 @@ pub trait QueryBuilderInjecter<'a> {
 /// for more information on how to combine them before passing them to this function or [create], or [delete], or [select], or [update].
 ///
 /// See: [injecters](super::types) module.
-pub fn query<'a>(component: &impl QueryBuilderInjecter<'a>) -> serde_json::Result<String> {
+pub fn query<'a>(component: &impl QueryBuilderInjecter<'a>) -> String {
   let builder = QueryBuilder::new();
   let builder = component.inject(builder);
   let query = builder.build();
 
-  Ok(query)
+  query
 }
 
 /// Collects the parameters out of the supplied injecters.

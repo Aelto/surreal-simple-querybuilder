@@ -26,7 +26,7 @@
 //!   )))
 //! );
 //!
-//! let query_string = query(&injecters).unwrap();
+//! let query_string = query(&injecters);
 //! let query_bindings = bindings(injecters).unwrap();
 //!
 //! assert_eq!(query_string, "SELECT * FROM users WHERE id = $id AND name = $name");
@@ -38,7 +38,7 @@
 //!
 //! The first scenario that comes to mind is a standard function to retrieve books
 //! by the author:
-//! ```rust
+//! ```rs
 //! impl Book {
 //!   fn find_by_author_id(id: &str) -> Vec<Self> {
 //!     // ...
@@ -55,7 +55,7 @@
 //! With the dynamic parameters you can update your `find` function to accept optional
 //! parameters so that only 1 simple function is needed:
 //!
-//! ```rust
+//! ```rs
 //! use serde_json::json;
 //!
 //! impl Book {
@@ -73,7 +73,7 @@
 //! }
 //! ```
 //! So you can now do:
-//! ```rust
+//! ```rs
 //! let books = Book::find_by_author_id("User:john", ());
 //! let paginated_books = Book::find_by_author_id("User:john", Pagination(0..25));
 //! let paginated_books_with_author_data = Book::find_by_author_id(
@@ -89,7 +89,7 @@
 #[test]
 fn test_injecters_doccomment() {
   assert_eq!(
-    crate::queries::query(&(Select("*"), From("users"), Where("id = 5"))).unwrap(),
+    crate::queries::query(&(Select("*"), From("users"), Where("id = 5"))),
     "SELECT * FROM users WHERE id = 5"
   );
 
@@ -101,7 +101,7 @@ fn test_injecters_doccomment() {
     Where(And((("id", 5), ("name", "john")))),
   );
 
-  let query_string = crate::queries::query(&injecters).unwrap();
+  let query_string = crate::queries::query(&injecters);
   let query_bindings = crate::queries::bindings(injecters).unwrap();
 
   assert_eq!(
@@ -165,6 +165,14 @@ pub use update::Update;
 mod on;
 #[cfg(feature = "sql_standard")]
 pub use on::On;
+
+mod distinct;
+#[cfg(feature = "sql_standard")]
+pub use distinct::Distinct;
+
+mod insert;
+#[cfg(feature = "sql_standard")]
+pub use insert::Insert;
 
 pub(crate) fn to_param_value(value: serde_json::Value) -> serde_json::Result<serde_json::Value> {
   Ok(value)

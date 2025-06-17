@@ -5,8 +5,8 @@ use crate::ast::*;
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
 use self::__lalrpop_util::state_machine as __state_machine;
-extern crate core;
 extern crate alloc;
+extern crate core;
 
 #[rustfmt::skip]
 #[allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
@@ -2183,1239 +2183,731 @@ pub(crate) use self::__lalrpop_util::lexer::Token;
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action0<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Model, usize),
-) -> Model
-{
-    __0
+fn __action0<'input>(input: &'input str, (_, __0, _): (usize, Model, usize)) -> Model {
+  __0
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action1<
-    'input,
->(
-    input: &'input str,
-    (_, name, _): (usize, Identifier, usize),
-    (_, alias, _): (usize, core::option::Option<Identifier>, usize),
-    (_, options, _): (usize, core::option::Option<ModelOptions>, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, fields, _): (usize, Vec<Field>, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> Model
-{
-    Model { name, fields, alias, options: options.unwrap_or_default() }
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action2<
-    'input,
->(
-    input: &'input str,
-    (_, _, _): (usize, &'input str, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, flags, _): (usize, Vec<Identifier>, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> ModelOptions
-{
-    ModelOptions::from(flags)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action3<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Vec<Field>, usize),
-) -> Vec<Field>
-{
-    __0
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action4<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldProperty, usize),
-) -> Field
-{
-    Field::Property(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action5<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldForeignNode, usize),
-) -> Field
-{
-    Field::ForeignNode(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action6<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldRelation, usize),
-) -> Field
-{
-    Field::Relation(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action7<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, FieldRelation, usize),
-) -> Field
-{
-    Field::Relation(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action8<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, name, _): (usize, Identifier, usize),
-) -> FieldProperty
-{
-    FieldProperty { name, is_public }
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action9<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, name, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, foreign_type, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> FieldForeignNode
-{
-    FieldForeignNode { name, foreign_type, is_public }
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action10<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, name, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, foreign_type, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, alias, _): (usize, Identifier, usize),
-) -> FieldRelation
-{
-    FieldRelation { name, foreign_type, alias, relation_type: FieldRelationType::OutgoingEdge, is_public }
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action11<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, bool, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, name, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, foreign_type, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-    (_, alias, _): (usize, Identifier, usize),
-) -> FieldRelation
-{
-    FieldRelation { name, foreign_type, alias, relation_type: FieldRelationType::IncomingEdge, is_public }
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action12<
-    'input,
->(
-    input: &'input str,
-    (_, is_public, _): (usize, core::option::Option<&'input str>, usize),
-) -> bool
-{
-    is_public.is_some()
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action13<
-    'input,
->(
-    input: &'input str,
-    (_, some_raw_literal, _): (usize, core::option::Option<&'input str>, usize),
-    (_, value, _): (usize, &'input str, usize),
-) -> Identifier
-{
-    Identifier { value: String::from(value), is_raw_literal: some_raw_literal.is_some() }
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action14<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, &'input str, usize),
-) -> core::option::Option<&'input str>
-{
-    Some(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action15<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<&'input str>
-{
-    None
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action16<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, &'input str, usize),
-) -> core::option::Option<&'input str>
-{
-    Some(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action17<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<&'input str>
-{
-    None
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action18<
-    'input,
->(
-    input: &'input str,
-    (_, mut v, _): (usize, alloc::vec::Vec<Field>, usize),
-    (_, e, _): (usize, core::option::Option<Field>, usize),
-) -> Vec<Field>
-{
-    match e {
-      None => v,
-      Some(e) => {
-          v.push(e);
-          v
-      }
+fn __action1<'input>(
+  input: &'input str, (_, name, _): (usize, Identifier, usize),
+  (_, alias, _): (usize, core::option::Option<Identifier>, usize),
+  (_, options, _): (usize, core::option::Option<ModelOptions>, usize),
+  (_, _, _): (usize, &'input str, usize), (_, fields, _): (usize, Vec<Field>, usize),
+  (_, _, _): (usize, &'input str, usize),
+) -> Model {
+  Model {
+    name,
+    fields,
+    alias,
+    options: options.unwrap_or_default(),
   }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action19<
-    'input,
->(
-    input: &'input str,
-    (_, mut v, _): (usize, alloc::vec::Vec<Identifier>, usize),
-    (_, e, _): (usize, core::option::Option<Identifier>, usize),
-) -> Vec<Identifier>
-{
-    match e {
-      None => v,
-      Some(e) => {
-          v.push(e);
-          v
-      }
+fn __action2<'input>(
+  input: &'input str, (_, _, _): (usize, &'input str, usize),
+  (_, _, _): (usize, &'input str, usize), (_, flags, _): (usize, Vec<Identifier>, usize),
+  (_, _, _): (usize, &'input str, usize),
+) -> ModelOptions {
+  ModelOptions::from(flags)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action3<'input>(input: &'input str, (_, __0, _): (usize, Vec<Field>, usize)) -> Vec<Field> {
+  __0
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action4<'input>(input: &'input str, (_, __0, _): (usize, FieldProperty, usize)) -> Field {
+  Field::Property(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action5<'input>(input: &'input str, (_, __0, _): (usize, FieldForeignNode, usize)) -> Field {
+  Field::ForeignNode(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action6<'input>(input: &'input str, (_, __0, _): (usize, FieldRelation, usize)) -> Field {
+  Field::Relation(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action7<'input>(input: &'input str, (_, __0, _): (usize, FieldRelation, usize)) -> Field {
+  Field::Relation(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action8<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, name, _): (usize, Identifier, usize),
+) -> FieldProperty {
+  FieldProperty { name, is_public }
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action9<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, name, _): (usize, Identifier, usize), (_, _, _): (usize, &'input str, usize),
+  (_, foreign_type, _): (usize, Identifier, usize), (_, _, _): (usize, &'input str, usize),
+) -> FieldForeignNode {
+  FieldForeignNode {
+    name,
+    foreign_type,
+    is_public,
   }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action20<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, ModelOptions, usize),
-) -> core::option::Option<ModelOptions>
-{
-    Some(__0)
+fn __action10<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, _, _): (usize, &'input str, usize), (_, name, _): (usize, Identifier, usize),
+  (_, _, _): (usize, &'input str, usize), (_, foreign_type, _): (usize, Identifier, usize),
+  (_, _, _): (usize, &'input str, usize), (_, alias, _): (usize, Identifier, usize),
+) -> FieldRelation {
+  FieldRelation {
+    name,
+    foreign_type,
+    alias,
+    relation_type: FieldRelationType::OutgoingEdge,
+    is_public,
+  }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action21<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<ModelOptions>
-{
-    None
+fn __action11<'input>(
+  input: &'input str, (_, is_public, _): (usize, bool, usize),
+  (_, _, _): (usize, &'input str, usize), (_, name, _): (usize, Identifier, usize),
+  (_, _, _): (usize, &'input str, usize), (_, foreign_type, _): (usize, Identifier, usize),
+  (_, _, _): (usize, &'input str, usize), (_, alias, _): (usize, Identifier, usize),
+) -> FieldRelation {
+  FieldRelation {
+    name,
+    foreign_type,
+    alias,
+    relation_type: FieldRelationType::IncomingEdge,
+    is_public,
+  }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action22<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Identifier, usize),
-) -> core::option::Option<Identifier>
-{
-    Some(__0)
+fn __action12<'input>(
+  input: &'input str, (_, is_public, _): (usize, core::option::Option<&'input str>, usize),
+) -> bool {
+  is_public.is_some()
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action23<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<Identifier>
-{
-    None
+fn __action13<'input>(
+  input: &'input str, (_, some_raw_literal, _): (usize, core::option::Option<&'input str>, usize),
+  (_, value, _): (usize, &'input str, usize),
+) -> Identifier {
+  Identifier {
+    value: String::from(value),
+    is_raw_literal: some_raw_literal.is_some(),
+  }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action24<
-    'input,
->(
-    input: &'input str,
-    (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Identifier, usize),
-) -> Identifier
-{
-    __0
+fn __action14<'input>(
+  input: &'input str, (_, __0, _): (usize, &'input str, usize),
+) -> core::option::Option<&'input str> {
+  Some(__0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action25<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Identifier, usize),
-) -> core::option::Option<Identifier>
-{
-    Some(__0)
+fn __action15<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<&'input str> {
+  None
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action26<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<Identifier>
-{
-    None
+fn __action16<'input>(
+  input: &'input str, (_, __0, _): (usize, &'input str, usize),
+) -> core::option::Option<&'input str> {
+  Some(__0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action27<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> alloc::vec::Vec<Identifier>
-{
-    alloc::vec![]
+fn __action17<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<&'input str> {
+  None
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action28<
-    'input,
->(
-    input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Identifier>, usize),
-) -> alloc::vec::Vec<Identifier>
-{
+fn __action18<'input>(
+  input: &'input str, (_, mut v, _): (usize, alloc::vec::Vec<Field>, usize),
+  (_, e, _): (usize, core::option::Option<Field>, usize),
+) -> Vec<Field> {
+  match e {
+    None => v,
+    Some(e) => {
+      v.push(e);
+      v
+    }
+  }
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action19<'input>(
+  input: &'input str, (_, mut v, _): (usize, alloc::vec::Vec<Identifier>, usize),
+  (_, e, _): (usize, core::option::Option<Identifier>, usize),
+) -> Vec<Identifier> {
+  match e {
+    None => v,
+    Some(e) => {
+      v.push(e);
+      v
+    }
+  }
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action20<'input>(
+  input: &'input str, (_, __0, _): (usize, ModelOptions, usize),
+) -> core::option::Option<ModelOptions> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action21<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<ModelOptions> {
+  None
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action22<'input>(
+  input: &'input str, (_, __0, _): (usize, Identifier, usize),
+) -> core::option::Option<Identifier> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action23<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<Identifier> {
+  None
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action24<'input>(
+  input: &'input str, (_, _, _): (usize, &'input str, usize),
+  (_, __0, _): (usize, Identifier, usize),
+) -> Identifier {
+  __0
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action25<'input>(
+  input: &'input str, (_, __0, _): (usize, Identifier, usize),
+) -> core::option::Option<Identifier> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action26<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<Identifier> {
+  None
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action27<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> alloc::vec::Vec<Identifier> {
+  alloc::vec![]
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action28<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<Identifier>, usize),
+) -> alloc::vec::Vec<Identifier> {
+  v
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action29<'input>(
+  input: &'input str, (_, __0, _): (usize, Identifier, usize),
+  (_, _, _): (usize, &'input str, usize),
+) -> Identifier {
+  __0
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action30<'input>(
+  input: &'input str, (_, __0, _): (usize, Field, usize),
+) -> core::option::Option<Field> {
+  Some(__0)
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action31<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> core::option::Option<Field> {
+  None
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action32<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> alloc::vec::Vec<Field> {
+  alloc::vec![]
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action33<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
+) -> alloc::vec::Vec<Field> {
+  v
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action34<'input>(
+  input: &'input str, (_, __0, _): (usize, Field, usize), (_, _, _): (usize, &'input str, usize),
+) -> Field {
+  __0
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action35<'input>(
+  input: &'input str, (_, __0, _): (usize, Field, usize),
+) -> alloc::vec::Vec<Field> {
+  alloc::vec![__0]
+}
+
+#[allow(unused_variables)]
+#[allow(clippy::too_many_arguments)]
+fn __action36<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
+  (_, e, _): (usize, Field, usize),
+) -> alloc::vec::Vec<Field> {
+  {
+    let mut v = v;
+    v.push(e);
     v
+  }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action29<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Identifier, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> Identifier
-{
-    __0
+fn __action37<'input>(
+  input: &'input str, (_, __0, _): (usize, Identifier, usize),
+) -> alloc::vec::Vec<Identifier> {
+  alloc::vec![__0]
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action30<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Field, usize),
-) -> core::option::Option<Field>
-{
-    Some(__0)
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action31<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> core::option::Option<Field>
-{
-    None
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action32<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> alloc::vec::Vec<Field>
-{
-    alloc::vec![]
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action33<
-    'input,
->(
-    input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
-) -> alloc::vec::Vec<Field>
-{
+fn __action38<'input>(
+  input: &'input str, (_, v, _): (usize, alloc::vec::Vec<Identifier>, usize),
+  (_, e, _): (usize, Identifier, usize),
+) -> alloc::vec::Vec<Identifier> {
+  {
+    let mut v = v;
+    v.push(e);
     v
+  }
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action34<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Field, usize),
-    (_, _, _): (usize, &'input str, usize),
-) -> Field
-{
-    __0
+fn __action39<'input>(
+  input: &'input str, __0: (usize, Field, usize), __1: (usize, &'input str, usize),
+) -> alloc::vec::Vec<Field> {
+  let __start0 = __0.0;
+  let __end0 = __1.2;
+  let __temp0 = __action34(input, __0, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action35(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action35<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Field, usize),
-) -> alloc::vec::Vec<Field>
-{
-    alloc::vec![__0]
+fn __action40<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize), __1: (usize, Field, usize),
+  __2: (usize, &'input str, usize),
+) -> alloc::vec::Vec<Field> {
+  let __start0 = __1.0;
+  let __end0 = __2.2;
+  let __temp0 = __action34(input, __1, __2);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action36(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action36<
-    'input,
->(
-    input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Field>, usize),
-    (_, e, _): (usize, Field, usize),
-) -> alloc::vec::Vec<Field>
-{
-    { let mut v = v; v.push(e); v }
+fn __action41<'input>(
+  input: &'input str, __0: (usize, core::option::Option<Field>, usize),
+) -> Vec<Field> {
+  let __start0 = __0.0;
+  let __end0 = __0.0;
+  let __temp0 = __action32(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action18(input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action37<
-    'input,
->(
-    input: &'input str,
-    (_, __0, _): (usize, Identifier, usize),
-) -> alloc::vec::Vec<Identifier>
-{
-    alloc::vec![__0]
+fn __action42<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize),
+  __1: (usize, core::option::Option<Field>, usize),
+) -> Vec<Field> {
+  let __start0 = __0.0;
+  let __end0 = __0.2;
+  let __temp0 = __action33(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action18(input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action38<
-    'input,
->(
-    input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Identifier>, usize),
-    (_, e, _): (usize, Identifier, usize),
-) -> alloc::vec::Vec<Identifier>
-{
-    { let mut v = v; v.push(e); v }
+fn __action43<'input>(
+  input: &'input str, __0: (usize, Identifier, usize), __1: (usize, &'input str, usize),
+) -> alloc::vec::Vec<Identifier> {
+  let __start0 = __0.0;
+  let __end0 = __1.2;
+  let __temp0 = __action29(input, __0, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action37(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action39<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Field, usize),
-    __1: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Field>
-{
-    let __start0 = __0.0;
-    let __end0 = __1.2;
-    let __temp0 = __action34(
-        input,
-        __0,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action35(
-        input,
-        __temp0,
-    )
+fn __action44<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Identifier>, usize),
+  __1: (usize, Identifier, usize), __2: (usize, &'input str, usize),
+) -> alloc::vec::Vec<Identifier> {
+  let __start0 = __1.0;
+  let __end0 = __2.2;
+  let __temp0 = __action29(input, __1, __2);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action38(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action40<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-    __1: (usize, Field, usize),
-    __2: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Field>
-{
-    let __start0 = __1.0;
-    let __end0 = __2.2;
-    let __temp0 = __action34(
-        input,
-        __1,
-        __2,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action36(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action45<'input>(
+  input: &'input str, __0: (usize, core::option::Option<Identifier>, usize),
+) -> Vec<Identifier> {
+  let __start0 = __0.0;
+  let __end0 = __0.0;
+  let __temp0 = __action27(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action19(input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action41<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, core::option::Option<Field>, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.0;
-    let __end0 = __0.0;
-    let __temp0 = __action32(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action18(
-        input,
-        __temp0,
-        __0,
-    )
+fn __action46<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Identifier>, usize),
+  __1: (usize, core::option::Option<Identifier>, usize),
+) -> Vec<Identifier> {
+  let __start0 = __0.0;
+  let __end0 = __0.2;
+  let __temp0 = __action28(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action19(input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action42<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-    __1: (usize, core::option::Option<Field>, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.0;
-    let __end0 = __0.2;
-    let __temp0 = __action33(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action18(
-        input,
-        __temp0,
-        __1,
-    )
+fn __action47<'input>(
+  input: &'input str, __0: (usize, &'input str, usize), __1: (usize, Identifier, usize),
+) -> core::option::Option<Identifier> {
+  let __start0 = __0.0;
+  let __end0 = __1.2;
+  let __temp0 = __action24(input, __0, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action22(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action43<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Identifier>
-{
-    let __start0 = __0.0;
-    let __end0 = __1.2;
-    let __temp0 = __action29(
-        input,
-        __0,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action37(
-        input,
-        __temp0,
-    )
+fn __action48<'input>(
+  input: &'input str, __0: (usize, Identifier, usize), __1: (usize, &'input str, usize),
+  __2: (usize, Identifier, usize), __3: (usize, core::option::Option<ModelOptions>, usize),
+  __4: (usize, &'input str, usize), __5: (usize, Vec<Field>, usize),
+  __6: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __1.0;
+  let __end0 = __2.2;
+  let __temp0 = __action47(input, __1, __2);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action1(input, __0, __temp0, __3, __4, __5, __6)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action44<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Identifier>, usize),
-    __1: (usize, Identifier, usize),
-    __2: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Identifier>
-{
-    let __start0 = __1.0;
-    let __end0 = __2.2;
-    let __temp0 = __action29(
-        input,
-        __1,
-        __2,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action38(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action49<'input>(
+  input: &'input str, __0: (usize, Identifier, usize),
+  __1: (usize, core::option::Option<ModelOptions>, usize), __2: (usize, &'input str, usize),
+  __3: (usize, Vec<Field>, usize), __4: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __0.2;
+  let __end0 = __1.0;
+  let __temp0 = __action23(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action1(input, __0, __temp0, __1, __2, __3, __4)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action45<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, core::option::Option<Identifier>, usize),
-) -> Vec<Identifier>
-{
-    let __start0 = __0.0;
-    let __end0 = __0.0;
-    let __temp0 = __action27(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action19(
-        input,
-        __temp0,
-        __0,
-    )
+fn __action50<'input>(input: &'input str, __0: (usize, Field, usize)) -> Vec<Field> {
+  let __start0 = __0.0;
+  let __end0 = __0.2;
+  let __temp0 = __action30(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action41(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action46<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Identifier>, usize),
-    __1: (usize, core::option::Option<Identifier>, usize),
-) -> Vec<Identifier>
-{
-    let __start0 = __0.0;
-    let __end0 = __0.2;
-    let __temp0 = __action28(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action19(
-        input,
-        __temp0,
-        __1,
-    )
+fn __action51<'input>(input: &'input str, __lookbehind: &usize, __lookahead: &usize) -> Vec<Field> {
+  let __start0 = *__lookbehind;
+  let __end0 = *__lookahead;
+  let __temp0 = __action31(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action41(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action47<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, &'input str, usize),
-    __1: (usize, Identifier, usize),
-) -> core::option::Option<Identifier>
-{
-    let __start0 = __0.0;
-    let __end0 = __1.2;
-    let __temp0 = __action24(
-        input,
-        __0,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action22(
-        input,
-        __temp0,
-    )
+fn __action52<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize), __1: (usize, Field, usize),
+) -> Vec<Field> {
+  let __start0 = __1.0;
+  let __end0 = __1.2;
+  let __temp0 = __action30(input, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action42(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action48<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, Identifier, usize),
-    __3: (usize, core::option::Option<ModelOptions>, usize),
-    __4: (usize, &'input str, usize),
-    __5: (usize, Vec<Field>, usize),
-    __6: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __1.0;
-    let __end0 = __2.2;
-    let __temp0 = __action47(
-        input,
-        __1,
-        __2,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action1(
-        input,
-        __0,
-        __temp0,
-        __3,
-        __4,
-        __5,
-        __6,
-    )
+fn __action53<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Field>, usize),
+) -> Vec<Field> {
+  let __start0 = __0.2;
+  let __end0 = __0.2;
+  let __temp0 = __action31(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action42(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action49<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, core::option::Option<ModelOptions>, usize),
-    __2: (usize, &'input str, usize),
-    __3: (usize, Vec<Field>, usize),
-    __4: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __0.2;
-    let __end0 = __1.0;
-    let __temp0 = __action23(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action1(
-        input,
-        __0,
-        __temp0,
-        __1,
-        __2,
-        __3,
-        __4,
-    )
+fn __action54<'input>(input: &'input str, __0: (usize, Identifier, usize)) -> Vec<Identifier> {
+  let __start0 = __0.0;
+  let __end0 = __0.2;
+  let __temp0 = __action25(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action45(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action50<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Field, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.0;
-    let __end0 = __0.2;
-    let __temp0 = __action30(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action41(
-        input,
-        __temp0,
-    )
+fn __action55<'input>(
+  input: &'input str, __lookbehind: &usize, __lookahead: &usize,
+) -> Vec<Identifier> {
+  let __start0 = *__lookbehind;
+  let __end0 = *__lookahead;
+  let __temp0 = __action26(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action45(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action51<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> Vec<Field>
-{
-    let __start0 = *__lookbehind;
-    let __end0 = *__lookahead;
-    let __temp0 = __action31(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action41(
-        input,
-        __temp0,
-    )
+fn __action56<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Identifier>, usize),
+  __1: (usize, Identifier, usize),
+) -> Vec<Identifier> {
+  let __start0 = __1.0;
+  let __end0 = __1.2;
+  let __temp0 = __action25(input, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action46(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action52<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-    __1: (usize, Field, usize),
-) -> Vec<Field>
-{
-    let __start0 = __1.0;
-    let __end0 = __1.2;
-    let __temp0 = __action30(
-        input,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action42(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action57<'input>(
+  input: &'input str, __0: (usize, alloc::vec::Vec<Identifier>, usize),
+) -> Vec<Identifier> {
+  let __start0 = __0.2;
+  let __end0 = __0.2;
+  let __temp0 = __action26(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action46(input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action53<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Field>, usize),
-) -> Vec<Field>
-{
-    let __start0 = __0.2;
-    let __end0 = __0.2;
-    let __temp0 = __action31(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action42(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action58<'input>(input: &'input str, __0: (usize, &'input str, usize)) -> bool {
+  let __start0 = __0.0;
+  let __end0 = __0.2;
+  let __temp0 = __action16(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action12(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action54<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-) -> Vec<Identifier>
-{
-    let __start0 = __0.0;
-    let __end0 = __0.2;
-    let __temp0 = __action25(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action45(
-        input,
-        __temp0,
-    )
+fn __action59<'input>(input: &'input str, __lookbehind: &usize, __lookahead: &usize) -> bool {
+  let __start0 = *__lookbehind;
+  let __end0 = *__lookahead;
+  let __temp0 = __action17(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action12(input, __temp0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action55<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> Vec<Identifier>
-{
-    let __start0 = *__lookbehind;
-    let __end0 = *__lookahead;
-    let __temp0 = __action26(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action45(
-        input,
-        __temp0,
-    )
+fn __action60<'input>(
+  input: &'input str, __0: (usize, &'input str, usize), __1: (usize, &'input str, usize),
+) -> Identifier {
+  let __start0 = __0.0;
+  let __end0 = __0.2;
+  let __temp0 = __action14(input, __0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action13(input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action56<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Identifier>, usize),
-    __1: (usize, Identifier, usize),
-) -> Vec<Identifier>
-{
-    let __start0 = __1.0;
-    let __end0 = __1.2;
-    let __temp0 = __action25(
-        input,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action46(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action61<'input>(input: &'input str, __0: (usize, &'input str, usize)) -> Identifier {
+  let __start0 = __0.0;
+  let __end0 = __0.0;
+  let __temp0 = __action15(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action13(input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action57<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, alloc::vec::Vec<Identifier>, usize),
-) -> Vec<Identifier>
-{
-    let __start0 = __0.2;
-    let __end0 = __0.2;
-    let __temp0 = __action26(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action46(
-        input,
-        __0,
-        __temp0,
-    )
+fn __action62<'input>(
+  input: &'input str, __0: (usize, Identifier, usize), __1: (usize, &'input str, usize),
+  __2: (usize, Identifier, usize), __3: (usize, ModelOptions, usize),
+  __4: (usize, &'input str, usize), __5: (usize, Vec<Field>, usize),
+  __6: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __3.0;
+  let __end0 = __3.2;
+  let __temp0 = __action20(input, __3);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action48(input, __0, __1, __2, __temp0, __4, __5, __6)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action58<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, &'input str, usize),
-) -> bool
-{
-    let __start0 = __0.0;
-    let __end0 = __0.2;
-    let __temp0 = __action16(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action12(
-        input,
-        __temp0,
-    )
+fn __action63<'input>(
+  input: &'input str, __0: (usize, Identifier, usize), __1: (usize, &'input str, usize),
+  __2: (usize, Identifier, usize), __3: (usize, &'input str, usize),
+  __4: (usize, Vec<Field>, usize), __5: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __2.2;
+  let __end0 = __3.0;
+  let __temp0 = __action21(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action48(input, __0, __1, __2, __temp0, __3, __4, __5)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action59<
-    'input,
->(
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> bool
-{
-    let __start0 = *__lookbehind;
-    let __end0 = *__lookahead;
-    let __temp0 = __action17(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action12(
-        input,
-        __temp0,
-    )
+fn __action64<'input>(
+  input: &'input str, __0: (usize, Identifier, usize), __1: (usize, ModelOptions, usize),
+  __2: (usize, &'input str, usize), __3: (usize, Vec<Field>, usize),
+  __4: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __1.0;
+  let __end0 = __1.2;
+  let __temp0 = __action20(input, __1);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action49(input, __0, __temp0, __2, __3, __4)
 }
 
 #[allow(unused_variables)]
 #[allow(clippy::too_many_arguments)]
-fn __action60<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, &'input str, usize),
-    __1: (usize, &'input str, usize),
-) -> Identifier
-{
-    let __start0 = __0.0;
-    let __end0 = __0.2;
-    let __temp0 = __action14(
-        input,
-        __0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action13(
-        input,
-        __temp0,
-        __1,
-    )
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action61<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, &'input str, usize),
-) -> Identifier
-{
-    let __start0 = __0.0;
-    let __end0 = __0.0;
-    let __temp0 = __action15(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action13(
-        input,
-        __temp0,
-        __0,
-    )
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action62<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, Identifier, usize),
-    __3: (usize, ModelOptions, usize),
-    __4: (usize, &'input str, usize),
-    __5: (usize, Vec<Field>, usize),
-    __6: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __3.0;
-    let __end0 = __3.2;
-    let __temp0 = __action20(
-        input,
-        __3,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action48(
-        input,
-        __0,
-        __1,
-        __2,
-        __temp0,
-        __4,
-        __5,
-        __6,
-    )
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action63<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, Identifier, usize),
-    __3: (usize, &'input str, usize),
-    __4: (usize, Vec<Field>, usize),
-    __5: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __2.2;
-    let __end0 = __3.0;
-    let __temp0 = __action21(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action48(
-        input,
-        __0,
-        __1,
-        __2,
-        __temp0,
-        __3,
-        __4,
-        __5,
-    )
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action64<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, ModelOptions, usize),
-    __2: (usize, &'input str, usize),
-    __3: (usize, Vec<Field>, usize),
-    __4: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __1.0;
-    let __end0 = __1.2;
-    let __temp0 = __action20(
-        input,
-        __1,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action49(
-        input,
-        __0,
-        __temp0,
-        __2,
-        __3,
-        __4,
-    )
-}
-
-#[allow(unused_variables)]
-#[allow(clippy::too_many_arguments)]
-fn __action65<
-    'input,
->(
-    input: &'input str,
-    __0: (usize, Identifier, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, Vec<Field>, usize),
-    __3: (usize, &'input str, usize),
-) -> Model
-{
-    let __start0 = __0.2;
-    let __end0 = __1.0;
-    let __temp0 = __action21(
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action49(
-        input,
-        __0,
-        __temp0,
-        __1,
-        __2,
-        __3,
-    )
+fn __action65<'input>(
+  input: &'input str, __0: (usize, Identifier, usize), __1: (usize, &'input str, usize),
+  __2: (usize, Vec<Field>, usize), __3: (usize, &'input str, usize),
+) -> Model {
+  let __start0 = __0.2;
+  let __end0 = __1.0;
+  let __temp0 = __action21(input, &__start0, &__end0);
+  let __temp0 = (__start0, __temp0, __end0);
+  __action49(input, __0, __temp0, __1, __2, __3)
 }
 #[allow(clippy::type_complexity)]
+#[allow(unused)]
 
-pub trait __ToTriple<'input, >
-{
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
+pub trait __ToTriple<'input> {
+  fn to_triple(
+    value: Self,
+  ) -> Result<
+    (usize, Token<'input>, usize),
+    __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+  >;
 }
 
-impl<'input, > __ToTriple<'input, > for (usize, Token<'input>, usize)
-{
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
-        Ok(value)
-    }
+impl<'input> __ToTriple<'input> for (usize, Token<'input>, usize) {
+  fn to_triple(
+    value: Self,
+  ) -> Result<
+    (usize, Token<'input>, usize),
+    __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+  > {
+    Ok(value)
+  }
 }
-impl<'input, > __ToTriple<'input, > for Result<(usize, Token<'input>, usize), &'static str>
-{
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
-        match value {
-            Ok(v) => Ok(v),
-            Err(error) => Err(__lalrpop_util::ParseError::User { error }),
-        }
+impl<'input> __ToTriple<'input> for Result<(usize, Token<'input>, usize), &'static str> {
+  fn to_triple(
+    value: Self,
+  ) -> Result<
+    (usize, Token<'input>, usize),
+    __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+  > {
+    match value {
+      Ok(v) => Ok(v),
+      Err(error) => Err(__lalrpop_util::ParseError::User { error }),
     }
+  }
 }
