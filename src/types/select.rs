@@ -18,6 +18,7 @@ impl<'a> QueryBuilderInjecter<'a> for Select<&'a str> {
   }
 }
 
+#[cfg(feature = "sql_standard")]
 impl<'a, COL> QueryBuilderInjecter<'a> for Select<super::Distinct<COL>>
 where
   super::Distinct<COL>: QueryBuilderInjecter<'a>,

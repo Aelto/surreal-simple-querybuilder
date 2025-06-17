@@ -163,13 +163,14 @@ pub use sql::Sql;
 pub use update::Update;
 
 mod on;
-#[cfg(feature = "sql_standard")]
 pub use on::On;
 
+#[cfg(feature = "sql_standard")]
 mod distinct;
 #[cfg(feature = "sql_standard")]
 pub use distinct::Distinct;
 
+#[cfg(feature = "sql_standard")]
 mod insert;
 #[cfg(feature = "sql_standard")]
 pub use insert::Insert;
