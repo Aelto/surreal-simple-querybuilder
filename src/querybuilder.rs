@@ -50,6 +50,73 @@ impl<'a> QueryBuilder<'a> {
   /// ```
   /// use surreal_simple_querybuilder::prelude::*;
   ///
+  /// let query = QueryBuilder::new()
+  ///   .insert("person", &["name", "age"])
+  ///   .values(&["'John'", "24"])
+  ///   .build();
+  ///
+  /// assert_eq!(query, "INSERT INTO person ( name , age ) VALUES ( 'John' , 24 )");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn insert<T: Into<CowSegment<'a>>, F: Into<CowSegment<'a>>>(
+    mut self, node: T, fields: &[F],
+  ) -> Self
+  where
+    F: Copy,
+  {
+    self.add_segment_p("INSERT INTO", node);
+    self.add_segment("(");
+    self.join_segments(",", "", fields, "");
+    self.add_segment(")");
+    self
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .insert("person", &["name", "age"])
+  ///   .values(&["'John'", "24"])
+  ///   .build();
+  ///
+  /// assert_eq!(query, "INSERT INTO person ( name , age ) VALUES ( 'John' , 24 )");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn values<F: Into<CowSegment<'a>>>(mut self, fields: &[F]) -> Self
+  where
+    F: Copy,
+  {
+    self.add_segment_p("VALUES", "(");
+    self.join_segments(",", "", fields, "");
+    self.add_segment(")");
+
+    self
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .insert("person", &["name", "age"])
+  ///   .values(&["'John'", "24"])
+  ///   .returning("id")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "INSERT INTO person ( name , age ) VALUES ( 'John' , 24 ) RETURNING id");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn returning<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
+    self.add_segment_p("RETURNING", field);
+
+    self
+  }
+
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
   /// let query = QueryBuilder::new().update("Person:ee").build();
   ///
   /// assert_eq!(query, "UPDATE Person:ee")
@@ -364,8 +431,65 @@ impl<'a> QueryBuilder<'a> {
   /// assert_eq!(query, "INNER JOIN author");
   /// ```
   #[cfg(feature = "sql_standard")]
-  pub fn join_inner<T: Into<CowSegment<'a>>>(mut self, field: T) -> Self {
-    self.add_segment_p("INNER JOIN", field);
+  pub fn join_inner<T: Into<CowSegment<'a>>>(mut self, table: T) -> Self {
+    self.add_segment_p("INNER JOIN", table);
+
+    self
+  }
+
+  /// Starts an LEFT JOIN clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .join_left("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "LEFT JOIN author");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn join_left<T: Into<CowSegment<'a>>>(mut self, table: T) -> Self {
+    self.add_segment_p("LEFT JOIN", table);
+
+    self
+  }
+
+  /// Starts an RIGHT JOIN clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .join_right("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "RIGHT JOIN author");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn join_right<T: Into<CowSegment<'a>>>(mut self, table: T) -> Self {
+    self.add_segment_p("RIGHT JOIN", table);
+
+    self
+  }
+
+  /// Starts an FULL JOIN clause,
+  ///
+  /// # Example
+  /// ```
+  /// use surreal_simple_querybuilder::prelude::*;
+  ///
+  /// let query = QueryBuilder::new()
+  ///   .join_full("author")
+  ///   .build();
+  ///
+  /// assert_eq!(query, "FULL JOIN author");
+  /// ```
+  #[cfg(feature = "sql_standard")]
+  pub fn join_full<T: Into<CowSegment<'a>>>(mut self, table: T) -> Self {
+    self.add_segment_p("FULL JOIN", table);
 
     self
   }

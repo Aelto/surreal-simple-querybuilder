@@ -225,6 +225,30 @@ impl<V, K> ForeignKey<V, K> {
   {
     self.map(NEWV::from)
   }
+
+  pub fn is_key(&self) -> bool {
+    self.inner.is_key()
+  }
+
+  pub fn is_not_key(&self) -> bool {
+    !self.is_key()
+  }
+
+  pub fn is_value(&self) -> bool {
+    self.inner.is_loaded()
+  }
+
+  pub fn is_not_value(&self) -> bool {
+    !self.is_value()
+  }
+
+  pub fn is_null(&self) -> bool {
+    self.inner.is_unloaded()
+  }
+
+  pub fn is_not_null(&self) -> bool {
+    !self.is_null()
+  }
 }
 
 impl<V, K> ForeignKey<V, K>

@@ -355,8 +355,14 @@ pub trait ToNodeBuilder<T: Display = Self>: Display {
   fn with_composite_id(&self, id: &str) -> String {
     format!("{self}:⟨{id}⟩")
   }
+
+  #[cfg(feature = "sql_standard")]
+  fn distinct(&self) -> String {
+    format!("DISTINCT {self}")
+  }
 }
 
+impl ToNodeBuilder for String {}
 impl<'a> ToNodeBuilder for &'a str {
   fn filter(&self, condition: &str) -> String {
     // unlike the default implementation of this trait function, the &str impl
@@ -419,7 +425,7 @@ pub trait NodeBuilder<T: Display = Self>: Display {
   /// ```
   fn if_then(&mut self, condition: bool, action: fn(&mut Self) -> &mut Self) -> &mut String;
 
-  /// Take the current string add add `> value` after it
+  /// Take the current string and add `> value` after it
   ///
   /// # Example
   /// ```
@@ -492,7 +498,6 @@ impl NodeBuilder for String {
 
     self
   }
-}
 
   #[cfg(feature = "sql_standard")]
   fn distinct(&mut self) -> &mut String {

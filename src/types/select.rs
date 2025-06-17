@@ -10,10 +10,19 @@ use crate::prelude::QueryBuilderInjecter;
 /// let param = (Select("*"), From("users"));
 /// assert_eq!(query(&param).unwrap(), "SELECT * FROM users");
 /// ```
-pub struct Select(pub &'static str);
+pub struct Select<T>(pub T);
 
-impl<'a> QueryBuilderInjecter<'a> for Select {
+impl<'a> QueryBuilderInjecter<'a> for Select<&'a str> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.select(self.0)
+  }
+}
+
+impl<'a, COL> QueryBuilderInjecter<'a> for Select<super::Distinct<COL>>
+where
+  super::Distinct<COL>: QueryBuilderInjecter<'a>,
+{
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    self.0.inject(querybuilder.select(""))
   }
 }
