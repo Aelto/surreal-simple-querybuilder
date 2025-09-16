@@ -15,7 +15,8 @@ members = [
 ]
 
 [features]
-default = ["querybuilder"]
+default = ["querybuilder", "sql_standard", "queries", "model", "foreign"]
+
 # enabling this feature switches the querybuilder to the standard SQL and
 # disables the surreal-db SQL specific syntaxes
 sql_standard = []
@@ -40,6 +41,7 @@ serde_json = "1.0.91"
 surrealdb = { version = "1.1.1", default-features = false, features = ["kv-mem"] }
 tokio = { version = "1.21.2", features = ["full"] }
 serde = { version = "1.0.152", features = ["serde_derive"] }
+serde_with = "3.12.0"
 
 [[example]]
 name = "querybuilder-basics"
