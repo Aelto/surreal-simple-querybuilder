@@ -15,7 +15,12 @@ members = [
 ]
 
 [features]
-default = ["querybuilder"]
+default = ["all"]
+
+# enabling this feature switches the querybuilder to the standard SQL and
+# disables the surreal-db SQL specific syntaxes
+sql_standard = []
+
 querybuilder = []
 queries = ["dep:flatten-json-object"]
 model = ["dep:surreal-simple-querybuilder-proc-macro"]

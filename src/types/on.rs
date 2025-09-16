@@ -1,7 +1,10 @@
+#[allow(unused)]
 use crate::prelude::QueryBuilder;
+#[allow(unused)]
 use crate::prelude::QueryBuilderInjecter;
 
 /// # Example
+/// > ℹ️ this type requires the `sql_standard` feature to be used in queries
 /// ```
 /// use surreal_simple_querybuilder::prelude::*;
 ///
@@ -10,8 +13,10 @@ use crate::prelude::QueryBuilderInjecter;
 ///
 /// assert_eq!(query, "SELECT * FROM users INNER JOIN permissions ON users.id = permissions.user_id");
 /// ```
+#[allow(unused)]
 pub struct On<T>(pub T);
 
+#[cfg(feature = "sql_standard")]
 impl<'a, T> QueryBuilderInjecter<'a> for On<T>
 where
   T: QueryBuilderInjecter<'a>,
@@ -28,6 +33,7 @@ where
   }
 }
 
+#[cfg(feature = "sql_standard")]
 impl<'a> QueryBuilderInjecter<'a> for On<&'a str> {
   fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
     querybuilder.on(self.0)
