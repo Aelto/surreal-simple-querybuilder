@@ -10,7 +10,7 @@ pub fn select<'a>(
   what: &'static str, from: &'static str, component: impl QueryBuilderInjecter<'a> + 'a,
 ) -> serde_json::Result<(String, BindingMap)> {
   let params = (Select(what), From(from), component);
-  let query = query(&params)?;
+  let query = query(&params);
   let bindings = bindings(params)?;
 
   Ok((query, bindings))

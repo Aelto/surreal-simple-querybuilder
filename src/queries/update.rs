@@ -25,7 +25,7 @@ pub fn update<'a, 'b>(
 ) -> serde_json::Result<(String, BindingMap)> {
   let params = (Update(table), component);
 
-  Ok((query(&params)?, bindings(params)?))
+  Ok((query(&params), bindings(params)?))
 }
 
 #[test]

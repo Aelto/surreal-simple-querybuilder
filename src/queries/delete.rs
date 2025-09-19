@@ -26,5 +26,5 @@ pub fn delete<'a, 'b>(
 ) -> serde_json::Result<(String, BindingMap)> {
   let params = (Delete(table), component);
 
-  Ok((query(&params)?, bindings(params)?))
+  Ok((query(&params), bindings(params)?))
 }

@@ -22,7 +22,7 @@ where
   Set<T>: QueryBuilderInjecter<'a> + 'a,
 {
   let params = (Create(what), component);
-  let query = query(&params)?;
+  let query = query(&params);
   let bindings = bindings(params)?;
 
   Ok((query, bindings))
