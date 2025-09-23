@@ -82,8 +82,8 @@
 //!     }
 //!
 //!     pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
-//!         let filter = Where((model.handle, handle));
-//!         let binds = ("handle", handle.clone());
+//!         let filter = Where(model.handle);
+//!         let binds = (model.handle, handle.clone());
 //!
 //!         Ok(Self::find_one(filter, binds).await?)
 //!     }

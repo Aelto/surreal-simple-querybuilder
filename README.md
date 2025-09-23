@@ -21,10 +21,10 @@ model!(User {
 impl IUser {
   pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
       let filter = (
-        Where((model.handle, handle))
+        Where(model.handle)
         Fetch(model.messages)
       );
-      let binds = ("handle", handle.clone());
+      let binds = (model.handle, handle.clone());
 
       Ok(Self::find_one(filter, binds).await?)
   }
@@ -693,8 +693,8 @@ impl IAccount {
     }
 
     pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
-        let filter = Where((model.handle, handle));
-        let binds = ("handle", handle.clone());
+        let filter = Where(model.handle);
+        let binds = (model.handle, handle.clone());
 
         Ok(Self::find_one(filter, binds).await?)
     }

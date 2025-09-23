@@ -97,3 +97,10 @@ impl<'a> QueryBuilderInjecter<'a> for Where<&'a str> {
     Ok(())
   }
 }
+
+#[cfg(feature = "model")]
+impl<'a, const N: usize> QueryBuilderInjecter<'a> for Where<crate::model::SchemaField<N>> {
+  fn inject(&self, querybuilder: QueryBuilder<'a>) -> QueryBuilder<'a> {
+    Where((self.0, "")).inject(querybuilder)
+  }
+}

@@ -37,50 +37,75 @@ impl WithBinding for () {
   }
 }
 
-impl<WB1, WB2> WithBinding for (WB1, WB2)
+impl<VALUE> WithBinding for (&'static str, VALUE)
 where
-  WB1: Serialize + 'static,
-  WB2: Serialize + 'static,
+  VALUE: Serialize + 'static,
 {
   fn bind<C: surrealdb::Connection>(
     self, query: surrealdb::method::Query<C>,
   ) -> surrealdb::method::Query<C> {
-    let query = query.bind(self.0);
-    let query = query.bind(self.1);
+    let query = query.bind((self.0, self.1));
+    query
+  }
+}
+
+#[cfg(feature = "model")]
+impl<VALUE, const N: usize> WithBinding for (crate::model::SchemaField<N>, VALUE)
+where
+  VALUE: Serialize + 'static,
+{
+  fn bind<C: surrealdb::Connection>(
+    self, query: surrealdb::method::Query<C>,
+  ) -> surrealdb::method::Query<C> {
+    let query = query.bind((self.0.identifier, self.1));
+    query
+  }
+}
+
+impl<WB1, WB2> WithBinding for (WB1, WB2)
+where
+  WB1: WithBinding,
+  WB2: WithBinding,
+{
+  fn bind<C: surrealdb::Connection>(
+    self, query: surrealdb::method::Query<C>,
+  ) -> surrealdb::method::Query<C> {
+    let query = self.0.bind(query);
+    let query = self.1.bind(query);
     query
   }
 }
 
 impl<WB1, WB2, WB3> WithBinding for (WB1, WB2, WB3)
 where
-  WB1: Serialize + 'static,
-  WB2: Serialize + 'static,
-  WB3: Serialize + 'static,
+  WB1: WithBinding,
+  WB2: WithBinding,
+  WB3: WithBinding,
 {
   fn bind<C: surrealdb::Connection>(
     self, query: surrealdb::method::Query<C>,
   ) -> surrealdb::method::Query<C> {
-    let query = query.bind(self.0);
-    let query = query.bind(self.1);
-    let query = query.bind(self.2);
+    let query = self.0.bind(query);
+    let query = self.1.bind(query);
+    let query = self.2.bind(query);
     query
   }
 }
 
 impl<WB1, WB2, WB3, WB4> WithBinding for (WB1, WB2, WB3, WB4)
 where
-  WB1: Serialize + 'static,
-  WB2: Serialize + 'static,
-  WB3: Serialize + 'static,
-  WB4: Serialize + 'static,
+  WB1: WithBinding,
+  WB2: WithBinding,
+  WB3: WithBinding,
+  WB4: WithBinding,
 {
   fn bind<C: surrealdb::Connection>(
     self, query: surrealdb::method::Query<C>,
   ) -> surrealdb::method::Query<C> {
-    let query = query.bind(self.0);
-    let query = query.bind(self.1);
-    let query = query.bind(self.2);
-    let query = query.bind(self.3);
+    let query = self.0.bind(query);
+    let query = self.1.bind(query);
+    let query = self.2.bind(query);
+    let query = self.3.bind(query);
     query
   }
 }
