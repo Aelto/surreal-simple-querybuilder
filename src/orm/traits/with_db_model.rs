@@ -65,6 +65,9 @@ pub trait WithDbModel<C: surrealdb::Connection>:
     let select = (Select("*"), From(Self::table()), query);
     let query = crate::queries::query(&select);
 
+    #[cfg(feature = "orm_debug")]
+    println!("find_many(), query={query:?}");
+
     find_many::<Self, C>(&query, binds).await
   }
 
@@ -75,6 +78,9 @@ pub trait WithDbModel<C: surrealdb::Connection>:
 
     let select = (Select("*"), From(Self::table()), query);
     let query = crate::queries::query(&select);
+
+    #[cfg(feature = "orm_debug")]
+    println!("find_one(), query={query:?}");
 
     find_one::<Self, C>(&query, binds).await
   }

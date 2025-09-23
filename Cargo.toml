@@ -25,6 +25,9 @@ sql_standard = []
 # get pre-made CRUD functions with out-of-the-box support for surrealdb.
 orm = ["dep:surrealdb", "dep:nanoid", "queries", "querybuilder"]
 
+# enabling this feature adds debug features to the ORM module.
+orm_debug = ["orm"]
+
 querybuilder = []
 queries = ["dep:flatten-json-object"]
 model = ["dep:surreal-simple-querybuilder-proc-macro"]
