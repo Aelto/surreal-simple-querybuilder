@@ -11,6 +11,7 @@ pub struct IUser {
   pub messages: ForeignVec<IMessage>,
 }
 
+with_orm!(IUser);
 model!(User {
   id,
   pub handle,
@@ -18,14 +19,14 @@ model!(User {
 });
 
 impl IUser {
-  pub fn find_by_handle(handle: &str) -> ApiResult<Vec<Self>> {
-    use surreal_simple_querybuilder::queries::select;
-    use schema::model as user;
-    
-    let (query, params) = select("*", user, (Where(user.handle, handle), Fetch([&*user.messages]))?;
-    let items = DB.query(query).bind(params).await?.take(0)?;
+  pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
+      let filter = (
+        Where((model.handle, handle))
+        Fetch(model.messages)
+      );
+      let binds = ("handle", handle.clone());
 
-    items
+      Ok(Self::find_one(filter, binds).await?)
   }
 }
 ```
@@ -675,7 +676,7 @@ impl WithCrudEvents for IAccount {
         // we want the ID ouf our accounts to be generated from their username,
         // so for example `John Doe` becomes `account:john-doe`:
         let slug = self.handle.to_slug();
-        self.set_id(Id::from_table_key(&*tb_account, slug.as_str()));
+        self.set_id(Id::from_table_key(Self::table(), slug.as_str()));
 
         Ok(())
     }
@@ -692,7 +693,7 @@ impl IAccount {
     }
 
     pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
-        let filter = Where((tb_account.handle, handle));
+        let filter = Where((model.handle, handle));
         let binds = ("handle", handle.clone());
 
         Ok(Self::find_one(filter, binds).await?)

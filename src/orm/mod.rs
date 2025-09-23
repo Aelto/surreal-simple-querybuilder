@@ -65,7 +65,7 @@
 //!         // we want the ID ouf our accounts to be generated from their username,
 //!         // so for example `John Doe` becomes `account:john-doe`:
 //!         let slug = self.handle.to_slug();
-//!         self.set_id(Id::from_table_key(&*tb_account, slug.as_str()));
+//!         self.set_id(Id::from_table_key(Self::table(m), slug.as_str()));
 //!
 //!         Ok(())
 //!     }
@@ -82,7 +82,7 @@
 //!     }
 //!
 //!     pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
-//!         let filter = Where((tb_account.handle, handle));
+//!         let filter = Where((model.handle, handle));
 //!         let binds = ("handle", handle.clone());
 //!
 //!         Ok(Self::find_one(filter, binds).await?)
