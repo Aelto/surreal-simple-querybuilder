@@ -49,6 +49,11 @@ impl IUser {
   - [The `ForeignKey` and `Foreign` types (`foreign` feature)](#the-foreignkey-and-foreign-types-foreign-feature)
     - [`ForeignKey` and loaded data during serialization](#foreignkey-and-loaded-data-during-serialization)
   - [Using the querybuilder in combination of the official SurrealDB client](#using-the-querybuilder-in-combination-of-the-official-surrealdb-client)
+  - [Using the ORM module for an out of the box experience (`orm` feature)](#using-the-orm-module-for-an-out-of-the-box-experience-orm-feature)
+    - [Setting it all up](#setting-it-all-up)
+      - [Setting up the database client](#setting-up-the-database-client)
+      - [Implementing the ORM for our types](#implementing-the-orm-for-our-types)
+      - [Using the ORM functions](#using-the-orm-functions)
 
 # Why a query-builder
 Query builders allow you to dynamically build your queries with some compile time
@@ -601,3 +606,96 @@ There is an important thing to keep in mind with this querybuilding crate, it is
 
 While it is not convenient to have to write these functions yourself it allows you to use a fixed version of the querybuilder crate while still getting the latest breaking updates on your favorite client.
 
+
+## Using the ORM module for an out of the box experience (`orm` feature)
+The crate also offers a suite of traits and macros to give simple structs ORM-like methods 
+for most CRUD operations. Get access to `surreal_simple_querybuilder::orm` by adding the `orm` feature.
+
+### Setting it all up
+#### Setting up the database client
+```rs
+use std::sync::LazyLock;
+use surrealdb::Surreal;
+
+// the name of these two items are used by the macros, they must not be changed
+pub type DbConnection = surrealdb::engine::local::Db;
+pub static DB: LazyLock<Surreal<DbConnection>> = LazyLock::new(Surreal::init);
+
+pub async fn connect(
+    address: &str,
+    _username: &str,
+    _password: &str,
+    namespace: &str,
+    database: &str,
+) {
+    DB.connect::<surrealdb::engine::local::SurrealKV>(address)
+      .await
+      .expect("database init: failed to connect");
+
+    DB.use_ns(namespace)
+        .use_db(database)
+        .await
+        .expect("database init: failed to use ns & db");
+}
+```
+#### Implementing the ORM for our types
+```rs
+#[derive(Debug, Serialize, Deserialize)]
+pub struct IAccount {
+    id: Id,
+    creation_date: chrono::DateTime<chrono::Utc>,
+
+    pub handle: Handle,
+    pub password: Password,
+}
+
+surreal_simple_querybuilder::with_orm!(IAccount);
+surreal_simple_querybuilder::model!(Account {
+  id,
+  pub creation_date,
+  pub handle,
+  pub password
+});
+pub use schema::model;
+```
+#### Using the ORM functions
+```rs
+use crate::prelude::*;
+
+impl WithCrudEvents for IAccount {
+    async fn on_create_before(&mut self) -> ModelResult<()> {
+        self.validated_ref()
+              .map_err(|_| ModelError::EventError("validation"))?;
+
+        self.creation_date = chrono::Utc::now();
+        self.hashed_password(nanoid::nanoid!().into())
+            .await
+            .map_err(|_| ModelError::EventError("password_hashing_error"))?;
+
+        // we want the ID ouf our accounts to be generated from their username,
+        // so for example `John Doe` becomes `account:john-doe`:
+        let slug = self.handle.to_slug();
+        self.set_id(Id::from_table_key(&*tb_account, slug.as_str()));
+
+        Ok(())
+    }
+}
+
+impl IAccount {
+    pub fn new(handle: Handle) -> Self {
+        Self {
+            id: Id::default(),
+            creation_date: Default::default(),
+            password: Password::default(),
+            handle,
+        }
+    }
+
+    pub async fn find_by_handle(handle: &Handle) -> ModelResult<Option<Self>> {
+        let filter = Where((tb_account.handle, handle));
+        let binds = ("handle", handle.clone());
+
+        Ok(Self::find_one(filter, binds).await?)
+    }
+}
+```

@@ -28,6 +28,9 @@ pub mod types;
 #[cfg(feature = "queries")]
 pub mod queries;
 
+#[cfg(feature = "orm")]
+pub mod orm;
+
 pub mod prelude;
 
 pub use serde_json;
