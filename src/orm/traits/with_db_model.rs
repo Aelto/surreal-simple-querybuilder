@@ -49,7 +49,7 @@ pub trait WithDbModel<C: surrealdb::Connection>:
     Ok(Self::db().delete(self.record()).await?)
   }
 
-  async fn find_by_id(id: Id) -> ModelResult<Option<Self>> {
+  async fn find_by_id(id: &Id) -> ModelResult<Option<Self>> {
     Ok(Self::db().select(id.record()).await?)
   }
 
