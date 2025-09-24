@@ -7,6 +7,10 @@ pub trait WithCrudEvents {
     Ok(())
   }
 
+  async fn on_create_after(&mut self) -> ModelResult<()> {
+    Ok(())
+  }
+
   async fn on_update_before(&mut self) -> ModelResult<()> {
     Ok(())
   }
