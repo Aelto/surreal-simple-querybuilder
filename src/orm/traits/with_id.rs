@@ -62,6 +62,16 @@ macro_rules! with_id {
     };
 }
 
+impl WithId for Id {
+  fn id(&self) -> &Id {
+    self
+  }
+
+  fn set_id(&mut self, id: Id) {
+    *self = id;
+  }
+}
+
 // conflicting implementation unfortunately...
 //
 // impl<MODEL> crate::foreign_key::IntoKey<Id> for MODEL
