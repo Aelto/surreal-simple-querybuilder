@@ -1,4 +1,14 @@
-/// Wrapping type around a [surrealdb::RecordId]
+#[allow(unused)]
+use super::WithId;
+
+/// Wrapping type around a [surrealdb::RecordId], with a pre-extracted & cached
+/// "hash" (the `id` part of `td:id` surreal IDs).
+///
+///
+/// [Id] implements the [WithId] trait, which means that if your functions use [Id]
+/// parameters you can potentially replace them with `id: &impl WithId` so you're
+/// able to pass either an Id directly or the whole struct that implements WithId
+/// rather than being limited to just the Id.
 #[derive(Debug, Clone)]
 pub struct Id {
   inner: surrealdb::RecordId,
@@ -21,8 +31,35 @@ impl Id {
     }
   }
 
+  /// returns the right part of this id, otherwise known as the id or hash.
+  ///
+  /// ```
+  /// use surreal_simple_querybuilder::orm::Id;
+  /// let id = Id::from_table_key("account", "abcdef");
+  /// assert_eq!(id.hash(), "abcdef");
+  ///
+  /// let id = Id::from_table_key("account", "abc/def");
+  /// assert_eq!(id.hash(), "⟨abc/def⟩");
+  /// ```
   pub fn hash(&self) -> &str {
     &self.hash
+  }
+
+  /// returns a trimmed version of the key/hash of this id, excluding the
+  /// delimiter characters like `⟨⟩` or backquotes.
+  ///
+  /// ```
+  /// use surreal_simple_querybuilder::orm::Id;
+  /// let id = Id::from_table_key("account", "abcdef");
+  /// assert_eq!(id.hash(), "abcdef");
+  /// assert_eq!(id.hash_trimmed(), "abcdef");
+  ///
+  /// let id = Id::from_table_key("account", "abc/def");
+  /// assert_eq!(id.hash(), "⟨abc/def⟩");
+  /// assert_eq!(id.hash_trimmed(), "abc/def");
+  /// ```
+  pub fn hash_trimmed(&self) -> &str {
+    &self.hash.trim_matches(&['⟨', '⟩', '`'])
   }
 
   pub fn record(&self) -> &surrealdb::RecordId {
